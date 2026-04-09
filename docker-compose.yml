@@ -1,0 +1,182 @@
+services:
+  # ─── FastAPI Backend API ───
+  backend:
+    build: .
+    container_name: geo-backend
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    environment:
+      - APP_ENV=production
+      - DB_HOST=mysql_db
+      - DB_USER=root
+      - DB_PASSWORD=root_password
+      - DB_NAME=geo_knowledge_engine
+      - ARTICLE_ACTION_TIMEOUT_SECONDS=120
+      - PUBLISH_REQUEST_TIMEOUT_SECONDS=20
+      - GEO_PUBLISH_REQUEST_TIMEOUT=20
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - OTEL_SDK_DISABLED=true
+      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
+      - TZ=Asia/Shanghai
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8001
+
+  # ─── 生产引擎（持续运行）───
+  geo-agent-app:
+    build: .
+    container_name: geo-agent-core
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - ./config/cookies:/app/config/cookies
+    environment:
+      - OPENAI_API_BASE=${OPENAI_BASE_URL}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - CHROMA_DB_HOST=chromadb
+      - CHROMA_DB_PORT=8000
+      - CREWAI_TRACING_ENABLED=false
+      - OTEL_SDK_DISABLED=true
+      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
+      - DB_HOST=mysql_db
+      - DB_USER=root
+      - DB_PASSWORD=root_password
+      - DB_NAME=geo_knowledge_engine
+      - WECHAT_APP_ID=${WECHAT_APP_ID}
+      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
+      - TZ=Asia/Shanghai
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+      chromadb:
+        condition: service_started
+    init: true
+    command: python -u batch_generator.py
+
+  # ─── Dashboard ───
+  dashboard:
+    build: .
+    container_name: geo-dashboard
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - ./config/cookies:/app/config/cookies
+    environment:
+      - DB_HOST=mysql_db
+      - DB_USER=root
+      - DB_PASSWORD=root_password
+      - DB_NAME=geo_knowledge_engine
+      - GEO_BACKEND_API_BASE_URL=http://backend:8001/api/v1
+      - GEO_BACKEND_API_TIMEOUT=4
+      - GEO_BACKEND_ACTION_TIMEOUT=120
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - WECHAT_APP_ID=${WECHAT_APP_ID}
+      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
+      - OTEL_SDK_DISABLED=true
+      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
+      - TZ=Asia/Shanghai
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    ports:
+      - "8503:8503"
+    command: streamlit run dashboard/app.py --server.port 8503 --server.address 0.0.0.0 --server.enableCORS false --server.enableXsrfProtection false
+
+  # ─── 定时任务（修复 + 发文 + 内链 + 检测）───
+  scheduler:
+    build: .
+    container_name: geo-scheduler
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - ./config/cookies:/app/config/cookies
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_BASE_URL}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+      - OTEL_SDK_DISABLED=true
+      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
+      - DB_HOST=mysql_db
+      - DB_USER=root
+      - DB_PASSWORD=root_password
+      - DB_NAME=geo_knowledge_engine
+      - GEO_PUBLISH_REQUEST_TIMEOUT=20
+      - WECHAT_APP_ID=${WECHAT_APP_ID}
+      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
+      - TZ=Asia/Shanghai
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    command: >
+      bash -c "
+        echo '⏰ 定时任务调度器启动';
+        while true; do
+          HOUR=$$(date +%H);
+          echo \"[$$(date)] 当前小时: $$HOUR\";
+
+          # 每小时: 修复低分文章 + 内链
+          python -u fix_and_link.py 2>&1 | tail -5;
+
+          # 早上 8 点: 自动发文（草稿模式）
+          if [ \"$$HOUR\" = '08' ]; then
+            echo '📤 执行自动发文...';
+            python -u auto_publish.py --limit 3 2>&1 | tail -10;
+          fi;
+
+          # 晚上 20 点: AI 引用检测
+          if [ \"$$HOUR\" = '20' ]; then
+            echo '🔍 执行 AI 引用检测...';
+            python -u -c 'from core.active_prober import ActiveProber; p=ActiveProber(); print(p.probe(\"行业关键词示例\"))' 2>&1 | tail -5;
+          fi;
+
+          echo '💤 休眠 1 小时...';
+          sleep 3600;
+        done
+      "
+
+  # ─── ChromaDB 向量数据库 ───
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: geo-chromadb
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./database/chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+
+  # ─── MySQL ───
+  mysql_db:
+    image: mysql:8.0
+    container_name: geo-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: geo_knowledge_engine
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10

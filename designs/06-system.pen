@@ -1,0 +1,232 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#8b92a8"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 系统状态",
+      "fontSize": 11
+    },
+    {
+      "type": "text",
+      "id": "page-header",
+      "x": 256,
+      "y": 32,
+      "fill": "#f1f3f9",
+      "content": "系统状态 System Status",
+      "fontSize": 24,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "module-api",
+      "x": 256,
+      "y": 100,
+      "width": 360,
+      "height": 180,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "api-title",
+      "x": 280,
+      "y": 124,
+      "fill": "#8b92a8",
+      "content": "大模型 API 调用量",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "api-val",
+      "x": 280,
+      "y": 180,
+      "fill": "#f1f3f9",
+      "content": "1.2 M",
+      "fontSize": 36,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "api-sub",
+      "x": 280,
+      "y": 224,
+      "fill": "#545b72",
+      "content": "今日 Tokens, 额度充裕",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "module-db",
+      "x": 640,
+      "y": 100,
+      "width": 360,
+      "height": 180,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "db-title",
+      "x": 664,
+      "y": 124,
+      "fill": "#8b92a8",
+      "content": "数据库存储使用率",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "db-val",
+      "x": 664,
+      "y": 180,
+      "fill": "#f1f3f9",
+      "content": "42%",
+      "fontSize": 36,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "db-bar-bg",
+      "x": 664,
+      "y": 224,
+      "width": 300,
+      "height": 6,
+      "fill": "#333333"
+    },
+    {
+      "type": "rectangle",
+      "id": "db-bar-fg",
+      "x": 664,
+      "y": 224,
+      "width": 126,
+      "height": 6,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "rectangle",
+      "id": "module-pub",
+      "x": 1024,
+      "y": 100,
+      "width": 360,
+      "height": 180,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "pub-title",
+      "x": 1048,
+      "y": 124,
+      "fill": "#8b92a8",
+      "content": "发布网关状态",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "pub-val",
+      "x": 1048,
+      "y": 180,
+      "fill": "#22c55e",
+      "content": "Normal",
+      "fontSize": 36,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "pub-sub",
+      "x": 1048,
+      "y": 224,
+      "fill": "#545b72",
+      "content": "最后检查时间: 刚好",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "log-area",
+      "x": 256,
+      "y": 304,
+      "width": 1128,
+      "height": 500,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "log-title",
+      "x": 280,
+      "y": 328,
+      "fill": "#8b92a8",
+      "content": "系统错误日志 (最近 50 条)",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "log-bg",
+      "x": 280,
+      "y": 360,
+      "width": 1080,
+      "height": 420,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "text",
+      "id": "log-text",
+      "x": 300,
+      "y": 380,
+      "fill": "#ef4444",
+      "content": "[2026-03-12 01:12:45] ERROR in publisher: WeChat API timeout.\n[2026-03-12 01:05:10] WARN  in generator: DeepSeek API rate limit near.\n[2026-03-12 00:50:30] ERROR in internal_linker: Graph Database connection lost.",
+      "fontSize": 13
+    }
+  ]
+}

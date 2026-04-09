@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GEO 控制台 v4.0 — 设计原型</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --brand: #2563eb;
+      --brand-l: #3b82f6;
+      --brand-s: rgba(37, 99, 235, .10);
+      --bg: #0a0e1a;
+      --surface: rgba(15, 20, 35, .75);
+      --elevated: rgba(22, 28, 48, .80);
+      --hover: rgba(30, 38, 60, .85);
+      --border: rgba(255, 255, 255, .06);
+      --border-h: rgba(37, 99, 235, .30);
+      --t1: #f1f3f9;
+      --t2: #8b92a8;
+      --t3: #545b72;
+      --ok: #22c55e;
+      --ok-s: rgba(34, 197, 94, .12);
+      --warn: #f59e0b;
+      --warn-s: rgba(245, 158, 11, .12);
+      --err: #ef4444;
+      --err-s: rgba(239, 68, 68, .12);
+      --r: 12px;
+      --blur: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--t1);
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      min-height: 100vh
+    }
+
+    svg.ic {
+      vertical-align: middle;
+      flex-shrink: 0
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: var(--surface);
+      backdrop-filter: blur(var(--blur));
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 10
+    }
+
+    .sidebar .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 2px
+    }
+
+    .sidebar .ver {
+      font-size: .7rem;
+      color: var(--t3);
+      margin-bottom: 28px
+    }
+
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--t2);
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 500;
+      margin-bottom: 2px;
+      transition: all .15s;
+      border: 1px solid transparent
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background: var(--brand-s);
+      color: var(--t1);
+      border: 1px solid var(--border-h)
+    }
+
+    .sidebar .foot {
+      margin-top: auto;
+      font-size: .68rem;
+      color: var(--t3)
+    }
+
+    .sidebar .refresh {
+      margin-top: 16px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--t2);
+      cursor: pointer;
+      font-size: .8rem;
+      font-family: inherit;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .sidebar .refresh:hover {
+      border-color: var(--brand);
+      color: var(--t1)
+    }
+
+    /* Main */
+    .main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 32px 36px
+    }
+
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: -.02em
+    }
+
+    h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 20px 0 12px;
+      color: var(--t2);
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .page {
+      display: none
+    }
+
+    .page.active {
+      display: block
+    }
+
+    /* KPI Cards */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 24px
+    }
+
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 16px;
+      backdrop-filter: blur(var(--blur));
+      transition: all .25s
+    }
+
+    .kpi:hover {
+      border-color: var(--border-h);
+      box-shadow: 0 0 20px var(--brand-s)
+    }
+
+    .kpi .ic-wrap {
+      color: var(--brand-l);
+      opacity: .8;
+      margin-bottom: 10px
+    }
+
+    .kpi .val {
+      font-size: 1.9rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px
+    }
+
+    .kpi .lbl {
+      font-size: .75rem;
+      color: var(--t2)
+    }
+
+    /* Grid layouts */
+    .grid-2-1 {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 20px
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px
+    }
+
+    /* Chart */
+    .chart {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      min-height: 220px;
+      backdrop-filter: blur(var(--blur))
+    }
+
+    /* Board */
+    .board {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px;
+      backdrop-filter: blur(var(--blur));
+      margin-bottom: 10px
+    }
+
+    .board .hdr {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--t2);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .board .item {
+      font-size: .8rem;
+      color: var(--t2);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .02);
+      line-height: 1.4
+    }
+
+    /* Article rows */
+    .art {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(var(--blur));
+      transition: all .2s
+    }
+
+    .art:hover {
+      border-color: var(--border-h);
+      background: var(--hover)
+    }
+
+    .art .title {
+      font-size: .85rem;
+      font-weight: 500
+    }
+
+    .art .meta {
+      font-size: .72rem;
+      color: var(--t3);
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: .76rem;
+      font-weight: 600;
+      display: inline-block
+    }
+
+    .badge-ok {
+      background: var(--ok-s);
+      color: var(--ok)
+    }
+
+    .badge-warn {
+      background: var(--warn-s);
+      color: var(--warn)
+    }
+
+    .badge-err {
+      background: var(--err-s);
+      color: var(--err)
+    }
+
+    .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-right: 3px
+    }
+
+    .dot-g {
+      background: var(--ok);
+      box-shadow: 0 0 6px var(--ok)
+    }
+
+    .dot-y {
+      background: var(--warn);
+      box-shadow: 0 0 6px var(--warn)
+    }
+
+    .dot-b {
+      background: var(--brand);
+      box-shadow: 0 0 6px var(--brand)
+    }
+
+    /* Glass panel */
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      backdrop-filter: blur(var(--blur));
+      margin-bottom: 16px
+    }
+
+    /* Table */
+    .tbl {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0
+    }
+
+    .tbl th,
+    .tbl td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: .82rem
+    }
+
+    .tbl th {
+      color: var(--brand-l);
+      font-weight: 600;
+      background: var(--brand-s);
+      font-size: .78rem
+    }
+
+    .tbl td {
+      color: var(--t2)
+    }
+
+    .tbl tr:hover td {
+      color: var(--t1);
+      background: var(--hover)
+    }
+
+    .progress {
+      width: 80px;
+      height: 6px;
+      background: rgba(255, 255, 255, .06);
+      border-radius: 3px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin: 16px 0;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--t2);
+      cursor: pointer;
+      font-size: .8rem;
+      font-family: inherit;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(var(--blur));
+      transition: all .15s
+    }
+
+    .btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: var(--brand-s)
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand)
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-l)
+    }
+
+    .input {
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--elevated);
+      color: var(--t1);
+      font-size: .82rem;
+      font-family: inherit;
+      width: 200px
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--brand)
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px
+    }
+
+    .filter-bar label {
+      font-size: .8rem;
+      color: var(--t2)
+    }
+
+    .filter-bar select {
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--elevated);
+      color: var(--t1);
+      font-size: .8rem;
+      font-family: inherit
+    }
+
+    .slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .slider-wrap input[type=range] {
+      width: 120px;
+      accent-color: var(--brand)
+    }
+
+    /* Sys rows */
+    .sys-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .sys-row:last-child {
+      border-bottom: none
+    }
+
+    .sys-l {
+      font-size: .82rem;
+      color: var(--t2);
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .sys-v {
+      font-size: .82rem;
+      color: var(--t1);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    /* Network */
+    .network {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      min-height: 380px;
+      backdrop-filter: blur(var(--blur));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden
+    }
+
+    /* Preview panel */
+    .preview-panel {
+      margin-top: 20px
+    }
+
+    .preview-panel .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px
+    }
+
+    .preview-body {
+      color: var(--t2);
+      font-size: .85rem;
+      line-height: 1.8
+    }
+
+    .preview-body h3 {
+      color: var(--t1);
+      margin: 14px 0 8px;
+      font-size: .95rem
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--brand);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: .85rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all .3s;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0)
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 9h18M3 15h18M9 3v18M15 3v18" />
+      </svg>
+      GEO 控制台
+    </div>
+    <div class="ver">v4.0 · Generic Edition</div>
+    <nav>
+      <a href="#" class="active" onclick="showPage('overview',this)">
+        <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        总览
+      </a>
+      <a href="#" onclick="showPage('content',this)">
+        <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+          <path d="M14 2v6h6" />
+          <path d="M16 13H8" />
+          <path d="M16 17H8" />
+          <path d="M10 9H8" />
+        </svg>
+        内容管理
+      </a>
+      <a href="#" onclick="showPage('graph',this)">
+        <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="5" r="3" />
+          <circle cx="5" cy="19" r="3" />
+          <circle cx="19" cy="19" r="3" />
+          <line x1="12" y1="8" x2="5" y2="16" />
+          <line x1="12" y1="8" x2="19" y2="16" />
+        </svg>
+        知识图谱
+      </a>
+      <a href="#" onclick="showPage('system',this)">
+        <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        系统状态
+      </a>
+    </nav>
+    <button class="refresh" onclick="showToast('数据已刷新')">
+      <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+        <path d="M21 3v5h-5" />
+      </svg>
+      刷新数据
+    </button>
+    <div class="foot">© 2026 GEO Engine v4.0</div>
+  </aside>
+
+  <div class="main">
+
+    <!-- ====== PAGE 1: 总览 ====== -->
+    <div id="overview" class="page active">
+      <h1>总览</h1>
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="ic-wrap"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+              <path d="M14 2v6h6" />
+            </svg></div>
+          <div class="val">127</div>
+          <div class="lbl">文章总数</div>
+        </div>
+        <div class="kpi">
+          <div class="ic-wrap"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg></div>
+          <div class="val">98</div>
+          <div class="lbl">质检通过</div>
+        </div>
+        <div class="kpi">
+          <div class="ic-wrap"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg></div>
+          <div class="val">15</div>
+          <div class="lbl">待处理词</div>
+        </div>
+        <div class="kpi">
+          <div class="ic-wrap"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="6" />
+              <circle cx="12" cy="12" r="2" />
+            </svg></div>
+          <div class="val">87.3</div>
+          <div class="lbl">平均质量分</div>
+        </div>
+        <div class="kpi">
+          <div class="ic-wrap"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg></div>
+          <div class="val">245</div>
+          <div class="lbl">内链关系</div>
+        </div>
+      </div>
+
+      <div class="grid-2-1">
+        <div>
+          <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg> 7日产出趋势</h2>
+          <div class="chart">
+            <svg viewBox="0 0 500 180">
+              <defs>
+                <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2563eb" stop-opacity=".25" />
+                  <stop offset="100%" stop-color="#2563eb" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <polyline points="10,140 80,120 160,90 240,100 320,60 400,75 490,40" fill="none" stroke="#3b82f6"
+                stroke-width="2.5" stroke-linejoin="round" />
+              <polygon points="10,140 80,120 160,90 240,100 320,60 400,75 490,40 490,170 10,170" fill="url(#g1)" />
+              <circle cx="10" cy="140" r="4" fill="#2563eb" />
+              <circle cx="80" cy="120" r="4" fill="#2563eb" />
+              <circle cx="160" cy="90" r="4" fill="#2563eb" />
+              <circle cx="240" cy="100" r="4" fill="#2563eb" />
+              <circle cx="320" cy="60" r="4" fill="#2563eb" />
+              <circle cx="400" cy="75" r="4" fill="#2563eb" />
+              <circle cx="490" cy="40" r="4" fill="#2563eb" />
+              <text x="10" y="175" fill="#545b72" font-size="10">02-22</text><text x="155" y="175" fill="#545b72"
+                font-size="10">02-24</text><text x="315" y="175" fill="#545b72" font-size="10">02-26</text><text x="470"
+                y="175" fill="#545b72" font-size="10">02-28</text>
+            </svg>
+          </div>
+          <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18" />
+              <path d="M9 21V9" />
+            </svg> 发文统计</h2>
+          <div class="grid-3">
+            <div class="glass" style="text-align:center;padding:16px">
+              <div style="font-size:1.5rem;font-weight:700">12</div>
+              <div style="font-size:.75rem;color:var(--t2)">草稿</div>
+            </div>
+            <div class="glass" style="text-align:center;padding:16px">
+              <div style="font-size:1.5rem;font-weight:700">86</div>
+              <div style="font-size:.75rem;color:var(--t2)">已通过</div>
+            </div>
+            <div class="glass" style="text-align:center;padding:16px">
+              <div style="font-size:1.5rem;font-weight:700">29</div>
+              <div style="font-size:.75rem;color:var(--t2)">已发布</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg> 生产看板</h2>
+          <div class="board">
+            <div class="hdr"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg> 队列中</div>
+            <div class="item">行业参数控制技术</div>
+            <div class="item">HDI 盲埋孔设计</div>
+            <div class="item">柔性电路板耐弯折</div>
+          </div>
+          <div class="board">
+            <div class="hdr"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+              </svg> 质检 / 修复</div>
+            <div class="item">铜厚均匀性分析与...</div>
+            <div class="item">高价值材料选型...</div>
+          </div>
+          <div class="board">
+            <div class="hdr"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg> 已入库</div>
+            <div class="item">多层板层压工艺控制...</div>
+            <div class="item">BGA 焊盘设计规范...</div>
+            <div class="item">沉金与 OSP 表面处理...</div>
+          </div>
+        </div>
+      </div>
+
+      <h2 style="margin-top:24px"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+          <path d="M14 2v6h6" />
+        </svg> 最新入库</h2>
+      <div>
+        <div class="art">
+          <div>
+            <div class="title">多层板层压工艺控制与常见缺陷分析</div>
+            <div class="meta"><span class="dot dot-g"></span>已通过 · 2026-02-28</div>
+          </div><span class="badge badge-ok">92</span>
+        </div>
+        <div class="art">
+          <div>
+            <div class="title">BGA 焊盘设计规范：IPC-7351 标准解读</div>
+            <div class="meta"><span class="dot dot-g"></span>已通过 · 2026-02-27</div>
+          </div><span class="badge badge-ok">88</span>
+        </div>
+        <div class="art">
+          <div>
+            <div class="title">铜厚均匀性测量方法与工艺优化策略</div>
+            <div class="meta"><span class="dot dot-y"></span>草稿 · 2026-02-27</div>
+          </div><span class="badge badge-warn">72</span>
+        </div>
+        <div class="art">
+          <div>
+            <div class="title">关键材料特性参数对照</div>
+            <div class="meta"><span class="dot dot-g"></span>已通过 · 2026-02-26</div>
+          </div><span class="badge badge-ok">85</span>
+        </div>
+        <div class="art">
+          <div>
+            <div class="title">沉金与 OSP 表面处理工艺对比分析</div>
+            <div class="meta"><span class="dot dot-b"></span>已发布 · 2026-02-25</div>
+          </div><span class="badge badge-ok">91</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== PAGE 2: 内容管理 ====== -->
+    <div id="content" class="page">
+      <h1>内容管理</h1>
+
+      <div class="filter-bar">
+        <label>状态</label><select>
+          <option>全部</option>
+          <option>草稿</option>
+          <option>已通过</option>
+          <option>已发布</option>
+        </select>
+        <div class="slider-wrap"><label>最低分数</label><input type="range" min="0" max="100" value="0"
+            oninput="this.nextElementSibling.textContent=this.value"><span
+            style="font-size:.8rem;color:var(--t2)">0</span></div>
+      </div>
+
+      <div class="glass" style="padding:0;overflow:hidden">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>标题</th>
+              <th>质量分</th>
+              <th>状态</th>
+              <th>创建时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>127</td>
+              <td>多层板层压工艺控制与常见缺陷分析</td>
+              <td>
+                <div class="progress">
+                  <div class="progress-fill" style="width:92%;background:var(--ok)"></div>
+                </div>92
+              </td>
+              <td><span class="dot dot-g"></span>已通过</td>
+              <td>2026-02-28</td>
+            </tr>
+            <tr>
+              <td>126</td>
+              <td>BGA 焊盘设计规范：IPC-7351 标准解读</td>
+              <td>
+                <div class="progress">
+                  <div class="progress-fill" style="width:88%;background:var(--ok)"></div>
+                </div>88
+              </td>
+              <td><span class="dot dot-g"></span>已通过</td>
+              <td>2026-02-27</td>
+            </tr>
+            <tr>
+              <td>125</td>
+              <td>铜厚均匀性测量方法与工艺优化策略</td>
+              <td>
+                <div class="progress">
+                  <div class="progress-fill" style="width:72%;background:var(--warn)"></div>
+                </div>72
+              </td>
+              <td><span class="dot dot-y"></span>草稿</td>
+              <td>2026-02-27</td>
+            </tr>
+            <tr>
+              <td>124</td>
+              <td>关键材料特性参数对照</td>
+              <td>
+                <div class="progress">
+                  <div class="progress-fill" style="width:85%;background:var(--ok)"></div>
+                </div>85
+              </td>
+              <td><span class="dot dot-b"></span>已发布</td>
+              <td>2026-02-26</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg> 文章操作</h2>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <input class="input" placeholder="输入文章 ID" value="125" id="art-id-input">
+        <button class="btn" onclick="showPreview()">
+          <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          预览全文
+        </button>
+        <button class="btn btn-primary"
+          onclick="showToast('正在修复文章 #' + document.getElementById('art-id-input').value + ' ...')">
+          <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+          </svg>
+          重新修复
+        </button>
+        <button class="btn" onclick="showToast('关键词已回收，文章 #' + document.getElementById('art-id-input').value + ' 已删除')">
+          <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+            <path d="M16 16h5v5" />
+          </svg>
+          回收关键词
+        </button>
+        <button class="btn" onclick="showToast('文章 #' + document.getElementById('art-id-input').value + ' 已标记为已发布')">
+          <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          手动发布
+        </button>
+      </div>
+
+      <div id="preview-area" class="glass preview-panel" style="display:none;margin-top:20px">
+        <div class="preview-header">
+          <h2 style="margin:0">关键工艺均匀性测量方法与优化策略</h2>
+          <span class="badge badge-warn">72</span>
+        </div>
+        <div class="preview-body">
+          <p><strong>关键工艺均匀性</strong> (Process Uniformity) 是衡量制造过程中核心参数分布一致性的关键指标。</p>
+          <h3>定义与重要性</h3>
+          <p>工艺均匀性会直接影响参数控制、信号表现和长期可靠性。系统应结合行业标准、测试条件和实施边界进行说明...</p>
+          <h3>测量方法</h3>
+          <p>常用的铜厚测量方法包括：微截面法、X 射线荧光法 (XRF)、涡流法等。每种方法各有优缺点和适用场景...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== PAGE 3: 知识图谱 ====== -->
+    <div id="graph" class="page">
+      <h1>知识图谱</h1>
+      <div class="grid-2" style="margin-bottom:20px">
+        <div class="kpi">
+          <div class="ic-wrap"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg></div>
+          <div class="val">245</div>
+          <div class="lbl">内链总数</div>
+        </div>
+        <div class="kpi">
+          <div class="ic-wrap"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="5" r="3" />
+              <circle cx="5" cy="19" r="3" />
+              <circle cx="19" cy="19" r="3" />
+              <line x1="12" y1="8" x2="5" y2="16" />
+              <line x1="12" y1="8" x2="19" y2="16" />
+            </svg></div>
+          <div class="val">89</div>
+          <div class="lbl">关联文章数</div>
+        </div>
+      </div>
+      <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="5" r="3" />
+          <circle cx="5" cy="19" r="3" />
+          <circle cx="19" cy="19" r="3" />
+          <line x1="12" y1="8" x2="5" y2="16" />
+          <line x1="12" y1="8" x2="19" y2="16" />
+        </svg> 交互式网络图</h2>
+      <div class="network" style="min-height:400px">
+        <svg viewBox="0 0 600 350" style="width:100%;height:100%">
+          <line x1="300" y1="175" x2="180" y2="80" stroke="#1e3a5f" stroke-width="1.5" />
+          <line x1="300" y1="175" x2="450" y2="100" stroke="#1e3a5f" stroke-width="1.5" />
+          <line x1="300" y1="175" x2="150" y2="260" stroke="#1e3a5f" stroke-width="1.5" />
+          <line x1="300" y1="175" x2="420" y2="280" stroke="#1e3a5f" stroke-width="1.5" />
+          <line x1="300" y1="175" x2="500" y2="200" stroke="#1e3a5f" stroke-width="1.5" />
+          <line x1="180" y1="80" x2="80" y2="120" stroke="#1e3a5f" stroke-width="1" />
+          <line x1="180" y1="80" x2="250" y2="40" stroke="#1e3a5f" stroke-width="1" />
+          <line x1="450" y1="100" x2="520" y2="60" stroke="#1e3a5f" stroke-width="1" />
+          <line x1="450" y1="100" x2="500" y2="200" stroke="#1e3a5f" stroke-width="1" />
+          <line x1="150" y1="260" x2="80" y2="300" stroke="#1e3a5f" stroke-width="1" />
+          <line x1="420" y1="280" x2="500" y2="320" stroke="#1e3a5f" stroke-width="1" />
+          <line x1="420" y1="280" x2="350" y2="320" stroke="#1e3a5f" stroke-width="1" />
+          <circle cx="300" cy="175" r="12" fill="#2563eb" stroke="#3b82f6" stroke-width="2" />
+          <circle cx="180" cy="80" r="9" fill="#2563eb" stroke="#3b82f6" stroke-width="2" />
+          <circle cx="450" cy="100" r="9" fill="#2563eb" stroke="#3b82f6" stroke-width="2" />
+          <circle cx="150" cy="260" r="9" fill="#2563eb" stroke="#3b82f6" stroke-width="2" />
+          <circle cx="420" cy="280" r="9" fill="#2563eb" stroke="#3b82f6" stroke-width="2" />
+          <circle cx="500" cy="200" r="8" fill="#2563eb" stroke="#3b82f6" stroke-width="1.5" />
+          <circle cx="80" cy="120" r="7" fill="#1d4ed8" stroke="#3b82f6" stroke-width="1.5" />
+          <circle cx="250" cy="40" r="7" fill="#1d4ed8" stroke="#3b82f6" stroke-width="1.5" />
+          <circle cx="520" cy="60" r="7" fill="#1d4ed8" stroke="#3b82f6" stroke-width="1.5" />
+          <circle cx="80" cy="300" r="7" fill="#1d4ed8" stroke="#3b82f6" stroke-width="1.5" />
+          <circle cx="500" cy="320" r="7" fill="#1d4ed8" stroke="#3b82f6" stroke-width="1.5" />
+          <circle cx="350" cy="320" r="7" fill="#1d4ed8" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="300" y="158" text-anchor="middle" fill="#8b92a8" font-size="9">参数控制主题</text><text x="180" y="70"
+            text-anchor="middle" fill="#8b92a8" font-size="8">多层板层压工艺</text><text x="450" y="90" text-anchor="middle"
+            fill="#8b92a8" font-size="8">BGA焊盘设计</text><text x="150" y="278" text-anchor="middle" fill="#8b92a8"
+            font-size="8">柔性电路板</text><text x="420" y="298" text-anchor="middle" fill="#8b92a8"
+            font-size="8">沉金表面处理</text><text x="500" y="218" text-anchor="middle" fill="#8b92a8"
+            font-size="8">高频材料</text>
+        </svg>
+      </div>
+      <h2 style="margin-top:20px"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+        </svg> 链接详情</h2>
+      <div class="glass" style="padding:0;overflow:hidden">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>来源文章</th>
+              <th>锚文本</th>
+              <th>目标文章</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>参数控制技术详解</td>
+              <td>多层板层压</td>
+              <td>多层板层压工艺控制</td>
+            </tr>
+            <tr>
+              <td>参数控制技术详解</td>
+              <td>BGA焊盘</td>
+              <td>BGA焊盘设计规范</td>
+            </tr>
+            <tr>
+              <td>多层板层压工艺控制</td>
+              <td>铜厚均匀性</td>
+              <td>铜厚均匀性测量方法</td>
+            </tr>
+            <tr>
+              <td>BGA焊盘设计规范</td>
+              <td>表面处理</td>
+              <td>沉金与OSP表面处理对比</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ====== PAGE 4: 系统状态 ====== -->
+    <div id="system" class="page">
+      <h1>系统状态</h1>
+      <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <ellipse cx="12" cy="5" rx="9" ry="3" />
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+        </svg> 数据库</h2>
+      <div class="glass">
+        <div class="sys-row"><span class="sys-l"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg> 连接状态</span><span class="sys-v"><span class="dot dot-g"></span>已连接</span></div>
+        <div class="sys-row"><span class="sys-l"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+              <line x1="6" y1="6" x2="6.01" y2="6" />
+              <line x1="6" y1="18" x2="6.01" y2="18" />
+            </svg> 主机</span><span class="sys-v">mysql_db</span></div>
+        <div class="sys-row"><span class="sys-l"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3" />
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+            </svg> 数据库</span><span class="sys-v">geo_knowledge_engine</span></div>
+      </div>
+      <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M3 9h18" />
+          <path d="M9 21V9" />
+        </svg> 数据统计</h2>
+      <div class="grid-3" style="margin-bottom:16px">
+        <div class="kpi">
+          <div class="val">127</div>
+          <div class="lbl">文章总数</div>
+        </div>
+        <div class="kpi">
+          <div class="val">342</div>
+          <div class="lbl">关键词总数</div>
+        </div>
+        <div class="kpi">
+          <div class="val">245</div>
+          <div class="lbl">内链总数</div>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="sys-row"><span class="sys-l">待处理关键词</span><span class="sys-v">15</span></div>
+        <div class="sys-row"><span class="sys-l">平均质量分</span><span class="sys-v">87.3</span></div>
+        <div class="sys-row"><span class="sys-l">质量分布</span><span class="sys-v"><span class="badge badge-ok"
+              style="margin-right:4px">>=80: 98</span><span class="badge badge-warn" style="margin-right:4px">60-79:
+              17</span><span class="badge badge-err">&lt;60: 12</span></span></div>
+      </div>
+      <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg> AI 引用检测</h2>
+      <div class="glass">
+        <div class="sys-row"><span class="sys-l">最后探测时间</span><span class="sys-v">2026-02-28 20:00</span></div>
+      </div>
+      <div class="glass">
+        <div class="sys-row"><span class="sys-l">LLM Provider</span><span class="sys-v"><span
+              class="dot dot-y"></span>待检测</span></div>
+        <div class="sys-row"><span class="sys-l">Doubao (豆包)</span><span class="sys-v"><span
+              class="dot dot-y"></span>待检测</span></div>
+        <div class="sys-row"><span class="sys-l">Kimi</span><span class="sys-v"><span
+              class="dot dot-y"></span>待检测</span></div>
+        <div class="sys-row"><span class="sys-l">Hunyuan (混元)</span><span class="sys-v"><span
+              class="dot dot-y"></span>待检测</span></div>
+      </div>
+      <h2><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+          <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+          <line x1="6" y1="6" x2="6.01" y2="6" />
+          <line x1="6" y1="18" x2="6.01" y2="18" />
+        </svg> 服务配置</h2>
+      <div class="glass">
+        <div class="sys-row"><span class="sys-l">引擎版本</span><span class="sys-v">GEO v4.0</span></div>
+        <div class="sys-row"><span class="sys-l">LLM 模型</span><span class="sys-v">configured-model</span></div>
+        <div class="sys-row"><span class="sys-l">质检通过线</span><span class="sys-v">80 分</span></div>
+        <div class="sys-row"><span class="sys-l">最大返修次数</span><span class="sys-v">3 次</span></div>
+        <div class="sys-row"><span class="sys-l">API 端点</span><span class="sys-v">configured-base-url</span></div>
+        <div class="sys-row"><span class="sys-l">每日预算</span><span class="sys-v">5.00 CNY</span></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <script>
+    function showPage(id, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+      el.classList.add('active');
+      return false;
+    }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerHTML = '<svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ' + msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+    function showPreview() {
+      const area = document.getElementById('preview-area');
+      area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+</body>
+
+</html>

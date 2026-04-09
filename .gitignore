@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database data (local volumes)
+database/mysql_data/
+database/chroma_data/
+database/*.db
+
+# Logs
+*.log
+batch_generator.log
+debug.log
+fix.log
+batch.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime
+token_usage.json
+last_probe.timestamp
+build_info.json
+
+# Cookies
+config/cookies/
+config/*.json
+
+# Node
+node_modules/
+frontend_v2/node_modules/
+frontend_v2/dist/
+
+# Temp scripts
+run_ssh.exp
+run_ssh_2222.exp
+copy_id.exp
+
+# Generated output and local assets
+output/
+temp.png
+sample.txt
+import_trace.txt
+
+# Python cache
+.pytest_cache/
+
+# Local editors and design/runtime scratch files
+designs/test.pen

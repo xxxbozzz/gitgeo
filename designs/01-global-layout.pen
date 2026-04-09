@@ -1,0 +1,217 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 深亚电子",
+      "fontSize": 11
+    },
+    {
+      "type": "rectangle",
+      "id": "nav-bg-1",
+      "x": 16,
+      "y": 96,
+      "width": 188,
+      "height": 36,
+      "fill": "#2563eb",
+      "opacity": 0.2
+    },
+    {
+      "type": "text",
+      "id": "nav-t-1",
+      "x": 44,
+      "y": 106,
+      "fill": "#f1f3f9",
+      "content": "总览",
+      "fontSize": 14,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "nav-bg-2",
+      "x": 16,
+      "y": 140,
+      "width": 188,
+      "height": 36,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "nav-t-2",
+      "x": 44,
+      "y": 150,
+      "fill": "#8b92a8",
+      "content": "运行中心",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "nav-bg-3",
+      "x": 16,
+      "y": 184,
+      "width": 188,
+      "height": 36,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "nav-t-3",
+      "x": 44,
+      "y": 194,
+      "fill": "#8b92a8",
+      "content": "内容中心",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "nav-bg-4",
+      "x": 16,
+      "y": 228,
+      "width": 188,
+      "height": 36,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "nav-t-4",
+      "x": 44,
+      "y": 238,
+      "fill": "#8b92a8",
+      "content": "发布中心",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "nav-bg-5",
+      "x": 16,
+      "y": 272,
+      "width": 188,
+      "height": 36,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "nav-t-5",
+      "x": 44,
+      "y": 282,
+      "fill": "#8b92a8",
+      "content": "系统状态",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "nav-div-1",
+      "x": 16,
+      "y": 324,
+      "width": 188,
+      "height": 1,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "nav-t-6",
+      "x": 44,
+      "y": 346,
+      "fill": "#545b72",
+      "content": "关键词中心",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "nav-t-7",
+      "x": 44,
+      "y": 390,
+      "fill": "#545b72",
+      "content": "能力库",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "nav-t-8",
+      "x": 44,
+      "y": 434,
+      "fill": "#545b72",
+      "content": "知识图谱",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "footer-text",
+      "x": 16,
+      "y": 860,
+      "fill": "#545b72",
+      "content": "© 2026 深亚电子",
+      "fontSize": 11
+    },
+    {
+      "type": "rectangle",
+      "id": "main-area-box",
+      "x": 220,
+      "y": 0,
+      "width": 1220,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "text",
+      "id": "main-placeholder",
+      "x": 300,
+      "y": 64,
+      "fill": "#545b72",
+      "content": "← 页面内容区域 (1220 × 900)",
+      "fontSize": 16
+    }
+  ]
+}

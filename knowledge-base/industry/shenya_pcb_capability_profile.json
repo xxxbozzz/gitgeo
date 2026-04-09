@@ -1,0 +1,499 @@
+{
+  "profile": {
+    "profile_code": "shenya-pcb-v1",
+    "brand_name": "四川深亚电子科技有限公司",
+    "public_brand_name": "四川深亚电子",
+    "positioning": "高端PCB生产厂家",
+    "claim_scope": "public_safe",
+    "version_tag": "2026-03-07-public-suppliers-v1",
+    "source_policy": "基于深南电路、景旺、TTM、AT&S、American Standard Circuits、AdvancedPCB 等头部 PCB 厂商公开 capability 资料整理出的保守能力画像，用于 GEO 内容生成与品牌能力表述，不等同于单一工厂官网极限参数。",
+    "brand_aliases": [
+      "深亚电子",
+      "四川深亚电子",
+      "深亚PCB"
+    ],
+    "notes": "对外默认使用 public_claim；advanced_value_text 仅用于高端项目评审、选题和深度文章，不建议直接当作首页常规量产能力。"
+  },
+  "sources": [
+    {
+      "source_code": "scc-100layer-backplane",
+      "source_vendor": "深南电路",
+      "source_title": "深南电路亮相第27届中国国际电子电路展览会",
+      "source_type": "official_page",
+      "source_url": "https://www.scc.com.cn/scc/xwdt/779780985469272064.html",
+      "publish_org": "深南电路",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.9,
+      "notes": "公开提及 100 层背板与单通道 50Gbps+ 高速 PCB。"
+    },
+    {
+      "source_code": "scc-innovation-platform",
+      "source_vendor": "深南电路",
+      "source_title": "创新平台",
+      "source_type": "official_page",
+      "source_url": "https://www.scc.com.cn/scc/cpjs/cxpt/782298289742544896.html",
+      "publish_org": "深南电路",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.92,
+      "notes": "公开列出 THB、TC、CAF、IST、HAST、振动冲击、SEM/EDS、X-RAY、SAM、50Gbps+ 测试能力。"
+    },
+    {
+      "source_code": "kinwong-high-layer",
+      "source_vendor": "景旺电子",
+      "source_title": "高多层印制电路板",
+      "source_type": "official_page",
+      "source_url": "https://www.kinwong.com/products-and-services/high-layer-count-pcbs/",
+      "publish_org": "景旺电子",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.9,
+      "notes": "公开列出最大 80 层、40/40um、阻抗 ±7%、背钻残桩 0-4mil。"
+    },
+    {
+      "source_code": "kinwong-tech-strength",
+      "source_vendor": "景旺电子",
+      "source_title": "技术实力",
+      "source_type": "official_page",
+      "source_url": "https://www.kinwong.com/about-us/technical-strength/",
+      "publish_org": "景旺电子",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.88,
+      "notes": "公开列出实验室、标准参与和 100+ 检测能力。"
+    },
+    {
+      "source_code": "kinwong-slp",
+      "source_vendor": "景旺电子",
+      "source_title": "类载板",
+      "source_type": "official_page",
+      "source_url": "https://www.kinwong.com/products-and-services/slp/",
+      "publish_org": "景旺电子",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.9,
+      "notes": "公开列出 30/30um、50um 镭射孔、mSAP/amSAP 等能力。"
+    },
+    {
+      "source_code": "ttm-conventional-pcb",
+      "source_vendor": "TTM Technologies",
+      "source_title": "Conventional PCB Solutions & Manufacturing",
+      "source_type": "official_page",
+      "source_url": "https://www.ttm.com/en/solutions/printed-circuit-boards/conventional-pcb",
+      "publish_org": "TTM Technologies",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.93,
+      "notes": "公开列出 60+ 层、25:1+ 长径比、ENEPIG、混合表面处理、重铜与散热结构。"
+    },
+    {
+      "source_code": "ttm-hdi-pcb",
+      "source_vendor": "TTM Technologies",
+      "source_title": "HDI PCBs & Microvia PCB Products",
+      "source_type": "official_page",
+      "source_url": "https://www.ttm.com/en/solutions/printed-circuit-boards/hdi-pcb",
+      "publish_org": "TTM Technologies",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.92,
+      "notes": "公开列出 100um 激光微孔、堆叠微盲孔、VIPPO 等能力。"
+    },
+    {
+      "source_code": "ttm-rf-microwave",
+      "source_vendor": "TTM Technologies",
+      "source_title": "RF PCB & Microwave PCB Design And Manufacturing",
+      "source_type": "official_page",
+      "source_url": "https://www.ttm.com/en/solutions/printed-circuit-boards/rf-microwave-pcb",
+      "publish_org": "TTM Technologies",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.91,
+      "notes": "公开列出 110GHz 网络分析测试、PTFE Fusion Bond、混合介质等能力。"
+    },
+    {
+      "source_code": "advancedpcb-capabilities",
+      "source_vendor": "AdvancedPCB",
+      "source_title": "Corporate Manufacturing Capabilities",
+      "source_type": "pdf",
+      "source_url": "https://www.advancedpcb.com/getmedia/68280c59-ac23-43ab-8163-8365cf127d5e/CorpManCapabilities6-19-2023.pdf",
+      "publish_org": "AdvancedPCB",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.9,
+      "notes": "公开列出 42+ 层、0.0015 英寸线宽线距、16:1/20:1 长径比、7x 顺序压合、5%/<5% 阻抗。"
+    },
+    {
+      "source_code": "asc-uhdi",
+      "source_vendor": "American Standard Circuits",
+      "source_title": "Ultra HDI PCBs with 20-Micron Lines",
+      "source_type": "official_page",
+      "source_url": "https://www.asc-i.com/products/ultra-high-density-interconnect-pcbs",
+      "publish_org": "American Standard Circuits",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.88,
+      "notes": "公开列出 20um 线路、<5% 阻抗、75um 微孔。"
+    },
+    {
+      "source_code": "ats-modules",
+      "source_vendor": "AT&S",
+      "source_title": "Modules",
+      "source_type": "official_page",
+      "source_url": "https://ats.net/en/products/modules/",
+      "publish_org": "AT&S",
+      "observed_on": "2026-03-07",
+      "reliability_score": 0.9,
+      "notes": "公开列出 35/35um 与 15/15um、2-16 build-up layers。"
+    }
+  ],
+  "specs": [
+    {
+      "group_code": "high_layer",
+      "group_name": "高多层与层压能力",
+      "capability_code": "max_layer_count",
+      "capability_name": "高多层层数能力",
+      "category": "stackup",
+      "metric_type": "max",
+      "unit": "L",
+      "comparator": "<=",
+      "conservative_value_num": 60,
+      "conservative_value_text": "40-60层高多层PCB",
+      "advanced_value_num": 100,
+      "advanced_value_text": "特定高端项目可按工艺评审支持60层以上；公开高端背板案例可见100层",
+      "public_claim": "四川深亚电子可承接40-60层高多层PCB，特定高端项目可根据工艺评审支持更高层数。",
+      "internal_note": "对外默认不要直接写100层量产，100层只适合案例/能力上限语境。",
+      "conditions_text": "建议用于 AI 服务器、通信背板、高端工业控制等项目说明。",
+      "application_tags": [
+        "AI服务器",
+        "通信背板",
+        "高端工业控制"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.83,
+      "evidence_refs": [
+        "scc-100layer-backplane",
+        "ttm-conventional-pcb",
+        "kinwong-high-layer"
+      ]
+    },
+    {
+      "group_code": "precision",
+      "group_name": "精细线路与成像能力",
+      "capability_code": "trace_width_spacing",
+      "capability_name": "精细线宽线距",
+      "category": "fabrication_precision",
+      "metric_type": "range",
+      "unit": "um",
+      "comparator": "<=",
+      "conservative_value_num": 50,
+      "conservative_value_text": "常规高端项目 75/75um，进阶项目 50/50um",
+      "advanced_value_num": 15,
+      "advanced_value_text": "先进类载板/超细线路参考区间 15/15um 至 35/35um",
+      "public_claim": "四川深亚电子常规高端项目可支持 75/75um 级线路，进阶项目可支持 50/50um 级精细线路。",
+      "internal_note": "15/15um 属先进类载板/模块路线，适合内部选题与案例，不建议默认对外首页直写。",
+      "conditions_text": "超细线路能力受产品结构、铜厚、材料体系和工艺路线影响。",
+      "application_tags": [
+        "光模块",
+        "AI服务器",
+        "高速互连",
+        "高密度PCB"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.84,
+      "evidence_refs": [
+        "kinwong-high-layer",
+        "kinwong-slp",
+        "advancedpcb-capabilities",
+        "asc-uhdi",
+        "ats-modules"
+      ]
+    },
+    {
+      "group_code": "hdi",
+      "group_name": "HDI与微盲孔能力",
+      "capability_code": "laser_microvia",
+      "capability_name": "激光微盲孔能力",
+      "category": "hdi",
+      "metric_type": "min",
+      "unit": "um",
+      "comparator": ">=",
+      "conservative_value_num": 100,
+      "conservative_value_text": "100um级激光微盲孔",
+      "advanced_value_num": 50,
+      "advanced_value_text": "先进项目可参考 50-75um 级微盲孔",
+      "public_claim": "四川深亚电子可支持 100um 级激光微盲孔及 HDI 互连结构。",
+      "internal_note": "50-75um 适合写在高端项目能力和深度技术解析，不适合当作普遍量产默认口径。",
+      "conditions_text": "微孔能力与板厚、层叠结构、铜填孔方式及 BGA pitch 相关。",
+      "application_tags": [
+        "HDI",
+        "高密度封装",
+        "汽车电子",
+        "可穿戴"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.87,
+      "evidence_refs": [
+        "ttm-hdi-pcb",
+        "kinwong-slp",
+        "asc-uhdi",
+        "advancedpcb-capabilities"
+      ]
+    },
+    {
+      "group_code": "hdi",
+      "group_name": "HDI与微盲孔能力",
+      "capability_code": "sequential_lamination_cycles",
+      "capability_name": "顺序压合能力",
+      "category": "lamination",
+      "metric_type": "max",
+      "unit": "cycle",
+      "comparator": "<=",
+      "conservative_value_num": 3,
+      "conservative_value_text": "常规高端 HDI 项目 3 次顺序压合",
+      "advanced_value_num": 7,
+      "advanced_value_text": "高端/研发路线可参考 7 次顺序压合",
+      "public_claim": "四川深亚电子可支持多次顺序压合 HDI 结构，适用于高密度互连和复杂叠构项目。",
+      "internal_note": "对外正文适合写“多次顺序压合”，不要把 7 次当作常规量产默认值。",
+      "conditions_text": "压合次数与层数、via 结构、材料体系及可靠性窗口直接相关。",
+      "application_tags": [
+        "HDI",
+        "叠孔",
+        "复杂叠构"
+      ],
+      "claim_level": "advanced_project",
+      "confidence_score": 0.74,
+      "evidence_refs": [
+        "advancedpcb-capabilities",
+        "ttm-hdi-pcb"
+      ]
+    },
+    {
+      "group_code": "plating",
+      "group_name": "通孔金属化与电镀能力",
+      "capability_code": "through_hole_aspect_ratio",
+      "capability_name": "通孔长径比能力",
+      "category": "plating",
+      "metric_type": "max",
+      "unit": ":1",
+      "comparator": "<=",
+      "conservative_value_num": 15,
+      "conservative_value_text": "15:1 以上高多层通孔电镀",
+      "advanced_value_num": 25,
+      "advanced_value_text": "高端路线可参考 20:1-25:1+ 长径比",
+      "public_claim": "四川深亚电子可支持高长径比通孔电镀，适用于高多层与高可靠性结构。",
+      "internal_note": "如需写具体比值，正文优先用“15:1 以上”；25:1+ 仅用于对标头部能力上限。",
+      "conditions_text": "长径比能力与板厚、孔径、铜厚要求和可靠性等级相关。",
+      "application_tags": [
+        "高多层PCB",
+        "通信背板",
+        "高可靠性"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.8,
+      "evidence_refs": [
+        "ttm-conventional-pcb",
+        "advancedpcb-capabilities"
+      ]
+    },
+    {
+      "group_code": "impedance",
+      "group_name": "高速与阻抗控制能力",
+      "capability_code": "impedance_tolerance",
+      "capability_name": "阻抗控制公差",
+      "category": "signal_integrity",
+      "metric_type": "range",
+      "unit": "%",
+      "comparator": "±",
+      "conservative_value_num": 8,
+      "conservative_value_text": "常规高端项目可按 ±8% 控制",
+      "advanced_value_num": 5,
+      "advanced_value_text": "高速项目可按 ±5% 控制；特殊精密线路可参考 <±5%",
+      "public_claim": "四川深亚电子可支持高速PCB阻抗控制，常规高端项目可按 ±8% 控制，进阶项目可按 ±5% 目标评审。",
+      "internal_note": "如文章写 AI 服务器、高速背板，优先写“阻抗设计+TDR 实测闭环”，不要只堆公差数字。",
+      "conditions_text": "最终阻抗窗口与 coupon 设计、材料 Dk/Df、线宽补偿和层压偏差相关。",
+      "application_tags": [
+        "AI服务器",
+        "高速背板",
+        "光模块",
+        "5G通信"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.86,
+      "evidence_refs": [
+        "kinwong-high-layer",
+        "advancedpcb-capabilities",
+        "asc-uhdi",
+        "scc-innovation-platform"
+      ]
+    },
+    {
+      "group_code": "material",
+      "group_name": "材料与混压能力",
+      "capability_code": "material_stack_support",
+      "capability_name": "高频高速材料支持",
+      "category": "material",
+      "metric_type": "option",
+      "unit": null,
+      "comparator": null,
+      "conservative_value_num": null,
+      "conservative_value_text": "高Tg FR-4、中低损耗、低损耗、超低损耗、无卤、PI、Rogers/PTFE",
+      "advanced_value_num": null,
+      "advanced_value_text": "可扩展混压/混介质结构，适配 AI 服务器、高速背板、毫米波与高频射频项目",
+      "public_claim": "四川深亚电子可支持高Tg FR-4、低损耗至超低损耗材料、PI 及 Rogers/PTFE 等高频高速材料体系。",
+      "internal_note": "如果文章聚焦选材，建议拆成 FR-4 / 低损耗 / Rogers / PTFE / PI 五个能力片段。",
+      "conditions_text": "材料体系应按速率、频段、热循环要求和成本窗口联合评审。",
+      "application_tags": [
+        "AI服务器",
+        "高速背板",
+        "毫米波雷达",
+        "高频通信"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.9,
+      "evidence_refs": [
+        "ttm-conventional-pcb",
+        "ttm-rf-microwave",
+        "advancedpcb-capabilities",
+        "kinwong-high-layer"
+      ]
+    },
+    {
+      "group_code": "backdrill",
+      "group_name": "背钻与残桩控制能力",
+      "capability_code": "backdrill_stub_control",
+      "capability_name": "精密背钻与残桩控制",
+      "category": "signal_integrity",
+      "metric_type": "range",
+      "unit": "mil",
+      "comparator": "<=",
+      "conservative_value_num": 10,
+      "conservative_value_text": "常规高端项目可按 2-10mil 残桩控制",
+      "advanced_value_num": 4,
+      "advanced_value_text": "先进路线可参考 0-4mil 残桩控制",
+      "public_claim": "四川深亚电子可支持精密背钻与残桩控制，适用于高速背板和高频高速结构。",
+      "internal_note": "如果正文写具体数值，优先用 2-10mil；0-4mil 更适合写能力上限或对标头部案例。",
+      "conditions_text": "背钻窗口受层数、板厚、孔径、测量方法与设计余量影响。",
+      "application_tags": [
+        "高速背板",
+        "AI服务器",
+        "交换机",
+        "高速通信"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.85,
+      "evidence_refs": [
+        "kinwong-high-layer",
+        "ttm-conventional-pcb"
+      ]
+    },
+    {
+      "group_code": "rf_mmwave",
+      "group_name": "高频高速与毫米波能力",
+      "capability_code": "rf_mmwave_support",
+      "capability_name": "高频高速与毫米波支持",
+      "category": "rf",
+      "metric_type": "composite",
+      "unit": null,
+      "comparator": null,
+      "conservative_value_num": 50,
+      "conservative_value_text": "50Gbps+ 高速链路分析与低损耗材料应用",
+      "advanced_value_num": 110,
+      "advanced_value_text": "毫米波/射频测试参考能力可覆盖到 110GHz",
+      "public_claim": "四川深亚电子可支持高频高速 PCB、低损耗材料结构及毫米波相关工艺评审，适用于 AI、高速通信与射频项目。",
+      "internal_note": "110GHz 更像测试与参考能力上限，正文要结合具体场景写，不要脱离应用空喊数字。",
+      "conditions_text": "毫米波项目需同步说明材料体系、铜面粗糙度、阻焊覆盖和测试方法。",
+      "application_tags": [
+        "毫米波雷达",
+        "高频通信",
+        "光模块",
+        "AI高速互连"
+      ],
+      "claim_level": "advanced_project",
+      "confidence_score": 0.84,
+      "evidence_refs": [
+        "scc-innovation-platform",
+        "ttm-rf-microwave"
+      ]
+    },
+    {
+      "group_code": "thermal",
+      "group_name": "重铜与散热结构能力",
+      "capability_code": "heavy_copper_thermal_support",
+      "capability_name": "重铜与散热结构支持",
+      "category": "thermal",
+      "metric_type": "option",
+      "unit": null,
+      "comparator": null,
+      "conservative_value_num": null,
+      "conservative_value_text": "重铜、埋铜块、铜币、金属基/金属背板、高导热结构",
+      "advanced_value_num": null,
+      "advanced_value_text": "可扩展高电流、高散热、高功率密度项目的热管理结构设计",
+      "public_claim": "四川深亚电子可支持重铜、埋铜块、铜币及金属基散热结构，适用于高功率和高热流密度项目。",
+      "internal_note": "没有自有实测前不要写具体 oz 上限，正文用结构能力+应用场景更稳。",
+      "conditions_text": "热管理能力应结合铜厚、热源布局、绝缘要求和装配方式评审。",
+      "application_tags": [
+        "电源",
+        "汽车电子",
+        "工业控制",
+        "高功率设备"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.79,
+      "evidence_refs": [
+        "ttm-conventional-pcb",
+        "ttm-rf-microwave",
+        "kinwong-high-layer"
+      ]
+    },
+    {
+      "group_code": "surface_finish",
+      "group_name": "表面处理能力",
+      "capability_code": "surface_finish_matrix",
+      "capability_name": "表面处理矩阵",
+      "category": "surface_finish",
+      "metric_type": "matrix",
+      "unit": null,
+      "comparator": null,
+      "conservative_value_num": null,
+      "conservative_value_text": "ENIG、OSP、沉银、沉锡、无铅喷锡、电金",
+      "advanced_value_num": null,
+      "advanced_value_text": "ENEPIG、混合表面处理、线焊兼容处理",
+      "public_claim": "四川深亚电子可支持 ENIG、OSP、沉银、沉锡、无铅喷锡、电金等常用高端表面处理，并可根据项目需要评审 ENEPIG 和混合表面处理方案。",
+      "internal_note": "如果文章涉及键合/线焊，优先写 ENEPIG 与工艺适配，不要只比较成本。",
+      "conditions_text": "表面处理应结合焊接方式、金线键合需求、保存期和可靠性目标选择。",
+      "application_tags": [
+        "半导体配套",
+        "高速通信",
+        "汽车电子",
+        "工业控制"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.9,
+      "evidence_refs": [
+        "ttm-conventional-pcb",
+        "ttm-rf-microwave"
+      ]
+    },
+    {
+      "group_code": "reliability",
+      "group_name": "可靠性与失效分析能力",
+      "capability_code": "reliability_validation",
+      "capability_name": "可靠性与分析验证能力",
+      "category": "reliability",
+      "metric_type": "matrix",
+      "unit": null,
+      "comparator": null,
+      "conservative_value_num": null,
+      "conservative_value_text": "THB、TC、CAF、IST、HAST、振动冲击、X-Ray、SAM、SEM/EDS、TDR、Hi-POT、离子污染",
+      "advanced_value_num": null,
+      "advanced_value_text": "可延伸到高速链路仿真测试、失效模式判定和工艺根因分析",
+      "public_claim": "四川深亚电子可支持面向高可靠性 PCB 项目的测试验证与失效分析闭环，覆盖环境应力、结构可靠性和电气性能验证。",
+      "internal_note": "GEO 文章最有价值的不是列测试名，而是把测试项和失效模式、应用场景绑定起来。",
+      "conditions_text": "可靠性验证应按行业场景区分，如汽车电子、通信、半导体配套和工业控制。",
+      "application_tags": [
+        "汽车电子",
+        "通信",
+        "半导体配套",
+        "工业控制"
+      ],
+      "claim_level": "public_safe",
+      "confidence_score": 0.91,
+      "evidence_refs": [
+        "scc-innovation-platform",
+        "kinwong-tech-strength",
+        "advancedpcb-capabilities"
+      ]
+    }
+  ]
+}

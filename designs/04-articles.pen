@@ -1,0 +1,382 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#8b92a8"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 内容中心",
+      "fontSize": 11
+    },
+    {
+      "type": "text",
+      "id": "page-header",
+      "x": 256,
+      "y": 32,
+      "fill": "#f1f3f9",
+      "content": "内容中心 Content Center",
+      "fontSize": 24,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "filter-bar",
+      "x": 256,
+      "y": 88,
+      "width": 1148,
+      "height": 56,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "f-1-l",
+      "x": 272,
+      "y": 106,
+      "fill": "#8b92a8",
+      "content": "状态: 全部 ▾",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "f-2-l",
+      "x": 400,
+      "y": 106,
+      "fill": "#8b92a8",
+      "content": "最低分数: 80 ▾",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "table-header-bg",
+      "x": 256,
+      "y": 168,
+      "width": 750,
+      "height": 40,
+      "fill": "#2563eb",
+      "opacity": 0.1
+    },
+    {
+      "type": "text",
+      "id": "th-1",
+      "x": 272,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "ID",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "th-2",
+      "x": 320,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "文章标题",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "th-3",
+      "x": 600,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "状态",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "th-4",
+      "x": 800,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "出链/入链",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "tr-1-bg",
+      "x": 256,
+      "y": 208,
+      "width": 750,
+      "height": 48,
+      "fill": "#1e263c",
+      "opacity": 0.8
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c1",
+      "x": 272,
+      "y": 224,
+      "fill": "#f1f3f9",
+      "content": "127",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c2",
+      "x": 320,
+      "y": 224,
+      "fill": "#f1f3f9",
+      "content": "多层板层压工艺控制...",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c3",
+      "x": 600,
+      "y": 224,
+      "fill": "#22c55e",
+      "content": "已通过",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c4",
+      "x": 800,
+      "y": 224,
+      "fill": "#f1f3f9",
+      "content": "11 / 18",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "tr-2-bg",
+      "x": 256,
+      "y": 256,
+      "width": 750,
+      "height": 48,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c1",
+      "x": 272,
+      "y": 272,
+      "fill": "#8b92a8",
+      "content": "126",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c2",
+      "x": 320,
+      "y": 272,
+      "fill": "#f1f3f9",
+      "content": "BGA 焊盘设计规范",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c3",
+      "x": 600,
+      "y": 272,
+      "fill": "#3b82f6",
+      "content": "已发布",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c4",
+      "x": 800,
+      "y": 272,
+      "fill": "#f1f3f9",
+      "content": "8 / 15",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-bg",
+      "x": 1030,
+      "y": 168,
+      "width": 374,
+      "height": 700,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "dr-title",
+      "x": 1050,
+      "y": 190,
+      "fill": "#545b72",
+      "content": "文章详情",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "dr-art-t",
+      "x": 1050,
+      "y": 220,
+      "fill": "#f1f3f9",
+      "content": "多层板层压工艺控制与常见缺陷分析",
+      "fontSize": 18,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-tag-1-bg",
+      "x": 1050,
+      "y": 260,
+      "width": 70,
+      "height": 24,
+      "fill": "#ffffff",
+      "opacity": 0.1
+    },
+    {
+      "type": "text",
+      "id": "dr-tag-1-t",
+      "x": 1058,
+      "y": 264,
+      "fill": "#f1f3f9",
+      "content": "PCB 层压",
+      "fontSize": 12
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-tag-2-bg",
+      "x": 1130,
+      "y": 260,
+      "width": 70,
+      "height": 24,
+      "fill": "#ffffff",
+      "opacity": 0.1
+    },
+    {
+      "type": "text",
+      "id": "dr-tag-2-t",
+      "x": 1138,
+      "y": 264,
+      "fill": "#f1f3f9",
+      "content": "阻抗控制",
+      "fontSize": 12
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-md-bg",
+      "x": 1050,
+      "y": 300,
+      "width": 334,
+      "height": 200,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "text",
+      "id": "dr-md-t",
+      "x": 1066,
+      "y": 316,
+      "fill": "#8b92a8",
+      "content": "多层 PCB 层压是将多张\n内层板和半固化片在高温高压\n下结合成一个整体的工艺过程。\n常见的缺陷包括爆板、白斑、夹心等...",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-btn-bg",
+      "x": 1050,
+      "y": 800,
+      "width": 150,
+      "height": 40,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "text",
+      "id": "dr-btn-t",
+      "x": 1095,
+      "y": 812,
+      "fill": "#f1f3f9",
+      "content": "手动发布",
+      "fontSize": 14,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-btn2-bg",
+      "x": 1220,
+      "y": 800,
+      "width": 70,
+      "height": 40,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "dr-btn2-t",
+      "x": 1240,
+      "y": 812,
+      "fill": "#f1f3f9",
+      "content": "返修",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-btn3-bg",
+      "x": 1310,
+      "y": 800,
+      "width": 70,
+      "height": 40,
+      "fill": "#ef4444",
+      "opacity": 0.2
+    },
+    {
+      "type": "text",
+      "id": "dr-btn3-t",
+      "x": 1330,
+      "y": 812,
+      "fill": "#ef4444",
+      "content": "回收",
+      "fontSize": 14
+    }
+  ]
+}

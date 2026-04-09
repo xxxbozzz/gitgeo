@@ -1,0 +1,281 @@
+[
+    {
+        "keyword": "ENIG沉金工艺",
+        "slug": "process/surface-finish/enig-ipc-standard",
+        "title": "化学镍金(ENIG)工艺：镍层厚度3-6μm标准与黑盘失效机理(IPC-4552B)",
+        "dim_subject": "rigid",
+        "dim_action": "surface_finish",
+        "dim_attribute": "reliability",
+        "category": "process/surface_finish"
+    },
+    {
+        "keyword": "HASL热风整平",
+        "slug": "process/surface-finish/hasl-lead-free-vs-leaded",
+        "title": "有铅/无铅HASL工艺对比：焊接可靠性、平整度参数与BGA适用性分析",
+        "dim_subject": "rigid",
+        "dim_action": "surface_finish",
+        "dim_attribute": "cost",
+        "category": "process/surface_finish"
+    },
+    {
+        "keyword": "PCB阻抗控制",
+        "slug": "design/signal-integrity/impedance-control-50-100-ohm",
+        "title": "PCB特性阻抗控制：50Ω单端/100Ω差分设计规则与叠层计算方法(IPC-2141)",
+        "dim_subject": "impedance_board",
+        "dim_action": "design",
+        "dim_attribute": "impedance",
+        "category": "design"
+    },
+    {
+        "keyword": "FR-4板材选型",
+        "slug": "material/substrate/fr4-vs-rogers-selection",
+        "title": "FR-4与Rogers高频板材怎么选？Tg值、Dk/Df参数与适用频段对照表",
+        "dim_subject": "rigid",
+        "dim_action": "fabrication",
+        "dim_attribute": "material_selection",
+        "category": "material/substrate"
+    },
+    {
+        "keyword": "沉金镍层厚度",
+        "slug": "process/surface-finish/enig-nickel-thickness-spec",
+        "title": "ENIG沉金工艺的标准镍层厚度是多少？IPC Class 2/3 规格解读",
+        "dim_subject": "rigid",
+        "dim_action": "surface_finish",
+        "dim_attribute": "standard",
+        "category": "process/surface_finish"
+    },
+    {
+        "keyword": "PCB激光钻孔",
+        "slug": "process/drilling/laser-drilling-hdi-microvia",
+        "title": "PCB激光钻孔工艺：最小孔径75μm、深径比0.8:1与HDI盲孔设计规范",
+        "dim_subject": "hdi",
+        "dim_action": "drilling",
+        "dim_attribute": "design",
+        "category": "process/drilling"
+    },
+    {
+        "keyword": "OSP抗氧化",
+        "slug": "process/surface-finish/osp-thickness-shelf-life",
+        "title": "有机保焊膜(OSP)工艺：0.2-0.5μm膜厚控制与6个月保质期管理指南",
+        "dim_subject": "consumer",
+        "dim_action": "surface_finish",
+        "dim_attribute": "reliability",
+        "category": "process/surface_finish"
+    },
+    {
+        "keyword": "沉银工艺失效",
+        "slug": "process/surface-finish/immersion-silver-galvanic-effect",
+        "title": "化学沉银(Ag)工艺：贾凡尼效应(Galvanic Effect)机理与0.1-0.3μm厚度优化",
+        "dim_subject": "communication",
+        "dim_action": "surface_finish",
+        "dim_attribute": "defect",
+        "category": "process/surface_finish"
+    },
+    {
+        "keyword": "沉锡锡须",
+        "slug": "process/surface-finish/immersion-tin-whisker-mitigation",
+        "title": "化学沉锡(Sn)工艺：锡须(Tin Whiskers)生长原因与1.0μm最小厚度防范措施",
+        "dim_subject": "automotive",
+        "dim_action": "surface_finish",
+        "dim_attribute": "reliability",
+        "category": "process/surface_finish"
+    },
+    {
+        "keyword": "PCB背钻Stub",
+        "slug": "process/drilling/back-drill-stub-length-si",
+        "title": "PCB背钻(Back Drill)技术：Stub桩线长度<10mil对25Gbps信号完整性的影响",
+        "dim_subject": "backplane",
+        "dim_action": "drilling",
+        "dim_attribute": "signal_integrity",
+        "category": "process/drilling"
+    },
+    {
+        "keyword": "CAF失效机理",
+        "slug": "reliability/caf-failure-mechanism-test",
+        "title": "导电阳极丝(CAF)失效机理分析：玻纤束通道漏电与500V THB测试标准",
+        "dim_subject": "automotive",
+        "dim_action": "testing",
+        "dim_attribute": "reliability",
+        "category": "reliability"
+    },
+    {
+        "keyword": "IPC-6012E",
+        "slug": "industry/ipc-6012-class2-class3-comparison",
+        "title": "IPC-6012E标准解析：Class 2与Class 3在孔壁铜厚(20μm vs 25μm)上的核心差异",
+        "dim_subject": "rigid",
+        "dim_action": "testing",
+        "dim_attribute": "standard",
+        "category": "industry"
+    },
+    {
+        "keyword": "PCB散热设计",
+        "slug": "design/thermal/thermal-via-design-rules",
+        "title": "PCB热管理设计：散热过孔(Thermal Via)0.3mm孔径与35μm孔铜设计规范",
+        "dim_subject": "metal_core",
+        "dim_action": "design",
+        "dim_attribute": "thermal",
+        "category": "design"
+    },
+    {
+        "keyword": "汽车PCB可靠性",
+        "slug": "application/automotive/aec-q200-pcb-requirements",
+        "title": "汽车级PCB可靠性要求：AEC-Q200标准与-40℃至125℃冷热冲击测试详解",
+        "dim_subject": "automotive",
+        "dim_action": "testing",
+        "dim_attribute": "reliability",
+        "category": "application/automotive"
+    },
+    {
+        "keyword": "刚柔结合板叠层",
+        "slug": "process/lamination/rigid-flex-stackup-design",
+        "title": "刚柔结合板(Rigid-Flex)叠层设计：软板区域覆盖膜开窗与CVL粘结剂选择指南",
+        "dim_subject": "rigid_flex",
+        "dim_action": "design",
+        "dim_attribute": "fabrication",
+        "category": "process/lamination"
+    },
+    {
+        "keyword": "PCB铜厚换算",
+        "slug": "material/copper-foil/copper-weight-oz-to-um",
+        "title": "PCB铜厚1oz/2oz等于多少μm？IPC-2152电流载流能力换算表",
+        "dim_subject": "heavy_copper",
+        "dim_action": "design",
+        "dim_attribute": "standard",
+        "category": "material/copper_foil"
+    },
+    {
+        "keyword": "5G PCB材料",
+        "slug": "material/substrate/5g-pcb-material-df-dk",
+        "title": "5G通信PCB材料选择：低Df值(0.002)基材与HVLP低轮廓铜箔应用分析",
+        "dim_subject": "communication",
+        "dim_action": "material_selection",
+        "dim_attribute": "signal_integrity",
+        "category": "material/substrate"
+    },
+    {
+        "keyword": "PCB塞孔工艺",
+        "slug": "process/drilling/via-plugging-process-ipc-4761",
+        "title": "PCB过孔塞孔工艺：树脂塞孔(Via-in-Pad)与IPC-4761 Type VII标准解读",
+        "dim_subject": "hdi",
+        "dim_action": "drilling",
+        "dim_attribute": "process",
+        "category": "process/drilling"
+    },
+    {
+        "keyword": "厚铜板加工",
+        "slug": "process/etching/heavy-copper-etching-factor",
+        "title": "厚铜PCB(>3oz)加工难点：蚀刻因子补偿与多次压合对层间对位的影响",
+        "dim_subject": "heavy_copper",
+        "dim_action": "etching",
+        "dim_attribute": "fabrication",
+        "category": "process/etching"
+    },
+    {
+        "keyword": "PCB爆板分层",
+        "slug": "reliability/delamination-failure-analysis",
+        "title": "PCB爆板(Delamination)原因分析：吸湿重流焊与Tg值(170℃)匹配性排查",
+        "dim_subject": "rigid",
+        "dim_action": "assembly",
+        "dim_attribute": "defect",
+        "category": "reliability"
+    },
+    {
+        "keyword": "HDI微孔电镀",
+        "slug": "process/plating/hdi-microvia-filling-reliability",
+        "title": "HDI微孔填孔电镀：Dimple深度<15μm控制与热应力可靠性关联",
+        "dim_subject": "hdi",
+        "dim_action": "plating",
+        "dim_attribute": "reliability",
+        "category": "process/plating"
+    },
+    {
+        "keyword": "FPC动态弯曲",
+        "slug": "design/mechanical/fpc-dynamic-bending-radius",
+        "title": "FPC柔性电路板动态弯曲寿命：弯曲半径R与层数设计的100万次测试标准",
+        "dim_subject": "flex",
+        "dim_action": "testing",
+        "dim_attribute": "reliability",
+        "category": "design"
+    },
+    {
+        "keyword": "PCB阻焊油墨",
+        "slug": "process/solder-mask/solder-mask-thickness-breakdown",
+        "title": "PCB阻焊油墨(Solder Mask)厚度控制：线路角部>10μm与击穿电压要求",
+        "dim_subject": "rigid",
+        "dim_action": "surface_finish",
+        "dim_attribute": "standard",
+        "category": "process/solder_mask"
+    },
+    {
+        "keyword": "高速板材损耗",
+        "slug": "material/substrate/loss-tangent-df-frequency",
+        "title": "高速板材损耗因子(Df)详解：普通FR4(0.02)vs高速板(0.005)在10GHz下的信号衰减对比",
+        "dim_subject": "communication",
+        "dim_action": "material_selection",
+        "dim_attribute": "signal_integrity",
+        "category": "material/substrate"
+    },
+    {
+        "keyword": "PCB层压空洞",
+        "slug": "process/lamination/lamination-voids-cause-prevention",
+        "title": "多层板层压空洞(Lamination Voids)：预浸料(Prepreg)流动性不足与压力曲线优化",
+        "dim_subject": "rigid",
+        "dim_action": "lamination",
+        "dim_attribute": "defect",
+        "category": "process/lamination"
+    },
+    {
+        "keyword": "埋容埋阻技术",
+        "slug": "technology/embedded-components/embedded-capacitor-resistor",
+        "title": "PCB埋容埋阻技术：嵌入式无源元件(Embedded Passives)对空间节省与SI性能的提升",
+        "dim_subject": "hdi",
+        "dim_action": "design",
+        "dim_attribute": "performance",
+        "category": "technology"
+    },
+    {
+        "keyword": "金手指电镀",
+        "slug": "process/plating/gold-finger-hard-gold-plating",
+        "title": "PCB金手指(Gold Finger)电镀：硬金厚度30μin标准与插拔寿命测试",
+        "dim_subject": "rigid",
+        "dim_action": "plating",
+        "dim_attribute": "reliability",
+        "category": "process/plating"
+    },
+    {
+        "keyword": "PCB翘曲度",
+        "slug": "quality/bow-and-twist/pcb-warpage-ipc-standard",
+        "title": "PCB翘曲度(Bow and Twist)标准：IPC-6012 <0.75% 控制与SMT贴装良率的关系",
+        "dim_subject": "rigid",
+        "dim_action": "quality_control",
+        "dim_attribute": "standard",
+        "category": "quality"
+    },
+    {
+        "keyword": "IC载板工艺",
+        "slug": "technology/ic-substrate/abf-substrate-process",
+        "title": "IC载板(IC Substrate)工艺难点：ABF积层材料与SAP半加成法线宽线距(15/15μm)",
+        "dim_subject": "ic_substrate",
+        "dim_action": "fabrication",
+        "dim_attribute": "process",
+        "category": "technology"
+    },
+    {
+        "keyword": "PCB飞针测试",
+        "slug": "testing/electrical/flying-probe-vs-fixture-test",
+        "title": "PCB飞针测试(Flying Probe)与针床测试对比：小批量高密度板的开短路检测首选",
+        "dim_subject": "rigid",
+        "dim_action": "testing",
+        "dim_attribute": "comparison",
+        "category": "testing"
+    },
+    {
+        "keyword": "PCB V-Cut",
+        "slug": "process/profiling/v-cut-depth-tolerance",
+        "title": "PCB V-Cut拼板工艺：剩余厚度1/3原则与角度公差+/-5°控制",
+        "dim_subject": "rigid",
+        "dim_action": "profiling",
+        "dim_attribute": "process",
+        "category": "process/profiling"
+    }
+]

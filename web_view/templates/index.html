@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB GEO 知识库仪表盘</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .stat-card { transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .probe-status-ok { color: green; font-weight: bold; }
+        .probe-status-fail { color: red; }
+        .sidebar { height: 100vh; background: #fff; border-right: 1px solid #dee2e6; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏 -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse pt-3">
+                <h4 class="px-3 mb-4">GEO 控制台</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link active" href="/">📊 仪表盘</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">🔍 关键词库</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">⚙️ 策略配置</a></li>
+                </ul>
+            </nav>
+
+            <!-- 主内容 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">系统概览</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">导出报告</button>
+                    </div>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card stat-card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">总文章数</h5>
+                                <p class="card-text display-4">{{ stats.total_articles }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stat-card text-white bg-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">已发布</h5>
+                                <p class="card-text display-4">{{ stats.published }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stat-card text-white bg-info mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">AI 收录率 (估算)</h5>
+                                <p class="card-text display-4">--%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最近文章 -->
+                <h3>📄 最近生成文章</h3>
+                <div class="table-responsive mb-4">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>标题</th>
+                                <th>Slug</th>
+                                <th>生成时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for article in recent_articles %}
+                            <tr>
+                                <td>{{ article.id }}</td>
+                                <td>{{ article.title }}</td>
+                                <td>{{ article.slug }}</td>
+                                <td>{{ article.created_at }}</td>
+                                <td>
+                                    <a href="/article/{{ article.slug }}" class="btn btn-sm btn-outline-primary">查看</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 探测记录 -->
+                <h3>📡 Active Probing 探测记录</h3>
+                 <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>目标 AI</th>
+                                <th>问题</th>
+                                <th>指纹命中</th>
+                                <th>引用命中</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for probe in probes %}
+                            <tr>
+                                <td>{{ probe.probe_time }}</td>
+                                <td>{{ probe.target_ai_model }}</td>
+                                <td>{{ probe.probe_question }}</td>
+                                <td class="{{ 'probe-status-ok' if probe.fingerprint_detected else 'probe-status-fail' }}">
+                                    {{ '✅ MATCH' if probe.fingerprint_detected else '❌ MISS' }}
+                                </td>
+                                <td class="{{ 'probe-status-ok' if probe.citation_detected else 'probe-status-fail' }}">
+                                    {{ '✅ CITATION' if probe.citation_detected else '❌ MISS' }}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">暂无探测记录</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>

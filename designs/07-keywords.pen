@@ -1,0 +1,128 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#8b92a8"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 关键词中心",
+      "fontSize": 11
+    },
+    {
+      "type": "text",
+      "id": "page-header",
+      "x": 256,
+      "y": 32,
+      "fill": "#f1f3f9",
+      "content": "关键词中心 Keywords Center",
+      "fontSize": 24,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "toolbar-bg",
+      "x": 256,
+      "y": 100,
+      "width": 1148,
+      "height": 56,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "tb-text",
+      "x": 272,
+      "y": 118,
+      "fill": "#8b92a8",
+      "content": "功能描述: 业务词根管理、长尾词拓展、意图分析配置",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "btn-add",
+      "x": 1300,
+      "y": 110,
+      "width": 88,
+      "height": 36,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "text",
+      "id": "btn-add-t",
+      "x": 1315,
+      "y": 120,
+      "fill": "#f1f3f9",
+      "content": "+ 导入词库",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "placeholder-box",
+      "x": 256,
+      "y": 180,
+      "width": 1148,
+      "height": 500,
+      "fill": "#161c30",
+      "opacity": 0.5
+    },
+    {
+      "type": "text",
+      "id": "placeholder-t",
+      "x": 760,
+      "y": 420,
+      "fill": "#545b72",
+      "content": "关键词树状视图展示区\n(即将上线)",
+      "fontSize": 20
+    }
+  ]
+}

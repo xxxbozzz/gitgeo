@@ -1,0 +1,164 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#8b92a8"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 知识图谱",
+      "fontSize": 11
+    },
+    {
+      "type": "text",
+      "id": "page-header",
+      "x": 256,
+      "y": 32,
+      "fill": "#f1f3f9",
+      "content": "知识图谱 Knowledge Graph",
+      "fontSize": 24,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "toolbar-bg",
+      "x": 256,
+      "y": 100,
+      "width": 1148,
+      "height": 56,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "tb-text",
+      "x": 272,
+      "y": 118,
+      "fill": "#8b92a8",
+      "content": "功能描述: 技术术语关联、内链网络可视化、孤岛检测",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "btn-add",
+      "x": 1300,
+      "y": 110,
+      "width": 88,
+      "height": 36,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "text",
+      "id": "btn-add-t",
+      "x": 1315,
+      "y": 120,
+      "fill": "#f1f3f9",
+      "content": "重新计算",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "graph-area",
+      "x": 256,
+      "y": 180,
+      "width": 780,
+      "height": 600,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "graph-t",
+      "x": 580,
+      "y": 460,
+      "fill": "#545b72",
+      "content": "D3.js 知识图谱渲染区",
+      "fontSize": 20
+    },
+    {
+      "type": "rectangle",
+      "id": "detail-area",
+      "x": 1056,
+      "y": 180,
+      "width": 348,
+      "height": 600,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "dt-title",
+      "x": 1076,
+      "y": 200,
+      "fill": "#f1f3f9",
+      "content": "节点详情",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "dt-prop1",
+      "x": 1076,
+      "y": 240,
+      "fill": "#8b92a8",
+      "content": "当前选中: BGA 封装",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "dt-prop2",
+      "x": 1076,
+      "y": 270,
+      "fill": "#8b92a8",
+      "content": "入度: 4  /  出度: 7",
+      "fontSize": 14
+    }
+  ]
+}

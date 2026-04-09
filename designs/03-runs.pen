@@ -1,0 +1,345 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#8b92a8"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 运行中心",
+      "fontSize": 11
+    },
+    {
+      "type": "text",
+      "id": "page-header",
+      "x": 256,
+      "y": 32,
+      "fill": "#f1f3f9",
+      "content": "运行中心 Run Center",
+      "fontSize": 24,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "filter-bar",
+      "x": 256,
+      "y": 88,
+      "width": 1148,
+      "height": 56,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "f-1-l",
+      "x": 272,
+      "y": 106,
+      "fill": "#8b92a8",
+      "content": "状态: 全部 ▾",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "f-2-l",
+      "x": 400,
+      "y": 106,
+      "fill": "#8b92a8",
+      "content": "方式: 全部 ▾",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "table-header-bg",
+      "x": 256,
+      "y": 168,
+      "width": 800,
+      "height": 40,
+      "fill": "#2563eb",
+      "opacity": 0.1
+    },
+    {
+      "type": "text",
+      "id": "th-1",
+      "x": 272,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "Run UID",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "th-2",
+      "x": 380,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "关键词",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "th-3",
+      "x": 700,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "状态",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "th-4",
+      "x": 900,
+      "y": 180,
+      "fill": "#3b82f6",
+      "content": "当前步骤",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "tr-1-bg",
+      "x": 256,
+      "y": 208,
+      "width": 800,
+      "height": 48,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c1",
+      "x": 272,
+      "y": 224,
+      "fill": "#8b92a8",
+      "content": "RU00001",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c2",
+      "x": 380,
+      "y": 224,
+      "fill": "#f1f3f9",
+      "content": "高频 PCB 设计",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c3",
+      "x": 700,
+      "y": 224,
+      "fill": "#22c55e",
+      "content": "成功",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "tr-1-c4",
+      "x": 900,
+      "y": 224,
+      "fill": "#8b92a8",
+      "content": "入库",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "tr-2-bg",
+      "x": 256,
+      "y": 256,
+      "width": 800,
+      "height": 48,
+      "fill": "#1e263c",
+      "opacity": 0.8
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c1",
+      "x": 272,
+      "y": 272,
+      "fill": "#f1f3f9",
+      "content": "RU00002",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c2",
+      "x": 380,
+      "y": 272,
+      "fill": "#f1f3f9",
+      "content": "BGA 焊盘工艺",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c3",
+      "x": 700,
+      "y": 272,
+      "fill": "#f59e0b",
+      "content": "进行中",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c4",
+      "x": 900,
+      "y": 272,
+      "fill": "#f1f3f9",
+      "content": "质检",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "tr-2-c5",
+      "x": 1000,
+      "y": 272,
+      "fill": "#3b82f6",
+      "content": "查看",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-bg",
+      "x": 1080,
+      "y": 168,
+      "width": 324,
+      "height": 700,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "dr-title",
+      "x": 1100,
+      "y": 190,
+      "fill": "#f1f3f9",
+      "content": "运行详情 (RU00003)",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "dr-t-1",
+      "x": 1100,
+      "y": 230,
+      "fill": "#22c55e",
+      "content": "✓ 关键词分析",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "dr-t-2",
+      "x": 1100,
+      "y": 260,
+      "fill": "#22c55e",
+      "content": "✓ 内容生成",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "dr-t-3",
+      "x": 1100,
+      "y": 290,
+      "fill": "#22c55e",
+      "content": "✓ 质检",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "dr-t-4",
+      "x": 1100,
+      "y": 320,
+      "fill": "#ef4444",
+      "content": "✗ 内链 (失败)",
+      "fontSize": 14,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-err-bg",
+      "x": 1100,
+      "y": 360,
+      "width": 280,
+      "height": 80,
+      "fill": "#ef4444",
+      "opacity": 0.1
+    },
+    {
+      "type": "text",
+      "id": "dr-err-t",
+      "x": 1116,
+      "y": 380,
+      "fill": "#ef4444",
+      "content": "DataIntegrityError: Failed to process \ninternal links.",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "dr-btn-bg",
+      "x": 1100,
+      "y": 800,
+      "width": 280,
+      "height": 40,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "text",
+      "id": "dr-btn-t",
+      "x": 1200,
+      "y": 812,
+      "fill": "#f1f3f9",
+      "content": "重试此运行",
+      "fontSize": 14,
+      "fontWeight": "bold"
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#8b92a8"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 能力库",
+      "fontSize": 11
+    },
+    {
+      "type": "text",
+      "id": "page-header",
+      "x": 256,
+      "y": 32,
+      "fill": "#f1f3f9",
+      "content": "能力库 Capabilities",
+      "fontSize": 24,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "toolbar-bg",
+      "x": 256,
+      "y": 100,
+      "width": 1148,
+      "height": 56,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "tb-text",
+      "x": 272,
+      "y": 118,
+      "fill": "#8b92a8",
+      "content": "功能描述: 爬虫能力配置、大模型 Prompt 模板管理、平台账号授权",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "btn-add",
+      "x": 1300,
+      "y": 110,
+      "width": 88,
+      "height": 36,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "text",
+      "id": "btn-add-t",
+      "x": 1315,
+      "y": 120,
+      "fill": "#f1f3f9",
+      "content": "+ 新增能力",
+      "fontSize": 13,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "card-1",
+      "x": 256,
+      "y": 180,
+      "width": 360,
+      "height": 200,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "card-1-t",
+      "x": 272,
+      "y": 196,
+      "fill": "#f1f3f9",
+      "content": "知乎图文爬取模型",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "card-1-s",
+      "x": 272,
+      "y": 240,
+      "fill": "#8b92a8",
+      "content": "支持按关键词自动提取知乎高赞回答及\n评论，清洗正文格式。",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "card-1-tag",
+      "x": 272,
+      "y": 340,
+      "fill": "#22c55e",
+      "content": "● 运行正常",
+      "fontSize": 13
+    },
+    {
+      "type": "rectangle",
+      "id": "card-2",
+      "x": 640,
+      "y": 180,
+      "width": 360,
+      "height": 200,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "card-2-t",
+      "x": 656,
+      "y": 196,
+      "fill": "#f1f3f9",
+      "content": "DeepSeek 重写模型",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "card-2-s",
+      "x": 656,
+      "y": 240,
+      "fill": "#8b92a8",
+      "content": "包含指令 Prompt: 提取核心参数，重新\n排版为工程师可读结构。",
+      "fontSize": 13
+    },
+    {
+      "type": "text",
+      "id": "card-2-tag",
+      "x": 656,
+      "y": 340,
+      "fill": "#22c55e",
+      "content": "● 运行正常",
+      "fontSize": 13
+    }
+  ]
+}

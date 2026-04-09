@@ -1,0 +1,342 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg-root",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#0a0e1a"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-bg",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 900,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "sidebar-divider",
+      "x": 219,
+      "y": 0,
+      "width": 1,
+      "height": 900,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "logo-text",
+      "x": 48,
+      "y": 24,
+      "width": 100,
+      "height": 20,
+      "fill": "#f1f3f9",
+      "content": "GEO 控制台",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "logo-icon",
+      "x": 16,
+      "y": 24,
+      "width": 20,
+      "height": 20,
+      "fill": "#2563eb"
+    },
+    {
+      "type": "text",
+      "id": "version-text",
+      "x": 16,
+      "y": 56,
+      "fill": "#545b72",
+      "content": "v5.0 · 总览",
+      "fontSize": 11
+    },
+    {
+      "type": "text",
+      "id": "page-header",
+      "x": 256,
+      "y": 32,
+      "fill": "#f1f3f9",
+      "content": "总览 Dashboard",
+      "fontSize": 24,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "kpi-bg-1",
+      "x": 256,
+      "y": 88,
+      "width": 220,
+      "height": 100,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "kpi-bdr-1",
+      "x": 256,
+      "y": 88,
+      "width": 220,
+      "height": 1,
+      "fill": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "kpi-v-1",
+      "x": 272,
+      "y": 104,
+      "fill": "#f1f3f9",
+      "content": "127",
+      "fontSize": 32,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "kpi-l-1",
+      "x": 272,
+      "y": 148,
+      "fill": "#8b92a8",
+      "content": "文章总数",
+      "fontSize": 12
+    },
+    {
+      "type": "rectangle",
+      "id": "kpi-bg-2",
+      "x": 492,
+      "y": 88,
+      "width": 220,
+      "height": 100,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "kpi-v-2",
+      "x": 508,
+      "y": 104,
+      "fill": "#f1f3f9",
+      "content": "98",
+      "fontSize": 32,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "kpi-l-2",
+      "x": 508,
+      "y": 148,
+      "fill": "#8b92a8",
+      "content": "质检通过",
+      "fontSize": 12
+    },
+    {
+      "type": "rectangle",
+      "id": "kpi-bg-3",
+      "x": 728,
+      "y": 88,
+      "width": 220,
+      "height": 100,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "kpi-v-3",
+      "x": 744,
+      "y": 104,
+      "fill": "#f1f3f9",
+      "content": "15",
+      "fontSize": 32,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "kpi-l-3",
+      "x": 744,
+      "y": 148,
+      "fill": "#8b92a8",
+      "content": "待处理词",
+      "fontSize": 12
+    },
+    {
+      "type": "rectangle",
+      "id": "kpi-bg-4",
+      "x": 964,
+      "y": 88,
+      "width": 220,
+      "height": 100,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "kpi-v-4",
+      "x": 980,
+      "y": 104,
+      "fill": "#f1f3f9",
+      "content": "87.3",
+      "fontSize": 32,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "kpi-l-4",
+      "x": 980,
+      "y": 148,
+      "fill": "#8b92a8",
+      "content": "平均质量分",
+      "fontSize": 12
+    },
+    {
+      "type": "text",
+      "id": "chart-title",
+      "x": 256,
+      "y": 216,
+      "fill": "#8b92a8",
+      "content": "7日产能趋势",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "chart-area",
+      "x": 256,
+      "y": 248,
+      "width": 692,
+      "height": 280,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "chart-ph",
+      "x": 550,
+      "y": 380,
+      "fill": "#545b72",
+      "content": "[ 折线图区域 ]",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "kanban-title",
+      "x": 964,
+      "y": 216,
+      "fill": "#8b92a8",
+      "content": "生产看板",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "kanban-area",
+      "x": 964,
+      "y": 248,
+      "width": 380,
+      "height": 280,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "rectangle",
+      "id": "kanban-item-1",
+      "x": 980,
+      "y": 264,
+      "width": 348,
+      "height": 50,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "kanban-item-1-t",
+      "x": 996,
+      "y": 280,
+      "fill": "#f1f3f9",
+      "content": "[进行中] 沉金工艺缺陷分析",
+      "fontSize": 14
+    },
+    {
+      "type": "rectangle",
+      "id": "kanban-item-2",
+      "x": 980,
+      "y": 322,
+      "width": 348,
+      "height": 50,
+      "fill": "#161c30"
+    },
+    {
+      "type": "text",
+      "id": "kanban-item-2-t",
+      "x": 996,
+      "y": 338,
+      "fill": "#f1f3f9",
+      "content": "[质检中] BGA 焊盘规范",
+      "fontSize": 14
+    },
+    {
+      "type": "text",
+      "id": "articles-title",
+      "x": 256,
+      "y": 560,
+      "fill": "#8b92a8",
+      "content": "最新入库文章",
+      "fontSize": 16,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "rectangle",
+      "id": "article-1",
+      "x": 256,
+      "y": 592,
+      "width": 1088,
+      "height": 60,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "art-1-t",
+      "x": 272,
+      "y": 608,
+      "fill": "#f1f3f9",
+      "content": "多层板层压工艺控制与常见缺陷分析",
+      "fontSize": 14,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "art-1-sub",
+      "x": 272,
+      "y": 630,
+      "fill": "#545b72",
+      "content": "2026-02-28 · 已通过",
+      "fontSize": 12
+    },
+    {
+      "type": "rectangle",
+      "id": "article-2",
+      "x": 256,
+      "y": 660,
+      "width": 1088,
+      "height": 60,
+      "fill": "#0f1423"
+    },
+    {
+      "type": "text",
+      "id": "art-2-t",
+      "x": 272,
+      "y": 676,
+      "fill": "#f1f3f9",
+      "content": "沉金与 OSP 表面处理工艺对比",
+      "fontSize": 14,
+      "fontWeight": "bold"
+    },
+    {
+      "type": "text",
+      "id": "art-2-sub",
+      "x": 272,
+      "y": 698,
+      "fill": "#545b72",
+      "content": "2026-02-27 · 已发布",
+      "fontSize": 12
+    }
+  ]
+}

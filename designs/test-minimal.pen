@@ -1,0 +1,23 @@
+{
+  "version": 0,
+  "objects": {
+    "root-page": {
+      "id": "root-page",
+      "type": "page",
+      "name": "Page 1",
+      "children": ["frame-1"]
+    },
+    "frame-1": {
+      "id": "frame-1",
+      "type": "frame",
+      "name": "Test Frame",
+      "x": 0,
+      "y": 0,
+      "width": 800,
+      "height": 600,
+      "fill": [{"type": "solid", "color": "#0a0e1a"}],
+      "children": []
+    }
+  },
+  "pages": ["root-page"]
+}
