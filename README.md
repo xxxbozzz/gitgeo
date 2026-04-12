@@ -273,6 +273,38 @@ docker compose up --build
 
 适合第一次快速起全套依赖，但不建议直接把它当生产方案。
 
+### 12. 直接拉取预构建镜像
+
+如果你只是想先确认公开镜像可用，可以直接拉取：
+
+```bash
+docker pull ghcr.io/xxxbozzz/gitgeo:latest
+```
+
+如果你想固定到某次构建，也可以使用：
+
+```bash
+docker pull ghcr.io/xxxbozzz/gitgeo:sha-<commit>
+```
+
+说明：
+
+- `latest` 对应默认分支上的最新成功镜像
+- `sha-<commit>` 对应某次具体提交，适合回滚和固定部署
+
+### 13. 使用预构建镜像启动
+
+仓库里已经带了生产 compose 模板 [docker-compose.prod.yml](./docker-compose.prod.yml)。
+
+最小示例：
+
+```bash
+export GEO_APP_IMAGE=ghcr.io/xxxbozzz/gitgeo:latest
+docker compose -f docker-compose.prod.yml up -d
+```
+
+如果你只想先拉镜像验证，不一定要把整套服务都起起来。更完整的生产部署建议见 [docs/ops_deploy_runbook.md](./docs/ops_deploy_runbook.md)。
+
 ## 关键配置项
 
 | 环境变量 | 说明 |
