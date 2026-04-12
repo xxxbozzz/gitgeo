@@ -1,5 +1,7 @@
 # GEO Engine
 
+[English README](./README_EN.md)
+
 Open Source Watermark: [`github.com/xxxbozzz`](https://github.com/xxxbozzz)
 
 通用的 GEO / AEO 内容生产、评分、反馈与分发引擎。
@@ -505,6 +507,8 @@ Netlify 的 GitHub App 支持“每次提交自动构建与部署”，也适合
 - [自动化 Prompt 流水线指南](./docs/prompt_pipeline_guide.md)
 - [创作者 Prompt 构建指南](./docs/prompt_creator_guide.md)
 - [最小闭环 Demo](./docs/minimal_demo.md)
+- [英文首页](./README_EN.md)
+- [贡献指南](./CONTRIBUTING.md)
 - [前端需求草案](./docs/frontend_v2_requirements.md)
 - [运行记录说明](./docs/geo_runtime_jobs.md)
 - [LICENSE](./LICENSE)

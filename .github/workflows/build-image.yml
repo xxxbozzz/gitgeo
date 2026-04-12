@@ -46,6 +46,8 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
+          build-args: |
+            ENABLE_CN_MIRRORS=false
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
