@@ -34,7 +34,28 @@ const routes = [
         name: 'System',
         component: () => import('../views/system/index.vue'),
       },
-      // Placeholder routes for reserved modules
+      // Management pages
+      {
+        path: 'materials',
+        name: 'Materials',
+        component: () => import('../views/materials/index.vue'),
+      },
+      {
+        path: 'prompts',
+        name: 'Prompts',
+        component: () => import('../views/prompts/index.vue'),
+      },
+      {
+        path: 'models',
+        name: 'Models',
+        component: () => import('../views/models/index.vue'),
+      },
+      {
+        path: 'tasks',
+        name: 'Tasks',
+        component: () => import('../views/tasks/index.vue'),
+      },
+      // Content operations
       {
         path: 'keywords',
         name: 'Keywords',

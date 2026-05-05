@@ -88,10 +88,13 @@ class DuckDuckGoSearchTool(BaseTool):
         if not results:
             try:
                 from langchain_openai import ChatOpenAI
+                _llm_model = os.environ.get("GEO_LLM_MODEL") or os.environ.get("OPENAI_MODEL") or "deepseek-chat"
+                _llm_base = os.environ.get("GEO_LLM_BASE_URL") or os.environ.get("OPENAI_BASE_URL") or "https://api.deepseek.com"
+                _llm_key = os.environ.get("GEO_LLM_API_KEY") or os.environ.get("OPENAI_API_KEY") or os.environ.get("DEEPSEEK_API_KEY")
                 llm = ChatOpenAI(
-                    model="deepseek-chat",
-                    base_url="https://api.deepseek.com",
-                    api_key=os.environ.get("DEEPSEEK_API_KEY") or os.environ.get("OPENAI_API_KEY"),
+                    model=_llm_model,
+                    base_url=_llm_base,
+                    api_key=_llm_key,
                     temperature=0.3,
                     max_tokens=1500,
                 )

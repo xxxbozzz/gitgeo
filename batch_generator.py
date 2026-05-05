@@ -64,21 +64,23 @@ from core.active_prober import ActiveProber
 
 load_dotenv()
 
-os.environ["OPENAI_API_KEY"] = os.environ.get("DEEPSEEK_API_KEY", "")
-os.environ["OPENAI_API_BASE"] = "https://api.deepseek.com"
-os.environ["OPENAI_BASE_URL"] = "https://api.deepseek.com"
+# ── LLM 配置（统一从环境变量读取，不锁定供应商）──
+_GEO_LLM_API_KEY = os.environ.get("GEO_LLM_API_KEY") or os.environ.get("DEEPSEEK_API_KEY") or os.environ.get("OPENAI_API_KEY", "")
+_GEO_LLM_BASE_URL = os.environ.get("GEO_LLM_BASE_URL") or os.environ.get("OPENAI_BASE_URL") or "https://api.deepseek.com"
+os.environ["OPENAI_API_KEY"] = _GEO_LLM_API_KEY
+os.environ["OPENAI_API_BASE"] = _GEO_LLM_BASE_URL
+os.environ["OPENAI_BASE_URL"] = _GEO_LLM_BASE_URL
 
-MAX_REPAIR_ATTEMPTS = 3     # 单篇最大返修次数
-PASS_THRESHOLD = 80         # 质检通过分数线
-COOLDOWN_SECONDS = 5        # 文章间冷却（防 API 限流）
-SCOUT_MAX_RETRIES = 3       # 侦察最大重试次数
-MAX_ARTICLES = int(os.getenv("MAX_ARTICLES", "120"))             # 基准文章量，到达后切入 GEO 真空词自动生产模式
-DAILY_GAP_ARTICLES = int(os.getenv("DAILY_GAP_ARTICLES", "5"))   # 每天自动生产的 GEO 真空词文章数量
-GEO_GAP_PRIORITY = 9999                                           # TrendScout 注入的高优先级真空词标记
-GAP_MODE_RETRY_SECONDS = int(os.getenv("GAP_MODE_RETRY_SECONDS", "3600"))
-ENABLE_ACTIVE_PROBING = os.getenv("ENABLE_ACTIVE_PROBING", "false").lower() in {"1", "true", "yes"}
+MAX_REPAIR_ATTEMPTS = int(os.getenv("GEO_REPAIR_ATTEMPTS", "3"))
+PASS_THRESHOLD = int(os.getenv("GEO_PASS_THRESHOLD", "80"))
+COOLDOWN_SECONDS = int(os.getenv("GEO_COOLDOWN_SECONDS", "5"))
+SCOUT_MAX_RETRIES = int(os.getenv("GEO_SCOUT_RETRIES", "3"))
+MAX_ARTICLES = int(os.getenv("GEO_MAX_ARTICLES", "0"))              # 0 = 不设上限
+DAILY_GAP_ARTICLES = int(os.getenv("GEO_DAILY_GAP_ARTICLES", "5"))
+GAP_MODE_RETRY_SECONDS = int(os.getenv("GEO_GAP_RETRY_SECONDS", "3600"))
+ENABLE_ACTIVE_PROBING = os.getenv("GEO_ENABLE_PROBING", "false").lower() in {"1", "true", "yes"}
 ACTIVE_PROBE_PLATFORMS = [
-    item.strip() for item in os.getenv("ACTIVE_PROBE_PLATFORMS", "deepseek,kimi,doubao").split(",")
+    item.strip() for item in os.getenv("GEO_PROBE_PLATFORMS", "deepseek,kimi,doubao").split(",")
     if item.strip()
 ]
 
@@ -106,9 +108,10 @@ for lib in ("openai", "httpx", "httpcore", "urllib3"):
 #  LLM 初始化
 # ═══════════════════════════════════════════
 
+_GEO_LLM_MODEL = os.environ.get("GEO_LLM_MODEL") or os.environ.get("OPENAI_MODEL") or "deepseek-chat"
 llm = ChatOpenAI(
-    model="deepseek-chat",
-    base_url="https://api.deepseek.com",
+    model=_GEO_LLM_MODEL,
+    base_url=_GEO_LLM_BASE_URL,
     api_key=os.environ.get("DEEPSEEK_API_KEY"),
     temperature=0.1,
     timeout=120,

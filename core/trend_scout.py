@@ -105,8 +105,9 @@ class GeoGapScout:
         if max_keywords is not None:
             max_inject = max_keywords
         self.max_inject = max_inject
-        self._api_key = os.getenv("DEEPSEEK_API_KEY", "")
-        self._api_base = "https://api.deepseek.com/v1"
+        self._api_key = os.environ.get("GEO_LLM_API_KEY") or os.environ.get("OPENAI_API_KEY") or os.environ.get("DEEPSEEK_API_KEY", "")
+        _base = os.environ.get("GEO_LLM_BASE_URL") or os.environ.get("OPENAI_BASE_URL") or "https://api.deepseek.com"
+        self._api_base = _base.rstrip("/") + "/v1"
 
     # ══════════════════════════════════════════
     #  公共入口
@@ -187,7 +188,7 @@ GAP=NO|原因（30字以内）"""
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": "deepseek-chat",
+                    "model": os.environ.get("GEO_LLM_MODEL") or os.environ.get("OPENAI_MODEL") or "deepseek-chat",
                     "messages": [{"role": "user", "content": prompt}],
                     "max_tokens": 60,
                     "temperature": 0.1,

@@ -1,4 +1,23 @@
 services:
+  # ─── 首次初始化（幂等，建表 + 导种子数据）───
+  init:
+    build: .
+    container_name: geo-init
+    environment:
+      - DB_HOST=mysql_db
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-root_password}
+      - DB_NAME=${DB_NAME:-geo_knowledge_engine}
+      - GEO_LLM_API_KEY=${GEO_LLM_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - TZ=Asia/Shanghai
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    command: python scripts/init_project.py
+
   # ─── FastAPI Backend API ───
   backend:
     build: .
@@ -9,22 +28,25 @@ services:
     environment:
       - APP_ENV=production
       - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-root_password}
+      - DB_NAME=${DB_NAME:-geo_knowledge_engine}
       - ARTICLE_ACTION_TIMEOUT_SECONDS=120
       - PUBLISH_REQUEST_TIMEOUT_SECONDS=20
       - GEO_PUBLISH_REQUEST_TIMEOUT=20
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
-      - OPENAI_MODEL=${OPENAI_MODEL}
-      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - GEO_LLM_API_KEY=${GEO_LLM_API_KEY:-}
+      - OPENAI_API_KEY=${GEO_LLM_API_KEY:-${OPENAI_API_KEY:-}}
+      - OPENAI_BASE_URL=${GEO_LLM_BASE_URL:-${OPENAI_BASE_URL:-}}
+      - OPENAI_MODEL=${GEO_LLM_MODEL:-${OPENAI_MODEL:-deepseek-chat}}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
       - OTEL_SDK_DISABLED=true
       - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
       - TZ=Asia/Shanghai
     depends_on:
       mysql_db:
         condition: service_healthy
+      init:
+        condition: service_completed_successfully
     ports:
       - "8001:8001"
     command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8001
@@ -38,29 +60,31 @@ services:
       - .:/app
       - ./config/cookies:/app/config/cookies
     environment:
-      - OPENAI_API_BASE=${OPENAI_BASE_URL}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL}
-      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - GEO_LLM_API_KEY=${GEO_LLM_API_KEY:-}
+      - GEO_LLM_BASE_URL=${GEO_LLM_BASE_URL:-}
+      - GEO_LLM_MODEL=${GEO_LLM_MODEL:-}
+      - OPENAI_API_BASE=${GEO_LLM_BASE_URL:-${OPENAI_BASE_URL:-}}
+      - OPENAI_BASE_URL=${GEO_LLM_BASE_URL:-${OPENAI_BASE_URL:-}}
+      - OPENAI_API_KEY=${GEO_LLM_API_KEY:-${OPENAI_API_KEY:-}}
+      - OPENAI_MODEL=${GEO_LLM_MODEL:-${OPENAI_MODEL:-deepseek-chat}}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
       - CHROMA_DB_HOST=chromadb
       - CHROMA_DB_PORT=8000
       - CREWAI_TRACING_ENABLED=false
       - OTEL_SDK_DISABLED=true
       - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
       - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
-      - WECHAT_APP_ID=${WECHAT_APP_ID}
-      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-root_password}
+      - DB_NAME=${DB_NAME:-geo_knowledge_engine}
+      - WECHAT_APP_ID=${WECHAT_APP_ID:-}
+      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET:-}
       - TZ=Asia/Shanghai
     depends_on:
       mysql_db:
         condition: service_healthy
       chromadb:
         condition: service_started
-    init: true
     command: python -u batch_generator.py
 
   # ─── Dashboard ───
@@ -73,18 +97,19 @@ services:
       - ./config/cookies:/app/config/cookies
     environment:
       - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-root_password}
+      - DB_NAME=${DB_NAME:-geo_knowledge_engine}
       - GEO_BACKEND_API_BASE_URL=http://backend:8001/api/v1
       - GEO_BACKEND_API_TIMEOUT=4
       - GEO_BACKEND_ACTION_TIMEOUT=120
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
-      - OPENAI_MODEL=${OPENAI_MODEL}
-      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
-      - WECHAT_APP_ID=${WECHAT_APP_ID}
-      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
+      - GEO_LLM_API_KEY=${GEO_LLM_API_KEY:-}
+      - OPENAI_API_KEY=${GEO_LLM_API_KEY:-${OPENAI_API_KEY:-}}
+      - OPENAI_BASE_URL=${GEO_LLM_BASE_URL:-${OPENAI_BASE_URL:-}}
+      - OPENAI_MODEL=${GEO_LLM_MODEL:-${OPENAI_MODEL:-deepseek-chat}}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - WECHAT_APP_ID=${WECHAT_APP_ID:-}
+      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET:-}
       - OTEL_SDK_DISABLED=true
       - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
       - TZ=Asia/Shanghai
@@ -93,7 +118,7 @@ services:
         condition: service_healthy
     ports:
       - "8503:8503"
-    command: streamlit run dashboard/app.py --server.port 8503 --server.address 0.0.0.0 --server.enableCORS false --server.enableXsrfProtection false
+    command: streamlit run dashboard/app.py --server.port 8503 --server.address 0.0.0.0
 
   # ─── 定时任务（修复 + 发文 + 内链 + 检测）───
   scheduler:
@@ -104,20 +129,23 @@ services:
       - .:/app
       - ./config/cookies:/app/config/cookies
     environment:
-      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
-      - OPENAI_API_BASE=${OPENAI_BASE_URL}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL}
+      - GEO_LLM_API_KEY=${GEO_LLM_API_KEY:-}
+      - GEO_LLM_BASE_URL=${GEO_LLM_BASE_URL:-}
+      - GEO_LLM_MODEL=${GEO_LLM_MODEL:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - OPENAI_API_BASE=${GEO_LLM_BASE_URL:-${OPENAI_BASE_URL:-}}
+      - OPENAI_BASE_URL=${GEO_LLM_BASE_URL:-${OPENAI_BASE_URL:-}}
+      - OPENAI_API_KEY=${GEO_LLM_API_KEY:-${OPENAI_API_KEY:-}}
+      - OPENAI_MODEL=${GEO_LLM_MODEL:-${OPENAI_MODEL:-deepseek-chat}}
       - OTEL_SDK_DISABLED=true
       - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
       - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-root_password}
+      - DB_NAME=${DB_NAME:-geo_knowledge_engine}
       - GEO_PUBLISH_REQUEST_TIMEOUT=20
-      - WECHAT_APP_ID=${WECHAT_APP_ID}
-      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
+      - WECHAT_APP_ID=${WECHAT_APP_ID:-}
+      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET:-}
       - TZ=Asia/Shanghai
     depends_on:
       mysql_db:
@@ -167,8 +195,8 @@ services:
     container_name: geo-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: geo_knowledge_engine
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${DB_NAME:-geo_knowledge_engine}
       TZ: Asia/Shanghai
     ports:
       - "3306:3306"
@@ -176,7 +204,7 @@ services:
       - ./database/mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root_password}" ]
       interval: 5s
       timeout: 3s
       retries: 10
