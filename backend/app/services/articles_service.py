@@ -329,10 +329,12 @@ class ArticlesService:
             }
 
         settings = get_settings()
+        _model = os.getenv("GEO_LLM_MODEL") or os.getenv("OPENAI_MODEL", "deepseek-chat")
+        _base = os.getenv("GEO_LLM_BASE_URL") or os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE") or "https://api.deepseek.com"
         llm = ChatOpenAI(
-            model=os.getenv("OPENAI_MODEL", "deepseek-chat"),
+            model=_model,
             api_key=api_key,
-            base_url=os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_BASE") or "https://api.deepseek.com",
+            base_url=_base,
             temperature=0.3,
             timeout=settings.article_action_timeout_seconds,
             max_tokens=settings.llm_fix_max_tokens,

@@ -1,7 +1,7 @@
 """
 官网导出器 (Website Exporter)
 =============================
-负责将质检通过的文章导出为 HTML 文件，供深亚官网通过 rsync 同步。
+负责将质检通过的文章导出为 HTML 文件，供目标站点通过 rsync 同步。
 
 功能：
     1. 单篇导出：质检通过后立即导出该文章 HTML
@@ -41,11 +41,11 @@ class WebsiteExporter:
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>{title} - 深亚电子PCB技术百科</title>
+    <title>{title} - {site_name}技术百科</title>
     <meta name="description" content="{description}">
     <meta name="keywords" content="{keywords}">
-    <meta name="author" content="深亚电子">
-    <link rel="canonical" href="https://www.pcbshenya.com/wiki/{slug}">
+    <meta name="author" content="{site_name}">
+    <link rel="canonical" href="https://{site_domain}/wiki/{slug}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- JSON-LD for AI Search Engines -->
     <script type="application/ld+json">
@@ -211,6 +211,9 @@ class WebsiteExporter:
         date_str = created.strftime("%Y-%m-%d") if created else datetime.now().strftime("%Y-%m-%d")
 
         # 6. 生成完整 HTML
+        site_name = os.environ.get("GEO_SITE_NAME", "GEO Engine")
+        site_domain = os.environ.get("GEO_SITE_DOMAIN", "example.com")
+        org_name = os.environ.get("GEO_ORG_NAME", "GEO Engine")
         full_html = self.HTML_TEMPLATE.format(
             title=row["title"],
             description=description,
@@ -218,8 +221,11 @@ class WebsiteExporter:
             slug=row["slug"],
             date=date_str,
             category=category,
+            site_name=site_name,
+            site_domain=site_domain,
+            org_name=org_name,
             html_content=html_body,
-            json_ld=self._generate_json_ld(row, description, date_str),
+            json_ld=self._generate_json_ld(row, description, date_str, site_name, site_domain, org_name),
         )
 
         # 7. 写入文件
@@ -233,24 +239,26 @@ class WebsiteExporter:
         log.info(f"📄 HTML 已导出: {safe_slug}.html [{category}]")
         return True
 
-    def _generate_json_ld(self, row: dict, description: str, date_str: str) -> str:
+    def _generate_json_ld(self, row: dict, description: str, date_str: str,
+                          site_name: str = "GEO Engine", site_domain: str = "example.com",
+                          org_name: str = "GEO Engine") -> str:
         """生成 Schema.org JSON-LD"""
         schema = {
             "@context": "https://schema.org",
             "@type": "TechArticle",
             "headline": row["title"],
-            "image": ["https://www.pcbshenya.com/images/logo.png"],
+            "image": [f"https://{site_domain}/images/logo.png"],
             "datePublished": date_str,
             "dateModified": row["updated_at"].strftime("%Y-%m-%d") if row.get("updated_at") else date_str,
             "author": [{
                 "@type": "Organization",
-                "name": "深亚电子",
-                "url": "https://www.pcbshenya.com",
+                "name": org_name,
+                "url": f"https://{site_domain}",
             }],
             "description": description,
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": f"https://www.pcbshenya.com/wiki/{row['slug']}",
+                "@id": f"https://{site_domain}/wiki/{row['slug']}",
             },
         }
 

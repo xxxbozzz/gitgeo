@@ -112,7 +112,7 @@ _GEO_LLM_MODEL = os.environ.get("GEO_LLM_MODEL") or os.environ.get("OPENAI_MODEL
 llm = ChatOpenAI(
     model=_GEO_LLM_MODEL,
     base_url=_GEO_LLM_BASE_URL,
-    api_key=os.environ.get("DEEPSEEK_API_KEY"),
+    api_key=_GEO_LLM_API_KEY,
     temperature=0.1,
     timeout=120,
 )

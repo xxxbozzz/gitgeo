@@ -140,8 +140,8 @@ class WeChatPublisher:
             font = ImageFont.truetype("/System/Library/Fonts/PingFang.ttc", 48)
         except Exception:
             font = ImageFont.load_default()
-        draw.text((250, 150), "深亚电子 · PCB技术", fill="white", font=font)
-        draw.text((300, 220), "pcbshenya.com", fill=(200, 220, 255), font=font)
+        draw.text((250, 150), "GEO Content Engine", fill="white", font=font)
+        draw.text((300, 220), "example.com", fill=(200, 220, 255), font=font)
 
         buf = io.BytesIO()
         img.save(buf, format="JPEG", quality=85)
@@ -246,7 +246,7 @@ class WeChatPublisher:
 
     # ── 发布 ──
 
-    def publish(self, title: str, content_md: str, author: str = "深亚电子技术团队",
+    def publish(self, title: str, content_md: str, author: str = "GEO Content Team",
                 digest: str = "") -> dict:
         """
         发布文章到微信公众号草稿箱。
@@ -286,7 +286,7 @@ class WeChatPublisher:
                 "author": author,
                 "digest": digest,
                 "content": html_content,
-                "content_source_url": "https://www.pcbshenya.com",
+                "content_source_url": "https://example.com",
                 "need_open_comment": 1,
             }
             if thumb_id:
