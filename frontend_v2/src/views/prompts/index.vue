@@ -36,6 +36,6 @@ const templates = ref([
   { id: 4, name: 'SEO元信息模板', category: '发布', active: false, description: '自动生成meta description/keywords/Open Graph' },
 ])
 
-function editTemplate(tpl: any) { showCreate.value = true }
-function testTemplate(tpl: any) { /* TODO */ }
+function editTemplate(_tpl: any) { showCreate.value = true }
+function testTemplate(_tpl: any) { /* TODO */ }
 </script>

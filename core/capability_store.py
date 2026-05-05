@@ -1,12 +1,12 @@
-"""
-深亚工艺能力仓库 (Capability Store)
-=================================
-为 GEO 系统提供“能力记忆层”：
-1. 自动创建工艺能力相关表
-2. 自动导入默认的深亚能力画像种子数据
-3. 支持按主题搜索命中的深亚工艺能力
-4. 支持将新采集到的真实数据转写为“深亚工艺能力”并入库
-"""
+“””
+能力仓库 (Capability Store)
+============================
+为 GEO 系统提供”能力记忆层”：
+1. 自动创建能力相关表
+2. 自动导入默认的品牌能力画像种子数据
+3. 支持按主题搜索命中的组织能力
+4. 支持将新采集到的真实数据转写为能力口径并入库
+“””
 
 from __future__ import annotations
 
@@ -21,21 +21,23 @@ from core.db_manager import db_manager
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SCHEMA_FILE = PROJECT_ROOT / "database" / "pcb_capability_schema.sql"
+SCHEMA_FILE = PROJECT_ROOT / "database" / "pcb_capability_schema.sql"  # legacy name kept for migration compat
 DEFAULT_PROFILE_FILE = PROJECT_ROOT / "knowledge-base" / "industry" / "shenya_pcb_capability_profile.json"
 
+_entity = os.environ.get("TARGET_ENTITY_NAME", "目标组织")
+_aliases = os.environ.get("TARGET_ENTITY_ALIASES", "目标组织")
 DEFAULT_PROFILE = {
-    "profile_code": "shenya-pcb-v1",
-    "brand_name": "四川深亚电子科技有限公司",
-    "public_brand_name": "四川深亚电子",
-    "positioning": "高端PCB生产厂家",
+    "profile_code": os.environ.get("GEO_PROFILE_CODE", "default-v1"),
+    "brand_name": os.environ.get("GEO_ORG_NAME", _entity),
+    "public_brand_name": _entity,
+    "positioning": os.environ.get("GEO_POSITIONING", "行业供应商"),
     "claim_scope": "public_safe",
     "version_tag": "runtime-default",
     "source_policy": (
         "采集行业头部厂商与权威标准中的真实参数后，"
-        "按深亚工艺能力口径沉淀，用于 GEO 写作与能力记忆。"
+        "按目标组织能力口径沉淀，用于 GEO 写作与能力记忆。"
     ),
-    "brand_aliases": ["深亚电子", "四川深亚电子", "深亚PCB"],
+    "brand_aliases": [a.strip() for a in _aliases.split(",") if a.strip()],
     "notes": "默认对外正文优先 public_claim，极限值仅在高端项目或对标语境中使用。",
 }
 
@@ -75,7 +77,7 @@ def _extract_terms(query: str) -> set[str]:
 
 
 class CapabilityStore:
-    """深亚工艺能力仓库"""
+    """目标组织能力仓库"""
 
     def __init__(self):
         self._schema_ready = False
@@ -163,7 +165,7 @@ class CapabilityStore:
 
     def search_capabilities(self, query: str, limit: int = 6) -> list[dict[str, Any]]:
         """
-        按主题查询匹配的深亚工艺能力。
+        按主题查询匹配的目标组织能力。
         优先查数据库；数据库不可用时回退到本地 JSON。
         """
         if self.ensure_seed_data():
@@ -198,12 +200,12 @@ class CapabilityStore:
         matches = self.search_capabilities(query, limit=limit)
         if not matches:
             return (
-                "当前能力仓库中没有直接命中的深亚工艺能力记录。"
-                "请先基于公开权威来源采集真实数据，再转写为深亚工艺能力并保存。"
+                "当前能力仓库中没有直接命中的目标组织能力记录。"
+                "请先基于公开权威来源采集真实数据，再转写为目标组织能力并保存。"
             )
 
         lines = [
-            "以下为能力仓库中已命中的深亚工艺能力，正文优先使用这些口径："
+            "以下为能力仓库中已命中的目标组织能力，正文优先使用这些口径："
         ]
         for item in matches:
             lines.append(
@@ -266,7 +268,7 @@ class CapabilityStore:
                 "reason": None,
             }
         except Exception as e:
-            print(f"❌ 保存深亚工艺能力失败: {e}")
+            print(f"❌ 保存目标组织能力失败: {e}")
             try:
                 cnx.rollback()
             except Exception:
@@ -333,7 +335,7 @@ class CapabilityStore:
     def _build_public_claim(self, capability_name: str, fact: dict[str, Any]) -> str:
         conservative = fact.get("conservative_value_text") or ""
         conditions = fact.get("conditions_text") or ""
-        parts = [f"四川深亚电子可支持{capability_name}"]
+        parts = [f"{self.profile.get('public_brand_name', '目标组织')}可支持{capability_name}"]
         if conservative:
             parts.append(conservative)
         sentence = "，".join(parts).rstrip("，")
@@ -605,7 +607,7 @@ class CapabilityStore:
                 })
             return normalized
         except Exception as e:
-            print(f"❌ 查询深亚工艺能力失败: {e}")
+            print(f"❌ 查询目标组织能力失败: {e}")
             return []
         finally:
             if cursor:

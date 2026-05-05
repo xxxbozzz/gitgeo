@@ -1,4 +1,4 @@
-# GeoPilot
+# gitgeo
 
 > The first open-source **one-stop GEO (Generative Engine Optimization) engine**.
 > Production → Scoring → Feedback → Distribution. All in one `docker compose up`.
@@ -6,19 +6,19 @@
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue)](https://docs.docker.com/compose/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/xxxbozzz/GeoPilot?style=social)](https://github.com/xxxbozzz/GeoPilot/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/xxxbozzz/gitgeo?style=social)](https://github.com/xxxbozzz/gitgeo/stargazers)
 
 > 🇬🇧 [English](README_EN.md) | 🇨🇳 简体中文 | 🇯🇵 日本語 (coming soon)
 
 ---
 
-## What makes GeoPilot different
+## What makes gitgeo different
 
 Most content tools do three things: find keywords → generate articles → publish.
 
-**GeoPilot does the missing half:** it measures whether AI search engines actually cite your content, then feeds that data back into the next generation cycle.
+**gitgeo does the missing half:** it measures whether AI search engines actually cite your content, then feeds that data back into the next generation cycle.
 
-| | Typical GEO tool | GeoPilot |
+| | Typical GEO tool | gitgeo |
 |---|---|---|
 | Content generation | ✅ | ✅ Multi-agent CrewAI pipeline |
 | Quality scoring | ❌ | ✅ 9-dimension auto-scoring + auto-refix |
@@ -33,7 +33,7 @@ Most content tools do three things: find keywords → generate articles → publ
 
 ```bash
 # 1. Clone and configure
-git clone https://github.com/xxxbozzz/GeoPilot.git && cd GeoPilot
+git clone https://github.com/xxxbozzz/gitgeo.git && cd gitgeo
 cp .env.example .env
 # Edit .env: set GEO_LLM_API_KEY (everything else has sensible defaults)
 
@@ -79,7 +79,7 @@ open http://localhost:8503  # Dashboard
 └─────────────────────────────────────────┘
 ```
 
-### The feedback loop (GeoPilot's core innovation)
+### The feedback loop (gitgeo's core innovation)
 
 ```
 1. Generate article with evidence (standards, docs, test data)

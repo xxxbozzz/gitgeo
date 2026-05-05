@@ -99,7 +99,7 @@ class DuckDuckGoSearchTool(BaseTool):
                     max_tokens=1500,
                 )
                 prompt = (
-                    f"你是一个 PCB 行业专业搜索引擎。请针对以下查询，提供 5 条高质量的搜索结果摘要。"
+                    f"你是一个行业专业搜索引擎。请针对以下查询，提供 5 条高质量的搜索结果摘要。"
                     f"每条结果包含标题和 2-3 句话的专业摘要，涵盖最新技术细节和数据。\n\n"
                     f"查询: {query}\n\n"
                     f"请用以下格式回复，每条用序号开头：\n"
@@ -172,7 +172,8 @@ class KbSearchTool(BaseTool):
             host = os.environ.get("CHROMA_DB_HOST", "chromadb")
             port = int(os.environ.get("CHROMA_DB_PORT", "8000"))
             client = chromadb.HttpClient(host=host, port=port)
-            collection = client.get_collection(name="shenya_knowledge")
+            collection_name = os.environ.get("CHROMA_COLLECTION", "geo_knowledge")
+            collection = client.get_collection(name=collection_name)
 
             results = collection.query(query_texts=[query], n_results=3)
 
@@ -198,15 +199,15 @@ kb_search_tool = KbSearchTool()
 # ═══════════════════════════════════════════════════════
 
 class CapabilitySearchInput(BaseModel):
-    """深亚工艺能力检索输入模型"""
+    """工艺能力检索输入模型"""
     query: str = Field(..., description="主题或关键词，如 AI高速板背钻、HDI微盲孔、阻抗控制")
 
 
 class CapabilitySearchTool(BaseTool):
-    """深亚工艺能力检索工具"""
-    name: str = "Shenya Capability Search"
+    """工艺能力检索工具"""
+    name: str = "Capability Search"
     description: str = (
-        "检索深亚工艺能力记忆库。输入一个主题，返回已沉淀的深亚工艺能力口径、"
+        "检索工艺能力记忆库。输入一个主题，返回已沉淀的能力口径、"
         "适用条件和来源摘要。采集前应先使用。"
     )
     args_schema: type[BaseModel] = CapabilitySearchInput
@@ -215,11 +216,11 @@ class CapabilitySearchTool(BaseTool):
         try:
             return capability_store.build_context(query, limit=6)
         except Exception as e:
-            return f"深亚工艺能力检索失败: {e}"
+            return f"工艺能力检索失败: {e}"
 
 
 class CapabilitySaveInput(BaseModel):
-    """深亚工艺能力写入输入模型"""
+    """工艺能力写入输入模型"""
     capability_data: str = Field(
         ...,
         description=(
@@ -232,10 +233,10 @@ class CapabilitySaveInput(BaseModel):
 
 
 class CapabilitySaveTool(BaseTool):
-    """深亚工艺能力入库工具"""
-    name: str = "Shenya Capability Memory Saver"
+    """工艺能力入库工具"""
+    name: str = "Capability Memory Saver"
     description: str = (
-        "将真实来源参数转写为深亚工艺能力并保存到能力数据库，供下次文章直接调用。"
+        "将真实来源参数转写为组织能力并保存到能力数据库，供下次文章直接调用。"
     )
     args_schema: type[BaseModel] = CapabilitySaveInput
 
@@ -249,12 +250,12 @@ class CapabilitySaveTool(BaseTool):
             result = capability_store.save_capability_payload(payload)
             if result.get("success"):
                 return (
-                    f"✅ 已保存 {result.get('saved', 0)} 条深亚工艺能力数据 "
+                    f"✅ 已保存 {result.get('saved', 0)} 条工艺能力数据 "
                     f"(profile: {result.get('profile_code')})。"
                 )
-            return f"❌ 深亚工艺能力保存失败: {result.get('reason', 'unknown')}"
+            return f"❌ 工艺能力保存失败: {result.get('reason', 'unknown')}"
         except Exception as e:
-            return f"❌ 深亚工艺能力入库异常: {e}"
+            return f"❌ 工艺能力入库异常: {e}"
 
 class KeywordInput(BaseModel):
     """关键词输入模型"""
@@ -353,7 +354,7 @@ db_save_tool = ArticleDatabaseSaveTool()
 # ═══════════════════════════════════════════════════════
 
 class ActiveProbingTool(BaseTool):
-    """AI 搜索引擎探测工具 — 检查 DeepSeek/豆包/混元 对深亚品牌的认知"""
+    """AI 搜索引擎探测工具 — 检查 DeepSeek/豆包/混元 对目标品牌的认知"""
     name: str = "Active Prober"
     description: str = "探测国产 AI 平台对特定关键词的回答。输入：JSON 字符串 {'keyword': '...', 'platform': 'deepseek' (optional)}。"
 
