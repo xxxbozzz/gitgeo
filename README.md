@@ -4,7 +4,12 @@
 > The world's first open-source one-stop GEO engine. Public since April 2026.
 
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
-[![Docker](https://img.shields.io/badge/Docker-Compose-blue)](https://docs.docker.com/compose/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688)](https://fastapi.tiangolo.com/)
+[![Vue 3](https://img.shields.io/badge/Vue-3.5%2B-4FC08D)](https://vuejs.org/)
+[![CrewAI](https://img.shields.io/badge/CrewAI-multi_agent-orange)](https://crewai.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)](https://www.mysql.com/)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-vector-FF6B6B)](https://www.trychroma.com/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)](https://docs.docker.com/compose/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/xxxbozzz/gitgeo?style=social)](https://github.com/xxxbozzz/gitgeo/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/xxxbozzz/gitgeo?style=social)](https://github.com/xxxbozzz/gitgeo/network)

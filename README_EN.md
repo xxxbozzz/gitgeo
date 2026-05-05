@@ -1,88 +1,77 @@
-# GEO Engine
+# gitgeo
 
-[中文 README](./README.md)
+> 🌍 **The world's first open-source one-stop GEO (Generative Engine Optimization) system** — publicly released April 2026.
 
-Open Source Watermark: [`github.com/xxxbozzz`](https://github.com/xxxbozzz)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-blue)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688)](https://fastapi.tiangolo.com/)
+[![Vue 3](https://img.shields.io/badge/Vue-3.5%2B-4FC08D)](https://vuejs.org/)
+[![CrewAI](https://img.shields.io/badge/CrewAI-multi_agent-orange)](https://crewai.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)](https://www.mysql.com/)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-vector-FF6B6B)](https://www.trychroma.com/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)](https://docs.docker.com/compose/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-GEO Engine is an open-source GEO / AEO workflow engine for content generation, scoring, feedback, and distribution.
+> 🇨🇳 [简体中文](README.md) | 🇬🇧 English
 
-## One-Line Summary
+---
 
-This project turns:
+## What is gitgeo
 
-`industry input -> prompt orchestration -> article generation -> quality scoring -> AI visibility feedback -> channel distribution`
+gitgeo is a **complete GEO workflow engine** covering: keyword discovery → AI content generation → 9-dimension quality scoring → AI platform visibility probing → prompt feedback loop → multi-channel distribution.
 
-into an engineering workflow.
+Most content tools stop at "find keywords → generate articles → publish." gitgeo does the missing half: **measuring whether AI search engines actually cite your content, then feeding that data back into the next generation cycle.**
 
-## Project Statement
+| Feature | Other GEO tools | gitgeo |
+|---------|:---:|:---:|
+| AI content generation | ✅ | ✅ CrewAI multi-agent |
+| Knowledge base RAG | ✅ | ✅ ChromaDB vector search |
+| Asset/prompt management | ✅ | ✅ Admin panel UI |
+| Quality scoring | ❌ | ✅ 9-dimension + auto-refix |
+| AI visibility probing | ❌ | ✅ DeepSeek/Kimi/Doubao |
+| Prompt feedback loop | ❌ | ✅ Probe→analyze→optimize→regenerate |
+| Capability memory | ❌ | ✅ Structured brand facts DB |
+| External publishing | ❌ | ✅ Zhihu/WeChat + adapters |
+| Docker one-click deploy | ⚠️ | ✅ `docker compose up` |
 
-- This repository is designed for individuals and small teams doing GEO experimentation and personal GEO promotion for non-GEO companies.
-- It is not the official product of any GEO agency or third-party GEO platform.
-- The open-source focus is the system structure, prompt pipeline, scoring loop, and channel adapter design.
+---
 
-## Support Note
-
-- This project can also serve as a technical base for GEO-related practice around Sichuan Shenya Electronics.
-- Sichuan Shenya Electronics official website: <https://www.pcbshenya.com/>
-
-## What It Solves
-
-Most content systems stop at:
-
-- keyword discovery
-- article generation
-- publishing
-
-GEO Engine focuses on the deeper loop:
-
-- evidence-backed writing
-- quality and citation-oriented scoring
-- AI visibility probing
-- prompt self-iteration
-- reusable channel distribution
-
-## Core Capabilities
-
-- GEO gap discovery
-- evidence-driven content generation
-- scoring, refix, and cleanup
-- AI visibility probing
-- prompt feedback loop
-- channel / adapter based distribution
-
-## Getting Started
-
-For the fastest local demo:
+## 5-Minute Quickstart
 
 ```bash
+git clone https://github.com/xxxbozzz/gitgeo.git && cd gitgeo
 cp .env.example .env
-make demo
-make demo-run
+# Edit .env: set GEO_LLM_API_KEY (everything else has sensible defaults)
+
+docker compose up -d
+
+curl http://localhost:8001/api/v1/ready  # → {"status":"ok"}
 ```
 
-Key docs:
+The init container auto-creates tables and seeds keywords. Content generation begins within 30 seconds.
 
-- [System Structure](./docs/system_structure.md)
-- [Minimal Demo](./docs/minimal_demo.md)
-- [Prompt Pipeline Guide](./docs/prompt_pipeline_guide.md)
-- [Prompt Creator Guide](./docs/prompt_creator_guide.md)
-- [Contributing](./CONTRIBUTING.md)
+---
 
-## Current Open-Source Boundary
+## Tech Stack
 
-What is already usable:
+| Layer | Technology |
+|-------|-----------|
+| AI Orchestration | CrewAI (multi-agent pipeline) |
+| LLM | OpenAI-compatible API (DeepSeek, OpenAI, Groq, vLLM) |
+| Backend | FastAPI (Python 3.12+) |
+| Frontend | Vue 3 + TypeScript + Element Plus + Tailwind CSS |
+| Database | MySQL 8.0 |
+| Vector Store | ChromaDB |
+| Container | Docker Compose (7 services) |
+| CI/CD | GitHub Actions → GHCR |
 
-- backend API
-- frontend console
-- generation / scoring / feedback loop
-- manual channel-based publication flow
+---
 
-What is still evolving:
+## Acknowledgments
 
-- fully generic channel registry
-- automatic high-weight site selection by industry and article type
-- adaptive routing based on post-publication feedback
+This project received early-stage validation support from [**Sichuan Shenya Electronics Technology Co., Ltd.**](https://www.pcbshenya.com), a high-end PCB manufacturing service provider based in Chengdu, China. We thank Shenya Electronics for providing real GEO requirements and production environment validation.
+
+---
 
 ## License
 
-[MIT](./LICENSE)
+MIT © [xxxbozzz](https://github.com/xxxbozzz)
