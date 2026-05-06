@@ -1,151 +1,72 @@
 <template>
-  <el-container class="h-screen w-full bg-[var(--bg-dark)] text-[var(--text-main)] overflow-hidden">
-    <!-- Desktop Sidebar -->
-    <el-aside width="220px" class="bg-[var(--bg-panel)] border-r border-[var(--border-subtle)] flex-col hidden md:flex shrink-0">
-      <div class="h-16 flex items-center px-6 cursor-pointer">
-        <div class="w-5 h-5 bg-[var(--color-primary)] rounded-sm mr-3 flex items-center justify-center">
-          <Monitor class="w-3 h-3 text-white" />
+  <n-layout has-sider class="h-screen">
+    <n-layout-sider bordered :collapsed="appStore.sidebarCollapsed" :width="220" collapse-mode="width">
+      <div class="sidebar-brand">
+        <span v-if="!appStore.sidebarCollapsed" class="brand-text">⚡ gitgeo</span>
+        <span v-else class="brand-text-sm">⚡</span>
+      </div>
+      <n-menu :value="activeKey" :collapsed="appStore.sidebarCollapsed" :options="menuOptions"
+        :collapsed-width="64" @update:value="onMenuSelect" />
+      <div class="sidebar-footer">
+        <n-button quaternary size="small" @click="appStore.toggleDark">{{ appStore.darkMode ? '☀️ 亮' : '🌙 暗' }}</n-button>
+      </div>
+    </n-layout-sider>
+    <n-layout>
+      <n-layout-header bordered class="top-header">
+        <div class="header-left">
+          <n-button quaternary size="small" @click="appStore.toggleSidebar">☰</n-button>
+          <n-breadcrumb><n-breadcrumb-item v-for="b in breadcrumbs" :key="b">{{ b }}</n-breadcrumb-item></n-breadcrumb>
         </div>
-        <span class="text-base font-bold tracking-wide">GEO 控制台</span>
-      </div>
-
-      <div class="px-6 pb-4">
-        <span class="text-[11px] text-[var(--text-muted)]">v5.0 · Generic Edition</span>
-      </div>
-
-      <div class="flex-1 overflow-y-auto w-full custom-scrollbar">
-        <MenuContent />
-      </div>
-
-      <div class="h-14 flex flex-col justify-center px-6 border-t border-[var(--border-subtle)] shrink-0">
-        <span class="text-xs text-[var(--text-muted)]">© 2026 GEO Engine</span>
-        <a
-          :href="openSourceWatermarkUrl"
-          target="_blank"
-          rel="noreferrer"
-          class="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors"
-        >
-          {{ openSourceWatermark }}
-        </a>
-      </div>
-    </el-aside>
-
-    <!-- Mobile Drawer Sidebar -->
-    <el-drawer
-      v-model="mobileMenuOpen"
-      direction="ltr"
-      size="240px"
-      :with-header="false"
-      class="geo-mobile-drawer"
-    >
-      <div class="bg-[var(--bg-panel)] h-full flex flex-col pt-4">
-         <div class="h-12 flex items-center px-6 mb-2">
-          <div class="w-5 h-5 bg-[var(--color-primary)] rounded-sm mr-3 flex items-center justify-center">
-            <Monitor class="w-3 h-3 text-white" />
-          </div>
-          <span class="text-base font-bold tracking-wide text-[var(--text-main)]">GEO 控制台</span>
-        </div>
-        <div class="flex-1 overflow-y-auto px-1 custom-scrollbar">
-          <MenuContent @navigated="mobileMenuOpen = false" />
-        </div>
-      </div>
-    </el-drawer>
-
-    <!-- Main Content Area -->
-    <el-container class="flex-col min-w-0">
-      <!-- Mobile Header Fallback -->
-      <div class="md:hidden h-14 bg-[var(--bg-panel)] border-b border-[var(--border-subtle)] flex items-center justify-between px-4 shrink-0">
-        <div class="flex items-center">
-          <div class="w-5 h-5 bg-[var(--color-primary)] rounded-sm mr-2 flex items-center justify-center">
-            <Monitor class="w-3 h-3 text-white" />
-          </div>
-          <span class="text-sm font-bold tracking-wide">GEO 控制台</span>
-        </div>
-        <button @click="mobileMenuOpen = true" class="text-[var(--text-muted)] hover:text-[var(--text-main)] p-1 rounded transition-colors">
-          <Menu class="w-6 h-6" />
-        </button>
-      </div>
-
-      <el-main class="p-0 bg-[var(--bg-dark)] h-full relative">
-        <div
-          ref="scrollContainerRef"
-          class="absolute inset-0 overflow-y-auto px-4 py-4 md:px-8 md:py-6 custom-scrollbar flex flex-col"
-        >
-          <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-              <component :is="Component" />
-            </transition>
-          </router-view>
-        </div>
-      </el-main>
-    </el-container>
-  </el-container>
+        <n-tag size="small" type="success">v5.0</n-tag>
+      </n-layout-header>
+      <n-layout-content class="main-content">
+        <transition name="fade" mode="out-in"><router-view /></transition>
+      </n-layout-content>
+    </n-layout>
+  </n-layout>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { Monitor, Menu } from 'lucide-vue-next'
-import MenuContent from './MenuContent.vue'
+import { computed, h, type Component } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useAppStore } from '../store/app'
+import { NIcon } from 'naive-ui'
+import { BarChartOutlined, ToolOutlined, BulbOutlined, CloudServerOutlined, DashboardOutlined, DatabaseOutlined, FileTextOutlined, ClockCircleOutlined, SendOutlined, SettingOutlined, ShareAltOutlined, TagOutlined } from '@vicons/antd'
 
-const mobileMenuOpen = ref(false)
-const scrollContainerRef = ref<HTMLDivElement | null>(null)
-const route = useRoute()
-const openSourceWatermark = import.meta.env.VITE_OPEN_SOURCE_WATERMARK || 'Open Source Edition · github.com/xxxbozzz'
-const openSourceWatermarkUrl = import.meta.env.VITE_OPEN_SOURCE_WATERMARK_URL || 'https://github.com/xxxbozzz'
+const router = useRouter(); const route = useRoute(); const appStore = useAppStore()
+const icon = (c: Component) => () => h(NIcon, null, { default: () => h(c) })
 
-function resetContentScroll() {
-  scrollContainerRef.value?.scrollTo({
-    top: 0,
-    behavior: 'auto',
-  })
-}
+const menuOptions = [
+  { label: '仪表盘', key: '/dashboard', icon: icon(DashboardOutlined) },
+  { type: 'divider' as const, key: 'd1' },
+  { label: '素材库', key: '/materials', icon: icon(DatabaseOutlined) },
+  { label: '提示词库', key: '/prompts', icon: icon(BulbOutlined) },
+  { label: '模型配置', key: '/models', icon: icon(CloudServerOutlined) },
+  { label: '任务调度', key: '/tasks', icon: icon(ClockCircleOutlined) },
+  { type: 'divider' as const, key: 'd2' },
+  { label: '文章管理', key: '/articles', icon: icon(FileTextOutlined) },
+  { label: '关键词中心', key: '/keywords', icon: icon(TagOutlined) },
+  { label: '能力库', key: '/capabilities', icon: icon(ToolOutlined) },
+  { type: 'divider' as const, key: 'd3' },
+  { label: '发布中心', key: '/publications', icon: icon(SendOutlined) },
+  { label: '知识图谱', key: '/graph', icon: icon(ShareAltOutlined) },
+  { label: '运行记录', key: '/runs', icon: icon(BarChartOutlined) },
+  { label: '系统状态', key: '/system', icon: icon(SettingOutlined) },
+]
 
-watch(
-  () => route.path,
-  async () => {
-    await nextTick()
-    resetContentScroll()
-  },
-)
-
-onMounted(() => {
-  resetContentScroll()
-})
+const activeKey = computed(() => (menuOptions.find(o => 'key' in o && typeof o.key === 'string' && route.path.startsWith(o.key)) as any)?.key || '/dashboard')
+const breadcrumbs = computed(() => ['首页', (menuOptions.find(o => 'key' in o && o.key === activeKey.value) as any)?.label || ''])
+function onMenuSelect(k: string) { router.push(k) }
 </script>
 
-<style>
-/* Global overrides for element-plus drawer to act as sidebar */
-.geo-mobile-drawer .el-drawer__body {
-  padding: 0 !important;
-  background-color: var(--bg-panel) !important;
-}
-</style>
-
 <style scoped>
-/* Custom scrollbar to keep layout clean */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Page Transition */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
+.sidebar-brand { padding: 20px 18px; }
+.brand-text { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-text-sm { font-size: 1.4rem; }
+.sidebar-footer { padding: 12px 18px; border-top: 1px solid var(--n-border-color); margin-top: auto; }
+.top-header { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 52px; }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.main-content { padding: 24px 28px; max-width: 1400px; }
+.fade-enter-active, .fade-leave-active { transition: opacity 0.12s; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

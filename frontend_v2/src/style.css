@@ -1,37 +1,206 @@
 @import "tailwindcss";
 
 :root {
-  --bg-dark: #070a13;          /* Darkened for stronger contrast */
-  --bg-panel: #0f1423;
-  --bg-panel-hover: #151b2b;
-  --text-main: #f1f3f9;
-  --text-muted: #8b92a8;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(37, 99, 235, 0.4);
-  --color-primary: #2563eb;
+  --bg-root: #03050a;
+  --bg-dark: #060912;
+  --bg-panel: rgba(15, 20, 38, 0.8);
+  --bg-panel-solid: #0f1426;
+  --bg-panel-hover: rgba(21, 27, 45, 0.9);
+  --bg-glass: rgba(15, 20, 38, 0.6);
+  --text-main: #edf0f7;
+  --text-secondary: #a8b3cf;
+  --text-muted: #6b7394;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-panel: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(59, 130, 246, 0.5);
+  --color-primary: #3b82f6;
+  --color-primary-glow: rgba(59, 130, 246, 0.25);
   --color-success: #22c55e;
   --color-warning: #f59e0b;
-  --color-danger:  #ef4444;
+  --color-danger: #ef4444;
+  --gradient-hero: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.04) 100%);
+  --shadow-panel: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
 }
 
-/* Base resets mapping to our dark theme */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-  margin: 0;
-  background-color: var(--bg-dark);
+  background: var(--bg-root);
   color: var(--text-main);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
-/* Custom Element Plus Dark Overrides */
+/* Glass panel base */
+.glass-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-panel);
+}
+
+/* KPI card */
+.kpi-card {
+  background: var(--bg-panel-solid);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  transition: all 0.2s ease;
+}
+.kpi-card:hover {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 20px var(--color-primary-glow);
+  transform: translateY(-1px);
+}
+
+/* Hero section */
+.hero-section {
+  background: var(--gradient-hero);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  margin-bottom: 24px;
+}
+
+/* Page title */
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Stat card */
+.stat-card {
+  background: var(--bg-panel-solid);
+  border: 1px solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+}
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.stat-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+.stat-delta {
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+.stat-delta.up { color: var(--color-success); }
+.stat-delta.down { color: var(--color-danger); }
+
+/* Premium table */
+.premium-table {
+  --el-table-bg-color: transparent;
+  --el-table-tr-bg-color: transparent;
+  --el-table-header-bg-color: rgba(255, 255, 255, 0.02);
+  --el-table-border-color: var(--border-subtle);
+}
+.premium-table .el-table__header th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 12px 16px;
+}
+.premium-table .el-table__body td {
+  padding: 10px 16px;
+  font-size: 0.88rem;
+}
+
+/* Tag styles */
+.geo-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  gap: 4px;
+}
+.geo-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.geo-tag.success { background: rgba(34,197,94,0.12); color: #4ade80; }
+.geo-tag.success::before { background: #22c55e; }
+.geo-tag.warning { background: rgba(245,158,11,0.12); color: #fbbf24; }
+.geo-tag.warning::before { background: #f59e0b; }
+.geo-tag.danger { background: rgba(239,68,68,0.12); color: #f87171; }
+.geo-tag.danger::before { background: #ef4444; }
+.geo-tag.primary { background: rgba(59,130,246,0.12); color: #60a5fa; }
+.geo-tag.primary::before { background: #3b82f6; }
+
+/* Section divider */
+.section-hr {
+  border: 0;
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 24px 0;
+}
+
+/* Cards grid */
+.card-grid { display: grid; gap: 16px; }
+.card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Action bar */
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+/* Filter pills */
+.filter-pills {
+  display: flex;
+  gap: 8px;
+}
+.filter-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  border: 1px solid var(--border-panel);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-pill:hover { border-color: var(--border-focus); color: var(--text-main); }
+.filter-pill.active { background: var(--color-primary); border-color: var(--color-primary); color: white; }
+
+/* Element Plus Dark Overrides */
 html.dark {
-  --el-bg-color: var(--bg-dark);
-  --el-bg-color-overlay: var(--bg-panel);
+  --el-bg-color: var(--bg-root);
+  --el-bg-color-overlay: var(--bg-panel-solid);
   --el-border-color-light: var(--border-subtle);
   --el-border-color-lighter: var(--border-subtle);
   --el-fill-color-blank: var(--bg-dark);
   --el-text-color-primary: var(--text-main);
-  --el-text-color-regular: var(--text-muted);
+  --el-text-color-regular: var(--text-secondary);
+  --el-color-primary: var(--color-primary);
 }
-
