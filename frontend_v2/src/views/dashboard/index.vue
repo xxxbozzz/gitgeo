@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, h } from 'vue'
+import { ref, onMounted } from 'vue'
 import { NGrid, NGi, NCard, NStatistic, NList, NListItem, NThing } from 'naive-ui'
 import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
