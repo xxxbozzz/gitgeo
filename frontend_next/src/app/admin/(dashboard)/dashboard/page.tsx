@@ -16,7 +16,13 @@ export default function DashboardPage() {
     try { setLoading(true); setError("");
       const [k, t, b] = await Promise.all([api.overview.kpis(), api.overview.trend(7), api.overview.board()]);
       setKpis(k); setTrend(t.items); setPending(b.pending_keywords || []);
-    } catch (e: any) { setError(e.message); } finally { setLoading(false); }
+    } catch {
+      // Demo fallback when API is unavailable
+      setKpis({ articles_total: 173, passed_articles: 169, pending_keywords: 12, average_quality_score: 89, internal_links: 1242, latest_article_at: new Date().toISOString() });
+      setTrend([{day:"04-30",count:3},{day:"05-01",count:5},{day:"05-02",count:4},{day:"05-03",count:5},{day:"05-04",count:6},{day:"05-05",count:5},{day:"05-06",count:7}]);
+      setPending([{id:1,keyword:"行业标准对比分析",search_volume:2800,difficulty:65,status:"pending"},{id:2,keyword:"技术参数选型指南",search_volume:1200,difficulty:45,status:"pending"}]);
+      setError("demo");
+    } finally { setLoading(false); }
   };
   useEffect(() => { load(); const i = setInterval(load, 30000); return () => clearInterval(i); }, []);
 
@@ -34,7 +40,8 @@ export default function DashboardPage() {
         <div><h1 className="text-2xl font-bold tracking-tight text-slate-900">数据总览</h1><p className="text-sm text-slate-500 mt-1">GEO 引擎实时运行状态 · 每 30 秒自动刷新</p></div>
         <button onClick={load} className="text-blue-600 hover:text-blue-700"><RefreshCw className="h-4 w-4" /></button>
       </div>
-      {error && <div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm flex items-center gap-2"><AlertCircle className="h-4 w-4" />{error}</div>}
+      {error === "demo" && <div className="p-2 rounded-lg bg-blue-50 text-blue-600 text-xs flex items-center gap-2 w-fit"><AlertCircle className="h-3 w-3" />Demo Mode — API 未连接，展示示例数据</div>}
+      {error && error !== "demo" && <div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm flex items-center gap-2"><AlertCircle className="h-4 w-4" />{error}</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {kpiCards.map(k => (<Card key={k.label} className="relative overflow-hidden border-[#E4ECFC] hover:shadow-md transition-shadow"><div className={`absolute left-0 top-2 bottom-2 w-1 rounded-r-full ${k.accent}`} /><CardContent className="p-5 pl-6"><div className="flex items-start justify-between"><div><p className="text-sm font-medium text-slate-500">{k.label}</p><p className="text-2xl font-bold tracking-tight text-slate-900 mt-1">{k.val}</p></div><k.icon className="h-8 w-8 text-blue-500/20" /></div></CardContent></Card>))}
       </div>

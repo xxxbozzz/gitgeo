@@ -20,7 +20,11 @@ export default function ArticlesPage() {
     try { setLoading(true); setErr("");
       const [l, s] = await Promise.all([api.articles.list({ query: q || '', status: sf || '' }), api.articles.summary()]);
       setItems(l.items); setSum(s);
-    } catch (e: any) { setErr(e.message); } finally { setLoading(false); }
+    } catch {
+      setItems([{id:1,title:"行业标准技术深度解析",quality_score:92,publish_status:1,created_at:"2026-05-08",slug:"demo-1"},{id:2,title:"工程实践参数选型指南",quality_score:88,publish_status:1,created_at:"2026-05-07",slug:"demo-2"},{id:3,title:"AI时代品牌内容策略",quality_score:75,publish_status:0,created_at:"2026-05-08",slug:"demo-3"}]);
+      setSum({total_articles:173,draft_articles:4,approved_articles:169,published_articles:0,average_quality_score:89});
+      setErr("demo");
+    } finally { setLoading(false); }
   };
   useEffect(() => { load(); }, [sf]);
 
@@ -35,7 +39,8 @@ export default function ArticlesPage() {
     <div className="flex items-center justify-between"><div><h1 className="text-2xl font-bold tracking-tight text-slate-900">文章管理</h1><p className="text-sm text-slate-500 mt-1">草稿 / 已通过 / 已发布 · 返修 · 回收 · 发布</p></div><Button className="bg-blue-600 hover:bg-blue-700" onClick={load}><RefreshCw className="h-4 w-4 mr-2"/>刷新</Button></div>
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">{kpis.map(k=><Card key={k.label} className="border-[#E4ECFC]"><CardContent className="p-4"><p className="text-sm text-slate-500">{k.label}</p><p className="text-2xl font-bold">{k.val}</p></CardContent></Card>)}</div>
     <div className="flex gap-2"><Input placeholder="搜索标题..." className="max-w-xs" value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&load()}/><select className="border rounded-md px-3 text-sm" value={sf} onChange={e=>setSf(e.target.value)}><option value="">全部</option><option value="draft">草稿</option><option value="approved">已通过</option><option value="published">已发布</option></select><Button variant="outline" onClick={load}>搜索</Button></div>
-    {err && <div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm">{err}</div>}
+    {err === "demo" && <div className="p-2 rounded-lg bg-blue-50 text-blue-600 text-xs w-fit">Demo Mode — API 未连接，展示示例数据</div>}
+    {err && err !== "demo" && <div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm">{err}</div>}
     <Card className="border-[#E4ECFC]"><CardContent className="p-0">
       {loading ? <div className="p-8 text-center text-slate-400">加载中...</div> : items.length===0 ? <div className="p-8 text-center text-slate-400">暂无文章</div> :
       <table className="w-full text-sm"><thead><tr className="border-b text-left text-xs font-medium text-slate-500 uppercase"><th className="p-3 pl-4">ID</th><th className="p-3">标题</th><th className="p-3">分数</th><th className="p-3">状态</th><th className="p-3">时间</th><th className="p-3 pr-4">操作</th></tr></thead>

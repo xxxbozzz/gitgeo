@@ -15,3 +15,47 @@
 - ❌ 图片位置不一致。Figure 1 原版在第 2 页顶部附近，标题在图上方；改写版 Figure 1 在第 2 页中部偏下，标题在图下方。Figure 2、Figure 3、Figure 4 在改写版中也整体后移，Figure 4 从原版第 5 页主体位置移到改写版第 6 页上方，并推动正文进入第 7 页。
 - ❌ 表格格式不一致。原版两个表格使用 `Table Grid`，有完整边框；改写版两个表格是 `Normal Table`，视觉上没有网格边框，列宽和换行也变化明显。尤其第 3 页模型结果表中 `Parameters` 被拆成两行，第 4 页分类报告表失去原版边框。
 - ❌ 图片本身都存在，但排版位置和说明文字位置与原版不一致，不能认为是“排版保持一致”的改写版。
+
+## 2026-05-08 TASK #4 frontend_next 视觉验收与截图结果
+
+### 执行结果
+
+- 已读取 `.collab/DONE.md`，按用户要求在 `localhost:3004` 启动 `frontend_next`。
+- 已执行 `npm run build`，构建通过，Next 输出显示 14 个 `/admin/*` 页面均已生成。
+- 已用 Chrome headless 覆盖 `docs/images/screenshots/` 截图。
+- 实际 `frontend_next/src/app/admin/**/page.tsx` 数量为 14 个，不是 15 个；当前截图也对应 14 张页面图。
+
+### 已覆盖截图
+
+- `docs/images/screenshots/dashboard.png`
+- `docs/images/screenshots/articles.png`
+- `docs/images/screenshots/keywords.png`
+- `docs/images/screenshots/capabilities.png`
+- `docs/images/screenshots/publications.png`
+- `docs/images/screenshots/runs.png`
+- `docs/images/screenshots/system.png`
+- `docs/images/screenshots/knowledge.png`
+- `docs/images/screenshots/probe.png`
+- `docs/images/screenshots/feedback.png`
+- `docs/images/screenshots/materials.png`
+- `docs/images/screenshots/prompts.png`
+- `docs/images/screenshots/models.png`
+- `docs/images/screenshots/tasks.png`
+
+### 视觉判断
+
+- 通过：整体视觉方向明显优于旧 `frontend_v2`。亮色基底、侧边栏分组、蓝色主行动按钮、卡片边框、表格密度和 lucide 图标系统已经有专业 SaaS 后台雏形。
+- 通过：`probe.png` 和 `feedback.png` 是目前最适合作为 README 亮点展示的两张图，能表达 gitgeo 的 AI 探测和 Prompt 反馈闭环差异点。
+- 通过：`models.png`、`prompts.png`、`tasks.png` 已经不再是“即将上线”空壳，适合作为管理能力截图。
+
+### 仍需 Worker 修复
+
+- P1：`dashboard.png`、`articles.png`、`publications.png` 等依赖后端 API 的页面仍出现 `Failed to fetch`。这些截图可以作为开发态记录，但不适合作为 README 最终宣传图。
+- P1：建议给 `frontend_next` 增加 demo fallback/mock data。当 API 不可达时，页面展示健康 demo 数据和 `Demo mode` 提示，而不是红色错误条。
+- P2：当前截图只有 14 张，因为代码里只有 14 个 page。若产品口径仍写“15 个页面”，需要补一个页面或修正文档口径。
+- P2：侧边栏底部暗色切换按钮只有 moon 图标，状态表达偏弱；建议加 tooltip 或文字状态。
+
+### 验收结论
+
+- 条件通过：新前端视觉方向可以进入 README 截图体系。
+- 不建议最终发布当前 `Failed to fetch` 截图。Worker 应补 demo fallback 或提供后端数据后，再让 Codex 进行最终截图复验。

@@ -73,7 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ))}
         </ScrollArea>
         <div className="border-t border-[#E4ECFC] dark:border-slate-800 p-2 flex justify-center">
-          <Button variant="ghost" size="icon" onClick={() => setDark(!dark)}><Moon className="h-4 w-4" /></Button>
+          <Button variant="ghost" size="sm" onClick={() => setDark(!dark)} title={dark ? "切换亮色" : "切换暗色"}>{dark ? <Sun className="h-4 w-4 mr-1" /> : <Moon className="h-4 w-4 mr-1" />}{dark ? "亮色" : "暗色"}</Button>
         </div>
       </aside>
       <main className="flex-1 overflow-y-auto">
