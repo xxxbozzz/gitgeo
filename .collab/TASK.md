@@ -122,3 +122,143 @@ Claude 修改后请更新 `.collab/DONE.md`，列出：
 - 是否已经把默认 LLM 配置改为通用 OpenAI-compatible 模板
 
 Codex 随后复审 README 渲染效果、英文质量、截图顺序和开源风险。
+
+---
+
+## TASK #6 — Claude 执行：核心功能闭环，不再继续 UI/README
+
+用户已确认 UI 和 README 暂时按当前版本进入冻结状态。后续不要把主要时间继续花在 README 竞品表、截图排版或视觉文案上。当前目标切到可运行、可演示、可扩展的功能闭环。
+
+### 产品目标
+
+把 gitgeo 从“内容生成 + 两个硬编码发布渠道”升级为真正通用的 GEO 系统：
+
+`行业画像 → 高权重站点筛选 → 平台适配器 → browser/API 发布 → AI 引用探测 → 证据标签分析 → Prompt 自迭代`
+
+### P0 必做：行业驱动站点选择器
+
+请新增通用模块，不要写死 PCB、知乎、微信：
+
+1. 新增 `core/site_selector.py` 或等价模块。
+2. 输入：行业、目标地区、内容类型、目标关键词、可用发布方式。
+3. 输出：候选站点列表，每个站点包含：
+   - `site_key`
+   - `display_name`
+   - `domain`
+   - `channel_type`
+   - `publish_method`: `api` / `browser` / `manual`
+   - `authority_score`
+   - `relevance_score`
+   - `freshness_score`
+   - `citation_potential_score`
+   - `reason`
+4. 站点权重必须可配置，建议放到 `config/site_profiles/*.yaml` 或数据库 seed，不要硬编码在服务层。
+5. 内置几个通用 demo 行业即可，例如 `generic_b2b`、`software`、`manufacturing`，PCB 只能作为示例画像之一，不能作为默认内核。
+
+### P0 必做：平台适配器注册表
+
+当前 `backend/app/services/publications_service.py` 仍然把 `longform_channel -> zhihu`、`mobile_channel -> wechat` 写死。请重构为 registry：
+
+1. 新增 `core/publishers/base.py`，定义统一接口：
+   - `adapter_key`
+   - `display_name`
+   - `publish_method`
+   - `supports_draft`
+   - `ready`
+   - `publish(title, content_md, metadata)`
+   - `publish_and_go_live(title, content_md, metadata)`
+2. 新增 `core/publishers/registry.py`，从配置注册 adapters。
+3. 把 `ZhihuPublisher`、`WeChatPublisher` 包装/迁移为 registry adapter。
+4. 增加 `BrowserPublisher` demo adapter：先不强求真实登录发布，但必须能产出“发布计划/草稿写入/待人工确认”的结构化结果。
+5. `PublicationsService` 不再识别固定两条 channel，而是从 registry/site selector 获取 adapter。
+
+### P1 必做：browser/API 发布器的安全边界
+
+发布功能必须避免开源用户一跑就误发：
+
+1. 默认 `publish_mode=draft`。
+2. `go_live=true` 时必须检查环境变量，例如 `GEO_ENABLE_LIVE_PUBLISH=true`，否则返回明确错误。
+3. browser 发布器必须支持 dry-run，输出目标 URL、标题、摘要、待填写字段，不自动提交最终发布按钮。
+4. 所有外部发布结果必须写入 `article_publications`，保留 request/response payload，便于追踪。
+
+### P1 必做：引用监测结果反哺 Prompt
+
+现有 `ActiveProber` 和 `PromptOptimizer` 已有雏形，请把它们串成可运行闭环：
+
+1. 新增 service/job：对指定关键词和平台执行 probe。
+2. 把 `mentioned/cited/evidence_labels/source_hits/missing_labels/coverage_score` 持久化。
+3. 下一轮生成文章时能够读取历史反馈，注入 prompt context。
+4. 新增最小 API 或 CLI demo：
+   - 输入 keyword
+   - 生成/读取文章
+   - 模拟或真实 probe
+   - 生成 prompt feedback
+   - 下一轮 prompt 能看到反馈文本
+5. Demo 模式可以用 fixture，不依赖真实 AI 平台登录。
+
+### P1 必做：测试
+
+请至少补这些测试：
+
+1. site selector 根据行业返回不同站点排序。
+2. registry 能注册并发现 zhihu/wechat/browser adapters。
+3. `PublicationsService` 不再只接受 `longform_channel/mobile_channel`。
+4. live publish guard 未开启时拒绝真实发布。
+5. prompt feedback 能把 missing labels 注入下一轮 prompt context。
+
+### Codex 验收标准
+
+Claude 完成后请在 `.collab/DONE.md` 写：
+
+- 新增/修改文件列表。
+- 如何运行 demo。
+- 哪些功能是真实外部调用，哪些是 dry-run/demo fixture。
+- 测试命令和结果。
+- 仍未完成的风险点。
+
+Codex 将从产品视角复验：
+
+- 是否真的通用，而不是把 PCB/知乎/微信换个名字继续写死。
+- 是否能解释每个行业为什么选择某些高权重站点。
+- 是否有安全 dry-run 边界。
+- 是否能形成“探测数据 → 证据标签 → prompt 更新”的闭环。
+
+---
+
+## TASK #5B — Claude 执行：README 截图区返修
+
+用户在 GitHub 移动端截图中确认了一个展示问题：README 的“截图”区域现在主要显示 `probe.png`、`feedback.png` 等文件名表格，不是视觉截图画廊。这个会让访问者误以为仓库没有真正展示产品界面。
+
+### 必改
+
+1. 把 README.md 的 `## 截图` 从路径表改成真正的图片画廊。
+2. 14 个页面都要以图片方式渲染，不要只列文件名。
+3. 第一屏优先展示最能说明差异化的三张：
+   - `docs/images/screenshots/probe.png`
+   - `docs/images/screenshots/feedback.png`
+   - `docs/images/screenshots/dashboard.png`
+4. 后面继续展示：
+   - `articles.png`
+   - `keywords.png`
+   - `capabilities.png`
+   - `publications.png`
+   - `runs.png`
+   - `system.png`
+   - `knowledge.png`
+   - `materials.png`
+   - `prompts.png`
+   - `models.png`
+   - `tasks.png`
+5. 移动端 GitHub 可读性优先，建议用简单的 Markdown：
+   - `### AI 探测`
+   - `![AI 探测](docs/images/screenshots/probe.png)`
+   - 不要依赖复杂 HTML 表格。
+6. 可以保留一个很短的“截图文件位于 docs/images/screenshots/”说明，但不能让文件名表成为主要展示。
+
+### 完成后
+
+Claude 请在 `.collab/DONE.md` 写清：
+
+- README 截图区是否已从路径表改为 14 张真实图片。
+- 截图展示顺序。
+- 是否同步 README_EN.md，如果未同步请说明原因。

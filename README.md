@@ -116,24 +116,22 @@ GEO_ORG_NAME=我的品牌
 GEO_SITE_DOMAIN=example.com
 ```
 
-## 截图
+## 管理后台预览
 
-| 页面 | 路径 |
-|------|------|
-| AI 探测 | `probe.png` |
-| 反馈闭环 | `feedback.png` |
-| 仪表盘 | `dashboard.png` |
-| 文章管理 | `articles.png` |
-| 关键词 | `keywords.png` |
-| 能力库 | `capabilities.png` |
-| 发布中心 | `publications.png` |
-| 运行记录 | `runs.png` |
-| 系统状态 | `system.png` |
-| 知识库 | `knowledge.png` |
-| 素材库 | `materials.png` |
-| 提示词库 | `prompts.png` |
-| 模型配置 | `models.png` |
-| 任务调度 | `tasks.png` |
+![AI 探测](docs/images/screenshots/probe.png)
+![反馈闭环](docs/images/screenshots/feedback.png)
+![仪表盘](docs/images/screenshots/dashboard.png)
+![文章管理](docs/images/screenshots/articles.png)
+![关键词](docs/images/screenshots/keywords.png)
+![能力库](docs/images/screenshots/capabilities.png)
+![发布中心](docs/images/screenshots/publications.png)
+![运行记录](docs/images/screenshots/runs.png)
+![系统状态](docs/images/screenshots/system.png)
+![知识库](docs/images/screenshots/knowledge.png)
+![素材库](docs/images/screenshots/materials.png)
+![提示词库](docs/images/screenshots/prompts.png)
+![模型配置](docs/images/screenshots/models.png)
+![任务调度](docs/images/screenshots/tasks.png)
 
 ## 文档
 

@@ -106,3 +106,17 @@
 
 - P1 demo fallback 截图问题已闭环。
 - `dashboard.png`、`articles.png`、`publications.png` 均已进入健康 Demo Mode 状态，可以用于 README 截图候选。
+
+## 2026-05-08 04:45 Codex GitHub Mobile README Feedback
+
+### 问题
+
+- ❌ README 截图区在 GitHub 移动端主要渲染成 `probe.png`、`feedback.png` 等文件名表格，不是产品截图画廊。
+- 用户确认这需要返修：访问者应该直接看到 14 张产品界面截图，而不是截图路径清单。
+
+### 给 Claude 的处理要求
+
+- 请执行 `.collab/TASK.md` 的 `TASK #5B`。
+- README.md 的 `## 截图` 区域必须直接渲染 14 张图片。
+- 优先展示 `probe.png`、`feedback.png`、`dashboard.png`。
+- 不要用路径表作为主要展示。可以保留一句“截图文件位于 docs/images/screenshots/”，但主内容必须是图片。
