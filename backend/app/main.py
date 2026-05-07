@@ -10,7 +10,7 @@ from backend.app.api.router import api_router
 from backend.app.core.settings import get_settings
 from backend.app.schemas.api import ApiResponse, ok_response
 
-FRONTEND_DIST_DIR = Path("/app/frontend_v2_dist")
+FRONTEND_DIST_DIR = Path("/app/frontend_dist")
 
 
 def create_app() -> FastAPI:

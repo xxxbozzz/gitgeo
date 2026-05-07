@@ -2,9 +2,9 @@
 FROM node:20-bookworm-slim AS frontend-builder
 
 WORKDIR /frontend
-COPY frontend_v2/package*.json ./
+COPY frontend_next/package*.json ./
 RUN npm ci
-COPY frontend_v2/ ./
+COPY frontend_next/ ./
 RUN npm run build
 
 # Use official Playwright image (includes Python & Browsers)
@@ -50,7 +50,7 @@ RUN PIP_DEFAULT_TIMEOUT=120 pip install --no-cache-dir --retries 5 -r requiremen
 # ---------------------------------------------------------
 
 COPY . .
-COPY --from=frontend-builder /frontend/dist /app/frontend_v2_dist
+COPY --from=frontend-builder /frontend/.next /app/frontend_dist
 
 ENV PYTHONUNBUFFERED=1
 

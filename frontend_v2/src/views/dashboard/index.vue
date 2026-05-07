@@ -5,7 +5,7 @@
       <p class="page-sub">GEO 引擎实时运行状态 · {{ now }}</p>
     </div>
     <div class="kpi-grid">
-      <div v-for="(kpi, i) in kpis" :key="kpi.label" :class="['kpi-card', 'accent-' + kpi.accent]">
+      <div v-for="kpi in kpis" :key="kpi.label" :class="['kpi-card', 'accent-' + kpi.accent]">
         <div class="stat-label">{{ kpi.label }}</div>
         <div class="stat-value">{{ kpi.value }}<span v-if="kpi.suffix" style="font-size:1rem;font-weight:400;opacity:0.6;margin-left:4px">{{ kpi.suffix }}</span></div>
         <div :class="['stat-delta', kpi.trend > 0 ? 'up' : 'down']">{{ kpi.trend > 0 ? '↑' : '↓' }} {{ Math.abs(kpi.trend) }} vs 昨日</div>
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { NGrid, NGi, NCard, NStatistic, NList, NListItem, NThing } from 'naive-ui'
+import { NGrid, NGi, NCard, NList, NListItem, NThing } from 'naive-ui'
 import * as echarts from 'echarts/core'
 import { LineChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent } from 'echarts/components'
