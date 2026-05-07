@@ -50,9 +50,23 @@ class WeChatAdapter:
         return pub.publish(request.title, request.content_md)
 
 
+class DryRunAdapter:
+    """Simulated publisher — validates request but does not post externally."""
+    platform_key = "dryrun"
+
+    def publish(self, request: PublishRequest) -> dict[str, object]:
+        return {
+            "success": True,
+            "status": "dry_run",
+            "message": f"[DRY RUN] {request.title[:40]}...",
+            "url": f"https://dryrun.local/{request.platform}/mock",
+        }
+
+
 ADAPTERS: dict[str, PublisherAdapter] = {
     "zhihu": ZhihuAdapter(),
     "wechat": WeChatAdapter(),
+    "dryrun": DryRunAdapter(),
 }
 
 

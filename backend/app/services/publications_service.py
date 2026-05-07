@@ -14,26 +14,27 @@ from backend.app.schemas.publications import (
     PublicationListPayload,
     PublicationSummaryItem,
 )
-from core.wechat_publisher import WeChatPublisher
-from core.zhihu_publisher import ZhihuPublisher
+from core.publisher_adapters import get_publisher_adapter, list_supported_platforms
 
 
 VALID_PUBLICATION_STATUSES = {"pending", "draft_saved", "published", "failed"}
 SUCCESSFUL_AUDIT_STATUSES = {"draft_saved", "published"}
-CHANNEL_ADAPTERS = {
-    "longform_channel": {
-        "channel_key": "longform_channel",
-        "channel_label": "Longform Channel",
-        "adapter_key": "zhihu",
-        "adapter_label": "Zhihu Adapter",
-    },
-    "mobile_channel": {
-        "channel_key": "mobile_channel",
-        "channel_label": "Mobile Channel",
-        "adapter_key": "wechat",
-        "adapter_label": "WeChat Adapter",
-    },
-}
+
+
+def _build_channel_registry() -> dict[str, dict[str, str]]:
+    """Build channel-adapter mapping from the publisher registry."""
+    registry: dict[str, dict[str, str]] = {}
+    for key in sorted(list_supported_platforms()):
+        registry[key] = {
+            "channel_key": key,
+            "channel_label": key.title(),
+            "adapter_key": key,
+            "adapter_label": f"{key.title()} Adapter",
+        }
+    return registry
+
+
+CHANNEL_ADAPTERS = _build_channel_registry()
 ADAPTER_TO_CHANNEL = {
     item["adapter_key"]: item
     for item in CHANNEL_ADAPTERS.values()
@@ -500,42 +501,29 @@ class PublicationsService:
         content_md: str,
         go_live: bool,
     ) -> dict[str, Any]:
-        if adapter_key == "zhihu":
-            publisher = ZhihuPublisher()
-            if not publisher.ready:
-                return {
-                    "success": False,
-                    "status": "failed",
-                    "message": "Cookie 未就绪，请先运行登录脚本",
-                    "error_message": "cookie_not_ready",
-                }
-            return (
-                publisher.publish_and_go_live(title, content_md)
-                if go_live
-                else publisher.publish(title, content_md, topic_tags=["PCB", "电子制造"])
-            )
-
-        if adapter_key == "wechat":
-            publisher = WeChatPublisher()
-            if not publisher.ready:
-                return {
-                    "success": False,
-                    "status": "failed",
-                    "message": "AppID/AppSecret 未配置",
-                    "error_message": "wechat_credentials_missing",
-                }
-            return (
-                publisher.publish_and_go_live(title, content_md)
-                if go_live
-                else publisher.publish(title, content_md)
-            )
-
-        return {
-            "success": False,
-            "status": "failed",
-            "message": f"不支持的发布适配器: {adapter_key}",
-            "error_message": "unsupported_adapter",
-        }
+        adapter = get_publisher_adapter(adapter_key)
+        if adapter is None:
+            return {
+                "success": False,
+                "status": "failed",
+                "message": f"Unsupported adapter: {adapter_key}",
+                "error_message": "unsupported_adapter",
+            }
+        try:
+            from core.publisher_adapters import PublishRequest
+            return adapter.publish(PublishRequest(
+                platform=adapter_key,
+                title=title,
+                content_md=content_md,
+                go_live=go_live,
+            ))
+        except Exception as e:
+            return {
+                "success": False,
+                "status": "failed",
+                "message": str(e),
+                "error_message": "adapter_exception",
+            }
 
     def publish_article(
         self,
@@ -546,6 +534,15 @@ class PublicationsService:
         trigger_mode: str = "manual",
         retry_of_publication_id: int | None = None,
     ) -> dict[str, Any]:
+        # Safety valve: live publishing must be explicitly enabled
+        if go_live and os.environ.get("GEO_ENABLE_LIVE_PUBLISH", "false").lower() not in ("1", "true", "yes"):
+            return {
+                "success": False,
+                "error_code": "live_publish_disabled",
+                "action": "publish",
+                "article_id": article_id,
+                "message": "Live publishing is disabled. Set GEO_ENABLE_LIVE_PUBLISH=true to enable.",
+            }
         settings = get_settings()
         os.environ.setdefault(
             "GEO_PUBLISH_REQUEST_TIMEOUT",
