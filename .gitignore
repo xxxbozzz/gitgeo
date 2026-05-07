@@ -67,3 +67,8 @@ import_trace.txt
 
 # Local editors and design/runtime scratch files
 designs/test.pen
+# Frontend build artifacts
+frontend_next/.next/
+frontend_next/node_modules/
+*.env.local
+*.env.*.local
