@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<style>
+@page { margin: 2.2cm 2cm; size: A4; }
+body { font-family: "Times New Roman", Georgia, serif; font-size: 11.5pt; line-height: 1.55; color: #1a1a1a; max-width: 42em; margin: 0 auto; }
+h1 { font-size: 15pt; border-bottom: 2px solid #2563eb; padding-bottom: 6pt; }
+h2 { font-size: 12.5pt; color: #1e3a5f; margin-top: 22pt; }
+p { text-align: justify; margin: 7pt 0; }
+table { border-collapse: collapse; margin: 10pt 0; font-size: 10pt; width: 100%; }
+th, td { border: 1px solid #ccc; padding: 4pt 8pt; text-align: left; }
+th { background: #f0f4ff; }
+code { background: #f5f5f5; padding: 1pt 3pt; font-size: 9.5pt; }
+img { max-width: 100%; }
+</style></head><body><h1>Sign Language Recognition Using Deep Convolutional Neural Networks</h1>
+<h2>1. Introduction</h2>
+<p>In this project, I built and compared several convolutional neural network models for recognising American Sign Language alphabet gestures. The data came from the Sign Language MNIST dataset — 28 by 28 grayscale images covering 24 static hand signs from A to Y, with J and Z left out because those letters involve motion rather than a single pose (Datamunge, 2017).</p>
+<p>Compared with building a production-ready recognition system, this project focuses more on understanding how architectural choices affect what a model actually learns. Because of this, I paid more attention to whether each design decision could be justified by evidence, rather than chasing the highest possible accuracy.</p>
+<p>The project runs three experiments: a simple baseline with two convolutional blocks, a tuned version of that baseline with a slower learning rate and bigger batch size, and a deeper VGG-style network with batch normalisation, dropout, and L2 regularisation. The untouched Kaggle test set was kept aside throughout tuning, so the final numbers give a fair picture of how well each model generalises.</p>
+<h2>2. Data Preparation</h2>
+<p>The Kaggle CSV files gave each image as a row of 784 pixel values plus a label. I reshaped these into 28×28×1 tensors and divided by 255, bringing all pixel values into the 0–1 range. This normalisation makes gradient-based optimisation more stable because no single feature dominates the loss landscape.</p>
+<p>The labels originally used alphabet indices from 0 to 24, but class 9 was missing because J was excluded. I remapped them to a continuous 0–23 range so that sparse categorical cross-entropy could use a 24-unit softmax output directly. The mapping was kept so that final predictions could still be read as letters.</p>
+<p>The training file had 27,455 images and the test file had 7,172. I used a stratified 85/15 split on the training file to create a validation set of 4,119 images. Stratification preserved the class balance, and the test set was never used during tuning. A fixed random seed was set across NumPy, Python, and TensorFlow, so the same data split is used in every experiment. This means differences between models really come from architecture and hyperparameter choices, not from accidental variation in how the data was divided.</p>
+<p>I chose not to resize the images. The dataset already provides standardised 28×28 inputs, and resizing would introduce interpolation artefacts without any benefit. For larger pre-trained networks this would change, but custom CNNs work naturally at the native resolution.</p>
+<h2>3. Model Design</h2>
+<p>The baseline CNN was deliberately simple — two Conv2D layers with ReLU and He initialisation, each followed by max pooling, then a flatten layer, a dense layer, dropout, and a 24-class softmax output. It had 423,448 parameters. I built it this way because a weak baseline makes it easier to see whether adding complexity actually helps.</p>
+<p>The enhanced model used a VGG-style structure with three convolutional blocks. Each block stacked two 3×3 Conv2D layers with batch normalisation, then a max pooling layer and dropout. The filter counts grew from 32 to 64 to 128 across the blocks, so the model could learn progressively richer features. Global average pooling replaced the flatten layer, cutting the number of dense parameters significantly.</p>
+<p>One thing that surprised me was the parameter count. The enhanced model had only 307,832 parameters — fewer than the baseline's 423,448 — but it was deeper and performed much better. The baseline wastes parameters because flattening a feature map before the dense layer creates many fully connected weights. The enhanced model spends more of its capacity on convolutional layers, where weights are shared spatially. For image recognition, this is usually the right trade-off, because local patterns like edges and finger positions can appear anywhere in the frame.</p>
+<h2>4. Training and Results</h2>
+<p>All models used sparse categorical cross-entropy loss with the Adam optimiser. I included early stopping and reduce-on-plateau callbacks so training would stop if validation loss stopped improving. Three experiments were run:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">LR</th>
+<th style="text-align: right;">Batch</th>
+<th style="text-align: right;">Params</th>
+<th style="text-align: right;">Val Acc</th>
+<th style="text-align: right;">Test Acc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enhanced VGG</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">307,832</td>
+<td style="text-align: right;">100.00%</td>
+<td style="text-align: right;">99.39%</td>
+</tr>
+<tr>
+<td>Baseline</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">423,448</td>
+<td style="text-align: right;">99.17%</td>
+<td style="text-align: right;">86.98%</td>
+</tr>
+<tr>
+<td>Tuned baseline</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">256</td>
+<td style="text-align: right;">423,448</td>
+<td style="text-align: right;">94.83%</td>
+<td style="text-align: right;">84.62%</td>
+</tr>
+</tbody>
+</table>
+<p>In the early design, I had expected the tuned baseline to outperform the original. A smaller learning rate and larger batch size usually help stability, but here the opposite happened — it reached only 84.62% test accuracy, lower than the faster baseline. I think the smaller updates with a large batch size prevented the model from exploring the loss surface effectively, leaving it stuck in a worse region.</p>
+<p>The original baseline hit 99.17% validation accuracy but only 86.98% on the test set. This kind of gap usually means the model learned something about the training distribution that does not transfer to unseen examples. The enhanced VGG closed this gap almost entirely: it achieved 99.39% test accuracy and a macro F1-score of 0.9939. It took about 7.8 times longer to train, but the 12.4 percentage point improvement in test accuracy makes that cost worthwhile.</p>
+<h2>5. Evaluation</h2>
+<p>The confusion matrix showed that remaining errors were concentrated in visually similar signs. T was predicted as X 18 times, Y as I 14 times, and G as H 10 times. This makes sense — at 28×28 resolution, fingers in similar positions can be hard to tell apart, and the model does not have colour or depth information to help it.</p>
+<p>The hardest classes still performed well:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th style="text-align: right;">Precision</th>
+<th style="text-align: right;">Recall</th>
+<th style="text-align: right;">F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.971</td>
+<td style="text-align: right;">0.985</td>
+</tr>
+<tr>
+<td>T</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">0.962</td>
+</tr>
+<tr>
+<td>Y</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.958</td>
+<td style="text-align: right;">0.978</td>
+</tr>
+<tr>
+<td>Weighted avg</td>
+<td style="text-align: right;">0.994</td>
+<td style="text-align: right;">0.994</td>
+<td style="text-align: right;">0.994</td>
+</tr>
+</tbody>
+</table>
+<p>Accuracy alone can hide class-specific problems, so I also looked at precision, recall, and F1-scores per class. The sample predictions confirmed what the numbers suggested — most errors involved subtle gesture similarities rather than random failure. Combining the confusion matrix with visual examples gave stronger evidence than any single metric could provide on its own.</p>
+<h2>6. Reflection</h2>
+<p>This dataset is a simplified benchmark. Real sign-language recognition needs to handle varied backgrounds, skin tones, lighting, camera angles, and motion — none of which appear in these static 28×28 images. Letters J and Z, which involve movement, are not included at all. So this project shows isolated letter classification rather than usable sign-language translation.</p>
+<p>There is also a broader point about evaluation. A practical assistive system should not only be measured by benchmark accuracy. It should be tested with diverse users, should communicate uncertainty when it is unsure, and should be designed as a support tool rather than a replacement for human interpreters. These are limits on how far the current results can be applied, but they also give direction for future work.</p>
+<p>The next steps would be collecting real webcam data, extending the model to handle video frames with temporal modelling, and testing with signer-independent splits. A compact ResNet-style architecture would also be a natural extension, since residual connections help train deeper networks more reliably (He et al., 2016).</p>
+<h2>References</h2>
+<p>Datamunge. (2017). <em>Sign Language MNIST</em>. Kaggle. https://www.kaggle.com/datasets/datamunge/sign-language-mnist</p>
+<p>He, K., Zhang, X., Ren, S., and Sun, J. (2016). Deep Residual Learning for Image Recognition. <em>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 770–778. https://doi.org/10.1109/CVPR.2016.90</p></body></html>
