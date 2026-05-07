@@ -87,3 +87,22 @@
 
 - Dashboard 与 Articles 的 demo fallback 已验收通过。
 - Publications 还需要同样的 demo fallback：API 不可达时展示 2-3 条发布审计示例记录，并用 `Demo Mode` 蓝色提示替代红色错误条。
+
+## 2026-05-08 TASK #4 Publications fallback 最终复验
+
+### 执行结果
+
+- 已确认最新提交：`1a5b7e6 fix: publications demo fallback (Codex re-review)`。
+- 已重新执行 `frontend_next` 的 `npm run build`，构建通过。
+- 已在 `localhost:3004` 启动新前端，并覆盖 `docs/images/screenshots/publications.png`。
+
+### 视觉验收
+
+- ✅ `publications.png` 已不再显示红色 `Failed to fetch`。
+- ✅ 页面现在显示 `Demo Mode — API 未连接，展示示例数据`。
+- ✅ 发布中心展示 3 条发布审计示例记录，包含知乎、微信、官网三类渠道，以及 success / failed 状态。
+
+### 当前结论
+
+- P1 demo fallback 截图问题已闭环。
+- `dashboard.png`、`articles.png`、`publications.png` 均已进入健康 Demo Mode 状态，可以用于 README 截图候选。
