@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@saasfly/ui/button";
-import { ScrollArea } from "@saasfly/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 function cn(...classes: (string | false | undefined | null)[]) { return classes.filter(Boolean).join(" "); }
 import {
   LayoutDashboard, Database, FileText, Send, Server, Hash, Wrench,

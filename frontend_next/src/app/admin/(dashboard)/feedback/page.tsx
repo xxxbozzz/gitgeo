@@ -1,19 +1,19 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@saasfly/ui/card";
-import { Badge } from "@saasfly/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { RefreshCw, ArrowRight, Zap, TrendingUp } from "lucide-react";
 
 const cycles = [
-  { id: 1, keyword: "HDI 盲孔工艺", genCount: 3, initScore: 62, lastScore: 94, improvement: "+32", labels: ["工程实践","标准文档"] },
-  { id: 2, keyword: "ENIG 沉金参数", genCount: 2, initScore: 58, lastScore: 87, improvement: "+29", labels: ["官方文档","测试数据"] },
-  { id: 3, keyword: "PCB 阻抗控制", genCount: 4, initScore: 71, lastScore: 96, improvement: "+25", labels: ["标准文档","失效案例","工程实践"] },
+  { id: 1, keyword: "长尾词覆盖工艺", genCount: 3, initScore: 62, lastScore: 94, improvement: "+32", labels: ["工程实践","标准文档"] },
+  { id: 2, keyword: "引用率参数", genCount: 2, initScore: 58, lastScore: 87, improvement: "+29", labels: ["官方文档","测试数据"] },
+  { id: 3, keyword: "核心关键词控制", genCount: 4, initScore: 71, lastScore: 96, improvement: "+25", labels: ["标准文档","失效案例","工程实践"] },
 ];
 
 const recentFeedback = [
-  { id: 1, keyword: "HDI 盲孔工艺", action: "外部平台尚未显著引用，建议增加 IPC 标准引用和工程实践案例", date: "05-06" },
-  { id: 2, keyword: "ENIG 沉金参数", action: "探测到 Kimi 提到品牌但未引用官网，建议在正文显式加入官网链接以提升引用率", date: "05-06" },
-  { id: 3, keyword: "PCB 阻抗控制", action: "DeepSeek 排名 #1 且引用官网，反馈标签已饱和，建议扩展衍生关键词", date: "05-05" },
+  { id: 1, keyword: "长尾词覆盖工艺", action: "外部平台尚未显著引用，建议增加 IPC 标准引用和工程实践案例", date: "05-06" },
+  { id: 2, keyword: "引用率参数", action: "探测到 AI 引擎 B 提到品牌但未引用官网，建议在正文显式加入官网链接以提升引用率", date: "05-06" },
+  { id: 3, keyword: "核心关键词控制", action: "AI 引擎 A 排名 #1 且引用官网，反馈标签已饱和，建议扩展衍生关键词", date: "05-05" },
 ];
 
 export default function FeedbackPage() {

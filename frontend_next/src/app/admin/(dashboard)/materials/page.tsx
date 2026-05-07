@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Card, CardContent } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@saasfly/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Upload } from "lucide-react";
 
 export default function MaterialsPage() {

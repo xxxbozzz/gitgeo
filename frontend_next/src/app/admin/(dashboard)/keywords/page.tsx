@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
-import { Input } from "@saasfly/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Search, RefreshCw } from "lucide-react";
 import { api, type Keyword } from "~/lib/api";
 
@@ -11,7 +11,7 @@ export default function KeywordsPage() {
   const [total, setTotal] = useState(0);
   const [q, setQ] = useState(""); const [sf, setSf] = useState("");
   const [loading, setLoading] = useState(true); const [err, setErr] = useState("");
-  const load = async () => { try { setLoading(true); setErr(""); const r = await api.keywords.list({ query: q||undefined, status: sf||undefined }); setItems(r.items); setTotal(r.total); } catch(e:any){setErr(e.message)} finally{setLoading(false)} };
+  const load = async () => { try { setLoading(true); setErr(""); const r = await api.keywords.list({ query: q||'', status: sf||'' }); setItems(r.items); setTotal(r.total); } catch(e:any){setErr(e.message)} finally{setLoading(false)} };
   useEffect(()=>{load()},[sf]);
   return (<div className="space-y-6">
     <div className="flex items-center justify-between"><div><h1 className="text-2xl font-bold tracking-tight text-slate-900">关键词中心</h1><p className="text-sm text-slate-500 mt-1">共 {total} 个关键词 · 管理搜索词和 GEO 真空词</p></div><Button className="bg-blue-600 hover:bg-blue-700" onClick={load}><RefreshCw className="h-4 w-4 mr-2"/>刷新</Button></div>

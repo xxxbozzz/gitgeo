@@ -2,7 +2,7 @@ const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001/api/v1";
 
 interface ApiEnvelope<T> { success: boolean; message: string; data: T | null; error_code: string | null }
 
-async function get<T>(path: string, params?: Record<string, string>): Promise<T> {
+async function get<T>(path: string, params?: Record<string, string | undefined>): Promise<T> {
   const url = new URL(BASE + path);
   if (params) Object.entries(params).forEach(([k, v]) => { if (v) url.searchParams.set(k, v) });
   const res = await fetch(url.toString(), { headers: { "Content-Type": "application/json" } });

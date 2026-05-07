@@ -1,10 +1,10 @@
 "use client";
-import { Card, CardContent } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Cpu, Plus, Power } from "lucide-react";
 
 const models = [
-  { id: 1, name: "deepseek-chat", provider: "DeepSeek", type: "chat", endpoint: "https://api.deepseek.com", primary: true },
+  { id: 1, name: "primary-chat-model", provider: "OpenAI-compatible", type: "chat", endpoint: "https://your-llm-endpoint.example/v1", primary: true },
   { id: 2, name: "gpt-4o", provider: "OpenAI", type: "chat", endpoint: "https://api.openai.com/v1", primary: false },
   { id: 3, name: "text-embedding-3-small", provider: "OpenAI", type: "embedding", endpoint: "https://api.openai.com/v1", primary: false },
 ];

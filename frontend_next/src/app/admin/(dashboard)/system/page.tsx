@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@saasfly/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { RefreshCw, Server, Database, Cpu, Braces } from "lucide-react";
 import { api, type SystemStatus } from "~/lib/api";
 

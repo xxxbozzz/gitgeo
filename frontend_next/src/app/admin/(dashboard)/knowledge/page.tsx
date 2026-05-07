@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
-import { Input } from "@saasfly/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@saasfly/ui/tabs";
-import { Badge } from "@saasfly/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { Upload, Search, FileText, Database, Brain, Trash2, Eye } from "lucide-react";
 
 const docs = [
-  { id: 1, name: "IPC-6012 刚性印制板标准.pdf", chunks: 48, size: "2.4 MB", status: "embedded", date: "2026-05-06" },
+  { id: 1, name: "行业标准规范汇编.pdf", chunks: 48, size: "2.4 MB", status: "embedded", date: "2026-05-06" },
   { id: 2, name: "品牌能力手册_v3.pdf", chunks: 32, size: "1.8 MB", status: "embedded", date: "2026-05-05" },
-  { id: 3, name: "PCB 失效分析案例集.pdf", chunks: 24, size: "3.1 MB", status: "processing", date: "2026-05-06" },
+  { id: 3, name: "industry-failure-analysis-cases.pdf", chunks: 24, size: "3.1 MB", status: "processing", date: "2026-05-06" },
   { id: 4, name: "行业标准法规汇编.docx", chunks: 0, size: "856 KB", status: "pending", date: "2026-05-06" },
 ];
 

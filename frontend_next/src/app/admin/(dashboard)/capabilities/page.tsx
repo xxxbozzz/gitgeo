@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
-import { Input } from "@saasfly/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { RefreshCw, Power } from "lucide-react";
 import { api, type Capability } from "~/lib/api";
 
@@ -10,7 +10,7 @@ export default function CapsPage() {
   const [items, setItems] = useState<Capability[]>([]);
   const [total, setTotal] = useState(0);
   const [q, setQ] = useState(""); const [loading, setLoading] = useState(true); const [err, setErr] = useState("");
-  const load = async () => { try { setLoading(true); setErr(""); const r = await api.capabilities.list({ query: q||undefined }); setItems(r.items); setTotal(r.total); } catch(e:any){setErr(e.message)} finally{setLoading(false)} };
+  const load = async () => { try { setLoading(true); setErr(""); const r = await api.capabilities.list({ query: q||'' }); setItems(r.items); setTotal(r.total); } catch(e:any){setErr(e.message)} finally{setLoading(false)} };
   useEffect(()=>{load()},[]);
   const disable = async (id:number) => { try { await api.capabilities.disable(id); load(); } catch(e:any){setErr(e.message)} };
   return (<div className="space-y-6">

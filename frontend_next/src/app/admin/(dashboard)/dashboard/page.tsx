@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@saasfly/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, CheckCircle, Clock, Star, TrendingUp, TrendingDown, AlertCircle, RefreshCw } from "lucide-react";
 import { api, type Kpis, type TrendItem, type Keyword } from "~/lib/api";
 

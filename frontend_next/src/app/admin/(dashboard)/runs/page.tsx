@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
-import { Input } from "@saasfly/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { RefreshCw } from "lucide-react";
 import { api, type Run, type RunSummary } from "~/lib/api";
 
@@ -13,7 +13,7 @@ export default function RunsPage() {
   const [sum, setSum] = useState<RunSummary|null>(null);
   const [q, setQ] = useState(""); const [sf, setSf] = useState("");
   const [loading, setLoading] = useState(true); const [err, setErr] = useState("");
-  const load = async () => { try { setLoading(true); setErr(""); const [l,s] = await Promise.all([api.runs.list({keyword:q||undefined,status:sf||undefined}),api.runs.summary()]); setItems(l.items); setSum(s); } catch(e:any){setErr(e.message)} finally{setLoading(false)} };
+  const load = async () => { try { setLoading(true); setErr(""); const [l,s] = await Promise.all([api.runs.list({keyword:q||'',status:sf||''}),api.runs.summary()]); setItems(l.items); setSum(s); } catch(e:any){setErr(e.message)} finally{setLoading(false)} };
   useEffect(()=>{load()},[sf]);
   return (<div className="space-y-6">
     <div className="flex items-center justify-between"><div><h1 className="text-2xl font-bold tracking-tight text-slate-900">运行记录</h1><p className="text-sm text-slate-500 mt-1">任务执行历史 · 步骤时间线 · 失败追溯</p></div><Button className="bg-blue-600 hover:bg-blue-700" onClick={load}><RefreshCw className="h-4 w-4 mr-2"/>刷新</Button></div>

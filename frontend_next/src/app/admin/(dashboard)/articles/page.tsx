@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
-import { Input } from "@saasfly/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Eye, RefreshCw, Trash2, Send } from "lucide-react";
 import { api, type Article, type ArticlesSummary } from "~/lib/api";
 
@@ -18,7 +18,7 @@ export default function ArticlesPage() {
 
   const load = async () => {
     try { setLoading(true); setErr("");
-      const [l, s] = await Promise.all([api.articles.list({ query: q || undefined, status: sf || undefined }), api.articles.summary()]);
+      const [l, s] = await Promise.all([api.articles.list({ query: q || '', status: sf || '' }), api.articles.summary()]);
       setItems(l.items); setSum(s);
     } catch (e: any) { setErr(e.message); } finally { setLoading(false); }
   };

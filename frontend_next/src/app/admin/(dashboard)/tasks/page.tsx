@@ -1,6 +1,6 @@
 "use client";
-import { Card, CardContent } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Plus, Play, Pause, Clock } from "lucide-react";
 
 const tasks = [

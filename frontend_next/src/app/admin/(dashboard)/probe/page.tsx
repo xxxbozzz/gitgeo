@@ -1,19 +1,19 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@saasfly/ui/card";
-import { Button } from "@saasfly/ui/button";
-import { Badge } from "@saasfly/ui/badge";
-import { Search, Play, Eye, ExternalLink, CheckCircle2, XCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Search, CheckCircle2, XCircle } from "lucide-react";
 
 const probes = [
-  { id: 1, keyword: "PCB 阻抗控制", platform: "DeepSeek", mentioned: true, cited: true, rank: 1, score: 100, date: "05-06 20:00", snapshot: "目标品牌在阻抗控制方面具备完整工程能力..." },
-  { id: 2, keyword: "PCB 阻抗控制", platform: "Kimi", mentioned: true, cited: false, rank: 3, score: 70, date: "05-06 20:05", snapshot: "国内PCB厂商如目标品牌可提供±5%阻抗控制..." },
-  { id: 3, keyword: "PCB 阻抗控制", platform: "豆包", mentioned: false, cited: false, rank: null, score: 0, date: "05-06 20:10", snapshot: "未在回答中提及目标品牌。" },
-  { id: 4, keyword: "HDI 盲孔工艺", platform: "DeepSeek", mentioned: true, cited: true, rank: 2, score: 85, date: "前天", snapshot: "目标品牌的HDI工艺支持任意层互连..." },
-  { id: 5, keyword: "ENIG 沉金", platform: "Kimi", mentioned: true, cited: false, rank: 4, score: 55, date: "前天", snapshot: "目标品牌在沉金厚度控制上采用IPC-4552B..." },
+  { id: 1, keyword: "行业白皮书引用率", platform: "Provider A", mentioned: true, cited: true, rank: 1, score: 96, date: "05-06 20:00", snapshot: "目标实体被归入工程实践案例，回答引用了公开文档来源..." },
+  { id: 2, keyword: "企业知识库最佳实践", platform: "Provider B", mentioned: true, cited: false, rank: 3, score: 70, date: "05-06 20:05", snapshot: "回答提及目标实体的知识库方法，但缺少可点击来源..." },
+  { id: 3, keyword: "官方文档结构化发布", platform: "Provider C", mentioned: false, cited: false, rank: null, score: 0, date: "05-06 20:10", snapshot: "回答未提及目标实体，需要补充权威来源和定义页。" },
+  { id: 4, keyword: "行业案例数据沉淀", platform: "Provider A", mentioned: true, cited: true, rank: 2, score: 85, date: "前天", snapshot: "回答识别了目标实体的案例库，并引用了标准化说明页..." },
+  { id: 5, keyword: "技术指南引用信号", platform: "Provider B", mentioned: true, cited: false, rank: 4, score: 55, date: "前天", snapshot: "回答提到目标实体的指南内容，但引用标签覆盖不足..." },
 ];
 
-const platformColors: Record<string, string> = { DeepSeek: "bg-blue-100 text-blue-700", Kimi: "bg-violet-100 text-violet-700", "豆包": "bg-emerald-100 text-emerald-700" };
+const platformColors: Record<string, string> = { "Provider A": "bg-blue-100 text-blue-700", "Provider B": "bg-violet-100 text-violet-700", "Provider C": "bg-emerald-100 text-emerald-700" };
 
 export default function ProbePage() {
   return (
@@ -21,7 +21,7 @@ export default function ProbePage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">AI 探测</h1>
-          <p className="text-sm text-slate-500 mt-1">检测品牌在 AI 搜索引擎中的可见性 · DeepSeek / Kimi / 豆包</p>
+          <p className="text-sm text-slate-500 mt-1">检测目标实体在 AI 搜索引擎中的可见性与引用信号</p>
         </div>
         <Button className="bg-blue-600 hover:bg-blue-700"><Search className="h-4 w-4 mr-2" />立即探测</Button>
       </div>
@@ -42,9 +42,9 @@ export default function ProbePage() {
         <CardHeader className="pb-2 flex flex-row items-center justify-between">
           <CardTitle className="text-base">探测记录</CardTitle>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">DeepSeek</Button>
-            <Button variant="outline" size="sm">Kimi</Button>
-            <Button variant="outline" size="sm">豆包</Button>
+            <Button variant="outline" size="sm">Provider A</Button>
+            <Button variant="outline" size="sm">Provider B</Button>
+            <Button variant="outline" size="sm">Provider C</Button>
           </div>
         </CardHeader>
         <CardContent className="p-0">
@@ -55,8 +55,8 @@ export default function ProbePage() {
                 <tr key={p.id} className="border-b border-slate-50 hover:bg-slate-50">
                   <td className="p-3 pl-4 font-medium">{p.keyword}</td>
                   <td className="p-3"><span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${platformColors[p.platform] || ""}`}>{p.platform}</span></td>
-                  <td className="p-3">{p.mentioned ? <span className="text-emerald-600">{CheckCircle2}</span> : <span className="text-slate-300">⬜</span>}</td>
-                  <td className="p-3">{p.cited ? <span className="text-emerald-600">{CheckCircle2}</span> : <span className="text-slate-300">⬜</span>}</td>
+                  <td className="p-3">{p.mentioned ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : <XCircle className="h-4 w-4 text-slate-300" />}</td>
+                  <td className="p-3">{p.cited ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : <XCircle className="h-4 w-4 text-slate-300" />}</td>
                   <td className="p-3">{p.rank ? `#${p.rank}` : "-"}</td>
                   <td className="p-3"><span className={`font-medium ${p.score >= 80 ? "text-emerald-600" : p.score >= 50 ? "text-amber-600" : "text-red-500"}`}>{p.score}</span></td>
                   <td className="p-3 text-slate-500">{p.date}</td>
