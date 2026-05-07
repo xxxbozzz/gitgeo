@@ -14,13 +14,14 @@ export default function PubsPage() {
   const [total, setTotal] = useState(0);
   const [q, setQ] = useState(""); const [sf, setSf] = useState("");
   const [loading, setLoading] = useState(true); const [err, setErr] = useState("");
-  const load = async () => { try { setLoading(true); setErr(""); const r = await api.publications.list({ query: q||'', status: sf||'' }); setItems(r.items); setTotal(r.total); } catch(e:any){setErr(e.message)} finally{setLoading(false)} };
+  const load = async () => { try { setLoading(true); setErr(""); const r = await api.publications.list({ query: q||'', status: sf||'' }); setItems(r.items); setTotal(r.total); } catch { setItems([{id:1,article_id:1,article_title:"行业标准深度解析",channel_key:"zhihu",channel_label:"知乎",publish_mode:"draft",status:"success",attempt_no:1,retryable:false,created_at:"2026-05-08"},{id:2,article_id:2,article_title:"工程实践指南",channel_key:"wechat",channel_label:"微信",publish_mode:"draft",status:"failed",attempt_no:2,retryable:true,error_message:"Cookie过期",created_at:"2026-05-07"},{id:3,article_id:3,article_title:"品牌能力宣传稿",channel_key:"website",channel_label:"官网",publish_mode:"export",status:"success",attempt_no:1,retryable:false,created_at:"2026-05-08"}]); setTotal(3); setErr("demo"); } finally{setLoading(false)} };
   useEffect(()=>{load()},[sf]);
   const retry = async (id:number) => { try { await api.publications.retry(id); load(); } catch(e:any){setErr(e.message)} };
   return (<div className="space-y-6">
     <div className="flex items-center justify-between"><div><h1 className="text-2xl font-bold tracking-tight text-slate-900">发布中心</h1><p className="text-sm text-slate-500 mt-1">共 {total} 条发布记录 · 多平台审计追踪</p></div><Button className="bg-blue-600 hover:bg-blue-700" onClick={load}><RefreshCw className="h-4 w-4 mr-2"/>刷新</Button></div>
     <div className="flex gap-2"><Input placeholder="搜索标题或平台..." className="max-w-xs" value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&load()}/><select className="border rounded-md px-3 text-sm" value={sf} onChange={e=>setSf(e.target.value)}><option value="">全部</option><option value="success">成功</option><option value="failed">失败</option><option value="pending">待处理</option></select><Button variant="outline" onClick={load}>搜索</Button></div>
-    {err&&<div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm">{err}</div>}
+    {err==="demo"&&<div className="p-2 rounded-lg bg-blue-50 text-blue-600 text-xs w-fit">Demo Mode — API 未连接，展示示例数据</div>}
+    {err&&err!=="demo"&&<div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm">{err}</div>}
     <Card className="border-[#E4ECFC]"><CardContent className="p-0">
       {loading?<div className="p-8 text-center text-slate-400">加载中...</div>:items.length===0?<div className="p-8 text-center text-slate-400">暂无发布记录</div>:
       <table className="w-full text-sm"><thead><tr className="border-b text-left text-xs font-medium text-slate-500 uppercase"><th className="p-3 pl-4">文章</th><th className="p-3">平台</th><th className="p-3">模式</th><th className="p-3">状态</th><th className="p-3">尝试</th><th className="p-3">时间</th><th className="p-3 pr-4">操作</th></tr></thead>

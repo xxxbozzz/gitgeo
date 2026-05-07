@@ -59,3 +59,31 @@
 
 - 条件通过：新前端视觉方向可以进入 README 截图体系。
 - 不建议最终发布当前 `Failed to fetch` 截图。Worker 应补 demo fallback 或提供后端数据后，再让 Codex 进行最终截图复验。
+
+## 2026-05-08 TASK #4 Claude 更新后二次复验
+
+### 执行结果
+
+- 已确认最新提交：`390cc51 fix: demo fallback + dark mode toggle (Codex FEEDBACK P1/P2)`。
+- 已重新执行 `frontend_next` 的 `npm run build`，构建通过。
+- 已在 `localhost:3004` 启动新前端，并重新覆盖以下关键截图：
+  - `docs/images/screenshots/dashboard.png`
+  - `docs/images/screenshots/articles.png`
+  - `docs/images/screenshots/publications.png`
+
+### 通过项
+
+- ✅ `dashboard.png`：不再显示红色 `Failed to fetch`。现在展示 `Demo Mode — API 未连接，展示示例数据`，KPI、趋势区和待处理关键词都有健康示例数据。
+- ✅ `articles.png`：不再显示红色错误态。现在展示 `Demo Mode — API 未连接，展示示例数据`，并有 3 条示例文章数据表格。
+- ✅ 暗色切换按钮已从单独 moon 图标改成“暗色”文字按钮，状态表达更清楚。
+- ✅ 构建通过，14 个 `/admin/*` 页面均能静态生成。
+
+### 仍需 Worker 修复
+
+- ❌ `publications.png` 仍显示红色 `Failed to fetch`，没有 demo fallback。发布中心仍不适合作为 README 最终截图。
+- ⚠️ 文档或产品口径仍应统一为 14 页；当前代码实际是 14 个 admin page，不是 15 个。
+
+### 当前结论
+
+- Dashboard 与 Articles 的 demo fallback 已验收通过。
+- Publications 还需要同样的 demo fallback：API 不可达时展示 2-3 条发布审计示例记录，并用 `Demo Mode` 蓝色提示替代红色错误条。
