@@ -225,6 +225,63 @@ Codex 将从产品视角复验：
 
 ---
 
+## TASK #6B — Claude 返修：让功能真的跑起来
+
+Codex 已复审 TASK #6，结论：未通过。原因不是方向错，而是提交没有把核心抽象接进系统，且新增 `core/dryrun_publisher.py` 当前无法导入。
+
+### 必修 P0
+
+1. 修复 `core/dryrun_publisher.py` 导入错误。
+   - 当前 `from core.publisher_adapters import ...` 指向不存在文件。
+   - 最小验收命令必须通过：
+     `python -c "from core.dryrun_publisher import DryRunPublisher; print(DryRunPublisher().publish('browser', 'T', '# body'))"`
+
+2. 新增真实站点选择器。
+   - 文件可以叫 `core/site_selector.py` 或 `core/distribution_selector.py`。
+   - 不能只写在文档里。
+   - 至少内置 `generic_b2b`、`software`、`manufacturing` 三个行业画像。
+   - 返回字段必须包含 `site_key/display_name/domain/channel_type/publish_method/authority_score/relevance_score/freshness_score/citation_potential_score/reason`。
+   - 权重尽量配置化，例如 `config/site_profiles/*.yaml`；如果先用 Python fixture，也要和代码硬分离，后续可迁移。
+
+3. 新增真实 adapter registry。
+   - 文件可以叫 `core/publisher_adapters.py` 或 `core/publishers/registry.py`。
+   - 必须能注册并列出 `zhihu`、`wechat`、`browser`、`dryrun`。
+   - adapter 接口至少包含 `adapter_key/display_name/publish_method/supports_draft/ready/publish/publish_and_go_live`。
+
+4. 重构 `backend/app/services/publications_service.py`。
+   - 删除服务层的固定 `longform_channel -> zhihu`、`mobile_channel -> wechat` 依赖，或至少改为从 registry/channel config 生成。
+   - 删除 `_publish_to_adapter` 中 `if adapter_key == "zhihu"` / `if adapter_key == "wechat"` 的硬分发。
+   - `browser/dryrun` adapter 必须可通过 service 进入并写入 `article_publications` 审计。
+
+5. 修改 `backend/app/schemas/articles.py`。
+   - 不要在 schema 中写死 `{"longform_channel", "mobile_channel", "zhihu", "wechat"}`。
+   - schema 只做清洗，合法性由 registry/service 返回明确错误。
+
+6. 加 live publish 安全阀。
+   - 默认 `go_live=True` 也不能真实发布。
+   - 只有 `GEO_ENABLE_LIVE_PUBLISH=true` 时才允许调用真实 `publish_and_go_live`。
+   - dry-run/browser draft 不受影响。
+
+7. 补可复现验证。
+   - 如果 pytest 不可用，请提供不依赖 pytest 的 `scripts/demo_task6.py` 或 `python -m ...` 命令。
+   - 验证项：
+     - 不同行业返回不同站点排序。
+     - registry 能列出 adapters。
+     - dry-run 不触发外部请求且返回结构化 payload。
+     - live guard 默认拒绝。
+     - Prompt feedback fixture 能生成下一轮 prompt context。
+
+### 完成后写 DONE.md
+
+请写清：
+
+- 实际新增/修改文件。
+- 所有验证命令和原始输出摘要。
+- 哪些是 demo fixture，哪些会触发真实外部请求。
+- 是否仍有未完成风险。
+
+---
+
 ## TASK #5B — Claude 执行：README 截图区返修
 
 用户在 GitHub 移动端截图中确认了一个展示问题：README 的“截图”区域现在主要显示 `probe.png`、`feedback.png` 等文件名表格，不是视觉截图画廊。这个会让访问者误以为仓库没有真正展示产品界面。

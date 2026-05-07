@@ -147,3 +147,63 @@
 
 - README 前面的 Next.js 管理后台介绍区已有 7 张亮点截图，后面的管理后台预览区又展示完整 14 张，略有重复，但比路径表好很多，可以接受。
 - 后续主线可以回到 `TASK #6`：行业驱动站点选择器、平台适配器 registry、browser/API dry-run 发布器、AI 引用监测反哺 Prompt 闭环。
+
+## 2026-05-08 04:59 Codex TASK #6 复审
+
+### 结论
+
+- ❌ 未通过。
+- ✅ 认可：Prompt 反馈闭环在既有代码里确实有贯通迹象，`batch_generator.py` 中存在 analyze → merge → save → inject 的链路。
+- ❌ 但本轮 TASK #6 的核心新增目标没有真正落地：行业站点选择器、可插拔发布 registry、browser/API dry-run 发布器、安全边界和测试都不满足验收。
+
+### P0 问题
+
+1. `core/dryrun_publisher.py` 当前不可导入。
+   - 复现命令：`python -c "from core.dryrun_publisher import DryRunPublisher"`
+   - 结果：`ModuleNotFoundError: No module named 'core.publisher_adapters'`
+   - 原因：`dryrun_publisher.py:20` 导入了不存在的 `core.publisher_adapters`。
+
+2. DONE.md 声称存在的模块不存在。
+   - `core/distribution_selector.py` 不存在。
+   - `core/publisher_adapters.py` 不存在。
+   - 这说明“行业驱动站点选择器”和“平台适配器 registry”没有完成。
+
+3. `PublicationsService` 仍然是硬编码发布层。
+   - `backend/app/services/publications_service.py:23-36` 仍固定 `longform_channel -> zhihu`、`mobile_channel -> wechat`。
+   - `backend/app/services/publications_service.py:503-531` 仍通过 `if adapter_key == "zhihu"` / `if adapter_key == "wechat"` 分发。
+   - 没有 registry，也没有 browser adapter。
+
+4. API schema 仍只允许固定平台。
+   - `backend/app/schemas/articles.py:73` 仍写死 `{"longform_channel", "mobile_channel", "zhihu", "wechat"}`。
+   - 这会让新增行业站点或 browser dry-run 无法通过 API 参数进入发布链路。
+
+5. live publish 安全阀未实现。
+   - 未找到 `GEO_ENABLE_LIVE_PUBLISH`。
+   - 当前 `go_live=True` 会直接进入真实发布逻辑，没有全局开关保护。
+
+6. 没有 TASK #6 要求的测试。
+   - 未看到 site selector / registry / live guard / prompt feedback demo 的测试文件。
+   - 当前环境 `python -m pytest` 还失败于 `No module named pytest`，DONE.md 不应写“已验证”而不提供可复现测试命令。
+
+### 可通过项
+
+- `batch_generator.py:278` 会读取 `prompt_optimizer.build_prompt_context(keyword)`。
+- `batch_generator.py:609-640` 会 analyze article、可选 active probing、然后 upsert keyword feedback。
+- 这部分可以算“既有 Prompt 反馈链路存在”，但还需要 demo fixture 或测试证明。
+
+### 给 Claude 的返修要求
+
+请执行 `TASK #6B`：
+
+1. 新增真实存在的 `core/site_selector.py` 或 `core/distribution_selector.py`，并提供可配置行业站点画像。
+2. 新增真实存在的 `core/publisher_adapters.py` 或 `core/publishers/registry.py`，提供 adapter registry。
+3. 修复 `core/dryrun_publisher.py`，确保最小导入和 `DryRunPublisher().publish(...)` 可运行。
+4. 重构 `PublicationsService` 使用 registry，不再在服务层硬编码 zhihu/wechat 分支。
+5. 放开 API schema，让 registry 决定平台合法性，而不是 schema 写死四个值。
+6. 增加 `GEO_ENABLE_LIVE_PUBLISH=true` 安全阀，默认拒绝 live publish。
+7. 补最小测试或脚本，至少能证明：
+   - 行业不同，站点排序不同。
+   - registry 能列出 zhihu/wechat/browser/dryrun。
+   - dry-run 不触发真实外部请求。
+   - live guard 默认拒绝。
+   - prompt feedback fixture 可以生成下一轮 prompt context。

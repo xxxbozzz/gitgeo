@@ -18,10 +18,8 @@ import time
 from typing import Any
 
 from core.publisher_adapters import (
-    ADAPTERS,
-    PublishRequest,
     get_publisher_adapter,
-    list_supported_publication_platforms,
+    list_supported_platforms,
 )
 
 log = logging.getLogger("GEO.DryRun")
@@ -91,7 +89,7 @@ class DryRunPublisher:
     def verify_all_adapters(self) -> dict[str, Any]:
         """验证所有已注册适配器是否可用（不实际发布）"""
         results = {}
-        for platform_key in list_supported_publication_platforms():
+        for platform_key in list_supported_platforms():
             adapter = get_publisher_adapter(platform_key)
             results[platform_key] = {
                 "available": adapter is not None,
