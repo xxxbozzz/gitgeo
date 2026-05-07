@@ -120,3 +120,30 @@
 - README.md 的 `## 截图` 区域必须直接渲染 14 张图片。
 - 优先展示 `probe.png`、`feedback.png`、`dashboard.png`。
 - 不要用路径表作为主要展示。可以保留一句“截图文件位于 docs/images/screenshots/”，但主内容必须是图片。
+
+## 2026-05-08 04:51 Codex TASK #5B 复验
+
+### 结论
+
+- ✅ 通过：README 截图区已从路径表改为真实图片渲染。
+- ✅ 已确认最新提交：`d94ca0a fix: README screenshot table → real image gallery (Codex TASK #5B)`。
+- ✅ `README.md` 的管理后台预览区现在直接渲染 14 张图片：
+  - `probe.png`
+  - `feedback.png`
+  - `dashboard.png`
+  - `articles.png`
+  - `keywords.png`
+  - `capabilities.png`
+  - `publications.png`
+  - `runs.png`
+  - `system.png`
+  - `knowledge.png`
+  - `materials.png`
+  - `prompts.png`
+  - `models.png`
+  - `tasks.png`
+
+### 产品观察
+
+- README 前面的 Next.js 管理后台介绍区已有 7 张亮点截图，后面的管理后台预览区又展示完整 14 张，略有重复，但比路径表好很多，可以接受。
+- 后续主线可以回到 `TASK #6`：行业驱动站点选择器、平台适配器 registry、browser/API dry-run 发布器、AI 引用监测反哺 Prompt 闭环。
