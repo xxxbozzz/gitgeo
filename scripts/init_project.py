@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-gitgeo 项目初始化脚本
-=====================
+gitgeo 项目初始化脚本 (PostgreSQL)
+==================================
 首次启动时自动执行：建表 → 导种子数据 → 打印就绪状态
 
 幂等：已存在的表和数据不会重复创建。
@@ -24,57 +24,45 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA_DIR = os.path.join(PROJECT_ROOT, "database")
 SEED_FILE = os.path.join(PROJECT_ROOT, "seed_topics.json")
 
-SCHEMA_FILES = [
-    "schema.sql",
-    "feedback_schema.sql",
-    "job_runtime_schema.sql",
-    "pcb_capability_schema.sql",
-]
+PG_INIT_FILE = os.path.join(SCHEMA_DIR, "init_postgres.sql")
 
 
 def get_db():
-    import mysql.connector
-    return mysql.connector.connect(
-        host=os.environ.get("DB_HOST", "mysql_db"),
-        port=int(os.environ.get("DB_PORT", "3306")),
-        user=os.environ.get("DB_USER", "root"),
-        password=os.environ.get("DB_PASSWORD", "root_password"),
-        database=os.environ.get("DB_NAME", "geo_knowledge_engine"),
-        connection_timeout=10,
-        autocommit=True,
+    import psycopg2
+    return psycopg2.connect(
+        host=os.environ.get("DB_HOST", "localhost"),
+        port=int(os.environ.get("DB_PORT", "5432")),
+        user=os.environ.get("DB_USER", "geo_app"),
+        password=os.environ.get("DB_PASSWORD", "change-this-password"),
+        dbname=os.environ.get("DB_NAME", "geo_engine"),
+        connect_timeout=10,
     )
 
 
-def run_schemas():
-    """执行所有 schema 文件（幂等：CREATE TABLE IF NOT EXISTS）"""
+def run_schema():
+    """执行 PostgreSQL 初始化脚本（幂等：CREATE TABLE IF NOT EXISTS）"""
+    if not os.path.exists(PG_INIT_FILE):
+        log.error("Schema 文件不存在: %s", PG_INIT_FILE)
+        return 0
+
     cnx = get_db()
+    cnx.autocommit = True
     cursor = cnx.cursor()
-    created = 0
-
-    for filename in SCHEMA_FILES:
-        filepath = os.path.join(SCHEMA_DIR, filename)
-        if not os.path.exists(filepath):
-            log.warning("跳过不存在的 schema: %s", filename)
-            continue
-        try:
-            sql = open(filepath, encoding="utf-8").read()
-            # 按分号拆分执行
-            statements = [s.strip() for s in sql.split(";") if s.strip()]
-            for stmt in statements:
-                if stmt and not stmt.startswith("--"):
-                    cursor.execute(stmt)
-            created += 1
-            log.info("✅ %s", filename)
-        except Exception as e:
-            log.warning("⚠️ %s: %s", filename, e)
-
-    cursor.close()
-    cnx.close()
-    return created
+    try:
+        sql = open(PG_INIT_FILE, encoding="utf-8").read()
+        cursor.execute(sql)
+        log.info("✅ init_postgres.sql 已应用")
+        return 1
+    except Exception as e:
+        log.warning("⚠️ schema 执行: %s", e)
+        return 0
+    finally:
+        cursor.close()
+        cnx.close()
 
 
 def seed_keywords():
-    """导入种子关键词（幂等：INSERT IGNORE）"""
+    """导入种子关键词（幂等：ON CONFLICT DO NOTHING）"""
     if not os.path.exists(SEED_FILE):
         log.warning("种子文件不存在: %s", SEED_FILE)
         return 0
@@ -97,7 +85,8 @@ def seed_keywords():
         diff = item.get("difficulty", 20)
         try:
             cursor.execute(
-                "INSERT IGNORE INTO geo_keywords (keyword, search_volume, difficulty) VALUES (%s, %s, %s)",
+                "INSERT INTO geo_keywords (keyword, search_volume, difficulty) "
+                "VALUES (%s, %s, %s) ON CONFLICT (keyword) DO NOTHING",
                 (keyword, vol, diff),
             )
             if cursor.rowcount > 0:
@@ -143,22 +132,24 @@ def main():
     args = parser.parse_args()
 
     log.info("=" * 50)
-    log.info("  gitgeo 项目初始化")
+    log.info("  gitgeo 项目初始化 (PostgreSQL)")
     log.info("=" * 50)
 
-    # 1. 等 MySQL 就绪
+    # 1. 等 PostgreSQL 就绪
     for attempt in range(30):
         try:
             cnx = get_db()
-            cnx.ping()
+            cur = cnx.cursor()
+            cur.execute("SELECT 1")
+            cur.close()
             cnx.close()
-            log.info("✅ MySQL 连接成功")
+            log.info("✅ PostgreSQL 连接成功")
             break
         except Exception:
             if attempt == 0:
-                log.info("⏳ 等待 MySQL 就绪...")
+                log.info("⏳ 等待 PostgreSQL 就绪...")
             if attempt >= 29:
-                log.error("❌ MySQL 连接超时，请检查数据库配置")
+                log.error("❌ PostgreSQL 连接超时")
                 sys.exit(1)
             import time
             time.sleep(2)
@@ -166,51 +157,49 @@ def main():
     if args.reset:
         log.warning("⚠️ 重置模式：删除所有表...")
         cnx = get_db()
+        cnx.autocommit = True
         cursor = cnx.cursor()
-        cursor.execute("DROP TABLE IF EXISTS geo_capability_spec_sources")
-        cursor.execute("DROP TABLE IF EXISTS geo_capability_specs")
-        cursor.execute("DROP TABLE IF EXISTS geo_capability_sources")
-        cursor.execute("DROP TABLE IF EXISTS geo_capability_profiles")
-        cursor.execute("DROP TABLE IF EXISTS geo_job_steps")
-        cursor.execute("DROP TABLE IF EXISTS geo_job_runs")
-        cursor.execute("DROP TABLE IF EXISTS geo_probe_results")
-        cursor.execute("DROP TABLE IF EXISTS geo_keyword_feedback")
-        cursor.execute("DROP TABLE IF EXISTS geo_links")
-        cursor.execute("DROP TABLE IF EXISTS geo_keywords")
-        cursor.execute("DROP TABLE IF EXISTS geo_articles")
+        tables = [
+            "geo_capability_spec_sources", "geo_capability_specs",
+            "geo_capability_sources", "geo_capability_profiles",
+            "geo_job_steps", "geo_job_runs",
+            "geo_probe_results", "geo_keyword_feedback",
+            "geo_links", "geo_keywords", "article_publications", "geo_articles",
+        ]
+        for t in tables:
+            cursor.execute(f"DROP TABLE IF EXISTS {t} CASCADE")
+        cursor.execute("DROP TYPE IF EXISTS metric_type_enum CASCADE")
+        cursor.execute("DROP TYPE IF EXISTS claim_level_enum CASCADE")
         cursor.close()
         cnx.close()
         log.info("✅ 旧表已清除")
 
     # 2. 建表
     log.info("📦 创建数据库表...")
-    schema_count = run_schemas()
-    log.info("✅ %d 个 schema 已应用", schema_count)
+    schema_count = run_schema()
+    log.info("✅ Schema 已应用" if schema_count else "⚠️ Schema 执行异常")
 
-    # 3. 种子数据
+    # 3. 种子
     log.info("🌱 导入种子关键词...")
-    keyword_count = count_keywords()
-    if keyword_count == 0:
-        seed_count = seed_keywords()
-        if seed_count == 0:
-            log.warning("⚠️ 没有导入任何关键词。请检查 seed_topics.json 或手动添加。")
-            log.info("   手动添加: INSERT INTO geo_keywords (keyword) VALUES ('你的关键词');")
+    kw_count = count_keywords()
+    if kw_count == 0:
+        seed_keywords()
     else:
-        log.info("✅ 已有 %d 个关键词（跳过种子导入）", keyword_count)
+        log.info("✅ 已有 %d 个关键词（跳过种子导入）", kw_count)
 
-    # 4. 检查 LLM 配置
+    # 4. 检查 LLM
     llm_ok = check_llm_configured()
     if llm_ok:
         log.info("✅ LLM API Key 已配置")
     else:
-        log.warning("⚠️ LLM API Key 未配置！请设置环境变量:")
+        log.warning("⚠️ LLM API Key 未配置！")
         log.info("   export GEO_LLM_API_KEY=sk-xxx")
         log.info("   export GEO_LLM_BASE_URL=https://api.deepseek.com")
-        log.info("   export GEO_LLM_MODEL=deepseek-chat")
+        log.info("   export GEO_LLM_MODEL=deepseek-v4-pro")
 
-    # 5. 就绪报告
+    # 5. 就绪
     log.info("=" * 50)
-    log.info("  🎉 gitgeo 初始化完成！")
+    log.info("  🎉 gitgeo 初始化完成！(PostgreSQL)")
     log.info("  📊 关键词: %d 个", count_keywords())
     log.info("  🤖 LLM: %s", "已配置 ✅" if llm_ok else "未配置 ⚠️")
     log.info("  🌐 Backend API: http://localhost:8001/api/v1")

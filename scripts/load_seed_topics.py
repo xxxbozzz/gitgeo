@@ -14,7 +14,7 @@
 import json
 import os
 import sys
-import mysql.connector
+import psycopg2
 
 # 添加项目根目录到 sys.path，以便导入 core 模块
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -65,7 +65,7 @@ def load_seeds():
             continue
             
         try:
-            sql = "INSERT IGNORE INTO geo_keywords (keyword, search_volume, difficulty) VALUES (%s, %s, %s)"
+            sql = "INSERT INTO geo_keywords (keyword, search_volume, difficulty) VALUES (%s, %s, %s) ON CONFLICT (keyword) DO NOTHING"
             val = (keyword, 1000, 50)
             cursor.execute(sql, val)
             
@@ -74,7 +74,7 @@ def load_seeds():
             else:
                 duplicate_count += 1
                 
-        except mysql.connector.Error as err:
+        except psycopg2.Error as err:
             print(f"❌ SQL 错误 ({keyword}): {err}")
             error_count += 1
 

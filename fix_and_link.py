@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 """
-一键修复脚本 — 修复低分文章 + 全量内链
-=======================================
+一键修复脚本 — 修复低分文章 + 全量内链 (PostgreSQL)
+=====================================================
 直接用 LLM 修复所有 <80 分的文章，然后为所有已发布文章建立内链。
-不走 CrewAI 流水线，直接调用 DeepSeek API。
 
 用法:
-    DB_HOST=localhost OTEL_SDK_DISABLED=true venv/bin/python fix_and_link.py
+    DB_HOST=localhost python fix_and_link.py
 """
 
 import os, sys, time, hashlib, logging
 
 os.environ.setdefault("OTEL_SDK_DISABLED", "true")
-os.environ.setdefault("MYSQL_CONNECTOR_PYTHON_TELEMETRY", "0")
 os.environ.setdefault("DB_HOST", "localhost")
 
 from dotenv import load_dotenv
 load_dotenv()
 
-import mysql.connector
+import psycopg2
+import psycopg2.extras
 from langchain_openai import ChatOpenAI
 from core.quality_checker import QualityChecker
 from core.auto_fixer import AutoFixer
@@ -28,10 +27,14 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefm
 log = logging.getLogger("FIX")
 
 # ─── LLM ───
+_llm_model = os.environ.get("GEO_LLM_MODEL") or os.environ.get("OPENAI_MODEL") or "deepseek-v4-pro"
+_llm_base = os.environ.get("GEO_LLM_BASE_URL") or os.environ.get("OPENAI_BASE_URL") or "https://api.deepseek.com"
+_llm_key = os.environ.get("GEO_LLM_API_KEY") or os.environ.get("DEEPSEEK_API_KEY") or os.environ.get("OPENAI_API_KEY", "")
+
 llm = ChatOpenAI(
-    model="deepseek-chat",
-    openai_api_key=os.getenv("DEEPSEEK_API_KEY"),
-    openai_api_base="https://api.deepseek.com",
+    model=_llm_model,
+    openai_api_key=_llm_key,
+    openai_api_base=_llm_base,
     temperature=0.3,
     max_tokens=8000,
 )
@@ -41,23 +44,26 @@ MAX_ATTEMPTS = 3
 
 
 def get_db():
-    return mysql.connector.connect(
+    return psycopg2.connect(
         host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "root_password"),
-        database=os.getenv("DB_NAME", "geo_knowledge_engine"),
-        connection_timeout=5,
+        port=int(os.getenv("DB_PORT", "5432")),
+        user=os.getenv("DB_USER", "geo_app"),
+        password=os.getenv("DB_PASSWORD", "change-this-password"),
+        dbname=os.getenv("DB_NAME", "geo_engine"),
+        connect_timeout=5,
     )
 
 
 def update_article(article_id, **fields):
     cnx = get_db()
-    cursor = cnx.cursor()
-    sets = ", ".join(f"{k}=%s" for k in fields)
-    cursor.execute(f"UPDATE geo_articles SET {sets} WHERE id=%s", (*fields.values(), article_id))
-    cnx.commit()
-    cursor.close()
-    cnx.close()
+    try:
+        cursor = cnx.cursor()
+        sets = ", ".join(f"{k}=%s" for k in fields)
+        cursor.execute(f"UPDATE geo_articles SET {sets} WHERE id=%s", (*fields.values(), article_id))
+        cnx.commit()
+        cursor.close()
+    finally:
+        cnx.close()
 
 
 def fix_article(article_id: int, title: str, content: str) -> bool:
@@ -82,7 +88,6 @@ def fix_article(article_id: int, title: str, content: str) -> bool:
             log.warning(f"  💀 放弃 [{score}分]")
             return False
 
-        # 生成修复指令
         fix_prompt = fixer.generate_fix_prompt(content, report)
         if not fix_prompt:
             log.warning("  AutoFixer 未生成指令")
@@ -105,18 +110,18 @@ def fix_article(article_id: int, title: str, content: str) -> bool:
             log.error(f"  LLM错误: {e}")
             continue
 
-        time.sleep(1)  # API 冷却
+        time.sleep(1)
 
     return False
 
 
 def main():
     log.info("=" * 60)
-    log.info("  一键修复脚本启动")
+    log.info("  一键修复脚本启动 (PostgreSQL)")
     log.info("=" * 60)
 
     cnx = get_db()
-    cursor = cnx.cursor(dictionary=True)
+    cursor = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
     # ═══ 阶段 1: 修复低分文章 ═══
     log.info("\n📋 阶段 1: 修复低于80分的文章")
@@ -145,7 +150,7 @@ def main():
         else:
             failed_count += 1
 
-        time.sleep(2)  # API 冷却
+        time.sleep(2)
 
     log.info(f"\n📊 修复结果: ✅通过 {fixed_count} | ❌未通过 {failed_count}")
 

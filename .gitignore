@@ -72,3 +72,4 @@ frontend_next/.next/
 frontend_next/node_modules/
 *.env.local
 *.env.*.local
+database/postgres_data/

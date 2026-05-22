@@ -7,7 +7,8 @@ GEO Engine Console v4.0
 import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
-import mysql.connector
+import psycopg2
+import psycopg2.extras
 import os
 import sys
 import time
@@ -43,13 +44,13 @@ st.set_page_config(
 @st.cache_resource(ttl=60)
 def get_connection():
     """缓存数据库连接，60秒过期"""
-    return mysql.connector.connect(
+    return psycopg2.connect(
         host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "root_password"),
-        database=os.getenv("DB_NAME", "geo_knowledge_engine"),
-        connection_timeout=5,
-        autocommit=True,
+        port=int(os.getenv("DB_PORT", "5432")),
+        user=os.getenv("DB_USER", "geo_app"),
+        password=os.getenv("DB_PASSWORD", "change-this-password"),
+        dbname=os.getenv("DB_NAME", "geo_engine"),
+        connect_timeout=5,
     )
 
 

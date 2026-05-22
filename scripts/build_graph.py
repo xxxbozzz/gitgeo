@@ -1,25 +1,26 @@
 
 import os
 import re
-import mysql.connector
+import psycopg2
+import psycopg2.extras
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 def get_connection():
-    return mysql.connector.connect(
+    return psycopg2.connect(
         host=os.getenv("DB_HOST", "localhost"),
-        user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "root_password"),
-        database=os.getenv("DB_NAME", "geo_knowledge_engine")
+        port=int(os.getenv("DB_PORT", "5432")),
+        user=os.getenv("DB_USER", "geo_app"),
+        password=os.getenv("DB_PASSWORD", "change-this-password"),
+        dbname=os.getenv("DB_NAME", "geo_engine"),
     )
 
 def build_graph():
     print("🚀 Starting Knowledge Graph Builder...")
     try:
         cnx = get_connection()
-        cursor = cnx.cursor(dictionary=True)
+        cursor = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         # 1. Fetch all articles
         print("📥 Fetching articles...")
@@ -60,7 +61,7 @@ def build_graph():
         # 3. Update Database
         if links:
             print("💾 Saving to database...")
-            cursor.execute("TRUNCATE TABLE geo_links")
+            cursor.execute("DELETE FROM geo_links")
             cursor.executemany(
                 "INSERT INTO geo_links (source_id, target_id, anchor_text) VALUES (%s, %s, %s)",
                 links
