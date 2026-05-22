@@ -11,6 +11,7 @@
 [![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF)](https://github.com/xxxbozzz/gitgeo/actions)
 [![Tests](https://img.shields.io/badge/tests-12%2F12_passed-brightgreen)](.)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Email](https://img.shields.io/badge/Email-huangkuifu010%40gmail.com-blue)](mailto:huangkuifu010@gmail.com)
 
 > 🇬🇧 [English](README_EN.md) | 🇨🇳 简体中文
 
@@ -211,7 +212,6 @@ GEO_ENABLE_LIVE_PUBLISH=false   # 安全阀，必须显式开启
 
 ## 文档
 
-- [GEO 知识库白皮书](http://kev-huang.com/methodology/geo-knowledge-base)——为什么这样设计 GitGeo
 - [系统架构](docs/system_structure.md)
 - [AI 反馈闭环](docs/ai_feedback_loop.md)
 - [Prompt 流水线](docs/prompt_pipeline_guide.md)
@@ -220,6 +220,8 @@ GEO_ENABLE_LIVE_PUBLISH=false   # 安全阀，必须显式开启
 ## 致谢
 
 本项目在早期得到了[**四川深亚电子科技有限公司**](https://www.pcbshenya.com)的业务场景验证支持。
+
+📧 **联系作者**：[huangkuifu010@gmail.com](mailto:huangkuifu010@gmail.com) | 💬 微信：bozi0410kk | 🐙 [GitHub](https://github.com/xxxbozzz)
 
 ## 许可
 
