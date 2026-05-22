@@ -63,6 +63,9 @@ temp.png
 sample.txt
 import_trace.txt
 
+# PEAN session state (NEVER commit)
+.pean/
+
 # Python cache
 .pytest_cache/
 
