@@ -10,6 +10,7 @@ API 与 Playwright 完全兼容。
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from pathlib import Path
@@ -60,14 +61,27 @@ class BrowserEngine:
             return
         launch_fn, self._backend = _get_browser_launcher()
         self._launcher = launch_fn
-        self._browser = await launch_fn(
-            headless=True,
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--disable-dev-shm-usage",
-                "--no-sandbox",
-            ],
-        )
+
+        if self._backend == "cloakbrowser":
+            # CloakBrowser's launch() is sync — run in thread
+            self._browser = await asyncio.to_thread(
+                launch_fn,
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-dev-shm-usage",
+                    "--no-sandbox",
+                ],
+            )
+        else:
+            self._browser = await launch_fn(
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--disable-dev-shm-usage",
+                    "--no-sandbox",
+                ],
+            )
         log.info("Browser engine started (backend: %s)", self._backend)
 
     async def stop(self) -> None:
@@ -88,10 +102,12 @@ class BrowserEngine:
         if auth_file.exists():
             import json
             state = json.loads(auth_file.read_text())
-            context = await self._browser.new_context(storage_state=state)
+            context = await asyncio.to_thread(
+                self._browser.new_context, storage_state=state
+            )
             log.debug("Loaded auth state for %s", platform)
         else:
-            context = await self._browser.new_context()
+            context = await asyncio.to_thread(self._browser.new_context)
 
         if mobile:
             context = await self._apply_mobile_profile(context)
@@ -100,7 +116,7 @@ class BrowserEngine:
 
     async def save_auth(self, platform: str, context) -> None:
         """保存登录状态到文件。"""
-        state = await context.storage_state()
+        state = await asyncio.to_thread(context.storage_state)
         AUTH_DIR.mkdir(parents=True, exist_ok=True)
         auth_file = AUTH_DIR / f"{platform}.json"
         import json
@@ -110,7 +126,7 @@ class BrowserEngine:
     async def new_context(self, *, mobile: bool = False):
         """创建一个全新的 context（不用已保存的状态）。"""
         await self.start()
-        context = await self._browser.new_context()
+        context = await asyncio.to_thread(self._browser.new_context)
         if mobile:
             context = await self._apply_mobile_profile(context)
         return context

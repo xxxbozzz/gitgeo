@@ -14,6 +14,8 @@ from core.publish.base import ArticleDTO, publish_layer
 from core.publish.adapters.zhihu import ZhihuAdapter
 from core.publish.adapters.wechat_mp import WeChatMPAdapter
 from core.publish.adapters.dryrun import DryRunAdapter
+from core.publish.adapters.devto import DevToAdapter
+from core.publish.adapters.telegraph import TelegraphAdapter
 
 log = logging.getLogger("GEO.Adapters")
 
@@ -21,6 +23,8 @@ log = logging.getLogger("GEO.Adapters")
 publish_layer.register(ZhihuAdapter())
 publish_layer.register(WeChatMPAdapter())
 publish_layer.register(DryRunAdapter())
+publish_layer.register(DevToAdapter())
+publish_layer.register(TelegraphAdapter())
 
 
 @dataclass(frozen=True)
