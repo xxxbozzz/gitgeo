@@ -1,5 +1,7 @@
 alembic
+aiohttp
 asyncpg
+cloakbrowser
 crewai
 crewai-tools
 fastapi
