@@ -124,6 +124,47 @@ pytest backend/tests/ -v
 GEO_TEST_DB=1 DB_HOST=localhost DB_USER=geo_app DB_PASSWORD=xxx pytest backend/tests/ -v
 ```
 
+## Docker 镜像
+
+已构建并推送至 GitHub Container Registry：
+
+```bash
+docker pull ghcr.io/xxxbozzz/gitgeo:latest
+```
+
+镜像包含（4.3GB，全预装，拉取即用）：
+- CloakBrowser 反检测 Chromium（140MB 预下载）
+- Playwright Chromium + Firefox + WebKit
+- PostgreSQL 客户端工具
+- 全部 Python 依赖
+
+或通过 Docker Compose 使用完整环境：
+
+```bash
+docker compose up -d
+# PostgreSQL + Backend (FastAPI :8001) + Dashboard (Streamlit :8503)
+# + ChromaDB + Scheduler — 全部就绪
+```
+
+---
+
+## 管理后台预览
+
+![AI 探测](docs/images/screenshots/probe.png)
+![反馈闭环](docs/images/screenshots/feedback.png)
+![仪表盘](docs/images/screenshots/dashboard.png)
+![文章管理](docs/images/screenshots/articles.png)
+![关键词](docs/images/screenshots/keywords.png)
+![能力库](docs/images/screenshots/capabilities.png)
+![发布中心](docs/images/screenshots/publications.png)
+![运行记录](docs/images/screenshots/runs.png)
+![系统状态](docs/images/screenshots/system.png)
+![知识库](docs/images/screenshots/knowledge.png)
+![素材库](docs/images/screenshots/materials.png)
+![提示词库](docs/images/screenshots/prompts.png)
+![模型配置](docs/images/screenshots/models.png)
+![任务调度](docs/images/screenshots/tasks.png)
+
 ---
 
 ## 配置
