@@ -21,6 +21,8 @@
 
 gitgeo 是一套**完整的 GEO 工作流引擎**。大多数内容系统止步于「关键词 → 生成 → 发布」。gitgeo 多做了一步：**测量你的内容是否真的被 AI 引用，把测量结果反哺给下一轮生成。**
 
+本项目源于[**四川深亚电子科技有限公司**](https://www.pcbshenya.com)的真实 GEO 业务需求。📧 [huangkuifu010@gmail.com](mailto:huangkuifu010@gmail.com)
+
 ```
 关键词发现 → 证据采集 → Prompt 组装 → 9 维质检 → AI 探测（4 平台 × 2 端）
     → 反馈写回 → 自动内链 → 多平台发布 → 审计追踪
@@ -220,8 +222,6 @@ GEO_ENABLE_LIVE_PUBLISH=false   # 安全阀，必须显式开启
 ## 致谢
 
 本项目在早期得到了[**四川深亚电子科技有限公司**](https://www.pcbshenya.com)的业务场景验证支持。
-
-📧 **联系作者**：[huangkuifu010@gmail.com](mailto:huangkuifu010@gmail.com) | 💬 微信：bozi0410kk | 🐙 [GitHub](https://github.com/xxxbozzz)
 
 ## 许可
 
