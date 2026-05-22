@@ -42,8 +42,9 @@ token_usage.json
 last_probe.timestamp
 build_info.json
 
-# Cookies
+# Cookies & Auth (NEVER commit credentials)
 config/cookies/
+config/auth/
 config/*.json
 
 # Node
