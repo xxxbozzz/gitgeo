@@ -1,15 +1,26 @@
-"""Unified publication adapters for platform-specific publishers."""
+"""
+Unified publication adapters — delegates to Publish Layer.
+
+Backward-compatible interface for auto_publish.py and publications_service.py.
+"""
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from dataclasses import dataclass
-from typing import Protocol
 
-from core.wechat_publisher import WeChatPublisher
-from core.zhihu_publisher import ZhihuPublisher
+from core.publish.base import ArticleDTO, publish_layer
+from core.publish.adapters.zhihu import ZhihuAdapter
+from core.publish.adapters.wechat_mp import WeChatMPAdapter
+from core.publish.adapters.dryrun import DryRunAdapter
 
 log = logging.getLogger("GEO.Adapters")
+
+# Register adapters on import
+publish_layer.register(ZhihuAdapter())
+publish_layer.register(WeChatMPAdapter())
+publish_layer.register(DryRunAdapter())
 
 
 @dataclass(frozen=True)
@@ -20,53 +31,47 @@ class PublishRequest:
     go_live: bool = False
 
 
-class PublisherAdapter(Protocol):
-    platform_key: str
+class PublisherAdapter:
+    """Adapter wrapper for backward compatibility.
 
-    def publish(self, request: PublishRequest) -> dict[str, object]: ...
+    Usage (old API):
+        adapter = get_publisher_adapter("zhihu")
+        result = adapter.publish(PublishRequest(...))
+    """
 
+    def __init__(self, platform_key: str):
+        self.platform_key = platform_key
 
-class ZhihuAdapter:
-    platform_key = "zhihu"
-
-    def publish(self, request: PublishRequest) -> dict[str, object]:
-        pub = ZhihuPublisher()
-        if not pub.ready:
-            return {"success": False, "message": "Cookie not ready"}
-        if request.go_live:
-            return pub.publish_and_go_live(request.title, request.content_md)
-        return pub.publish(request.title, request.content_md)
-
-
-class WeChatAdapter:
-    platform_key = "wechat"
-
-    def publish(self, request: PublishRequest) -> dict[str, object]:
-        pub = WeChatPublisher()
-        if not pub.ready:
-            return {"success": False, "message": "AppID/AppSecret not configured"}
-        if request.go_live:
-            return pub.publish_and_go_live(request.title, request.content_md)
-        return pub.publish(request.title, request.content_md)
-
-
-class DryRunAdapter:
-    """Simulated publisher — validates request but does not post externally."""
-    platform_key = "dryrun"
-
-    def publish(self, request: PublishRequest) -> dict[str, object]:
-        return {
-            "success": True,
-            "status": "dry_run",
-            "message": f"[DRY RUN] {request.title[:40]}...",
-            "url": f"https://dryrun.local/{request.platform}/mock",
-        }
+    def publish(self, request: PublishRequest) -> dict:
+        article = ArticleDTO(
+            title=request.title,
+            content_html=request.content_md,  # Will be converted to HTML by adapter
+            content_md=request.content_md,
+        )
+        try:
+            result = asyncio.run(publish_layer.publish(self.platform_key, article))
+            return {
+                "success": result.success,
+                "status": result.status,
+                "external_id": result.external_id,
+                "external_url": result.external_url,
+                "url": result.external_url,  # Backward compat
+                "message": result.message,
+                "error_message": result.error_message,
+            }
+        except Exception as exc:
+            return {
+                "success": False,
+                "status": "failed",
+                "message": str(exc),
+                "error_message": str(exc),
+            }
 
 
+# Backward-compatible adapter map
 ADAPTERS: dict[str, PublisherAdapter] = {
-    "zhihu": ZhihuAdapter(),
-    "wechat": WeChatAdapter(),
-    "dryrun": DryRunAdapter(),
+    key: PublisherAdapter(key)
+    for key in publish_layer.supported_platforms
 }
 
 

@@ -66,9 +66,11 @@ PROMPT_FILES = {
 
 PUBLISH_CONFIG_FILES = {
     "core/publisher_adapters.py",
-    "core/wechat_publisher.py",
-    "core/zhihu_publisher.py",
-    "core/dryrun_publisher.py",
+    "core/publish/adapters/zhihu.py",
+    "core/publish/adapters/wechat_mp.py",
+    "core/publish/adapters/dryrun.py",
+    "core/publish/base.py",
+    "core/publish/engine.py",
     "auto_publish.py",
     "backend/app/services/publications_service.py",
 }
@@ -530,7 +532,7 @@ def check_publish_config(files: list[str], base: str, head: str) -> DimensionRes
             score -= 0.3
 
     # Check platform-specific publishers exist
-    for platform_file in ["core/zhihu_publisher.py", "core/wechat_publisher.py"]:
+    for platform_file in ["core/publish/adapters/zhihu.py", "core/publish/adapters/wechat_mp.py"]:
         if platform_file in files:
             curr = get_file_content_at_ref(platform_file, head)
             if "def publish" not in curr:
