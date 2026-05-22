@@ -1,0 +1,1 @@
+把这个东西修好再次在github上进行一次大提交和更新通过测试和实验 把工程和稳定性提到a等 你可以安装一个osworld比如openapa或者bytebot os-copilot来协助你完成测试 并且把ds的api后面加上pro-think-max 这个只是举例 怎么去添加后缀要参考官方文档

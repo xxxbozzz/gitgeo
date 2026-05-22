@@ -1,54 +1,45 @@
-"""Keyword center endpoints."""
+"""Keyword endpoints."""
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 
+from backend.app.core.dependencies import get_keyword_repo
+from backend.app.repositories.keyword import KeywordRepository
 from backend.app.schemas.api import ApiResponse, ok_response
-from backend.app.services.keywords_service import keywords_service
+
+router = APIRouter(prefix="/keywords", tags=["keywords"])
 
 
-router = APIRouter(tags=["keywords"])
-
-
-@router.get("/keywords", response_model=ApiResponse)
-def list_keywords(
-    status: str | None = Query(default=None, description="pending / consumed"),
-    query: str | None = Query(default=None, description="Keyword or article fuzzy search"),
+@router.get("", response_model=ApiResponse)
+async def list_keywords(
+    status: str | None = Query(default=None),
+    query: str | None = Query(default=None),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
+    repo: KeywordRepository = Depends(get_keyword_repo),
 ) -> ApiResponse:
-    """Return paginated keyword pool records."""
-    return ok_response(
-        message="keywords_list_ready",
-        data=keywords_service.list_keywords(
-            status=status,
-            query_text=query,
-            limit=limit,
-            offset=offset,
-        ),
-    )
+    items, total = await repo.list_keywords(status=status, query_text=query, limit=limit, offset=offset)
+    return ok_response(message="keywords_list_ready", data={
+        "items": items, "total": total, "limit": limit, "offset": offset,
+    })
 
 
-@router.get("/gap-keywords", response_model=ApiResponse)
-def list_gap_keywords(
-    query: str | None = Query(default=None, description="Keyword fuzzy search"),
+@router.get("/gap", response_model=ApiResponse)
+async def list_gap_keywords(
+    query: str | None = Query(default=None),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
+    repo: KeywordRepository = Depends(get_keyword_repo),
 ) -> ApiResponse:
-    """Return paginated pending/gap keywords."""
-    return ok_response(
-        message="gap_keywords_ready",
-        data=keywords_service.list_gap_keywords(
-            query_text=query,
-            limit=limit,
-            offset=offset,
-        ),
-    )
+    items, total = await repo.list_keywords(status="pending", query_text=query, limit=limit, offset=offset)
+    return ok_response(message="gap_keywords_ready", data={
+        "items": items, "total": total, "limit": limit, "offset": offset,
+    })
 
 
-@router.get("/keywords/clusters", response_model=ApiResponse)
-def list_keyword_clusters(limit: int = Query(default=12, ge=1, le=50)) -> ApiResponse:
-    """Return keyword cluster distribution."""
-    return ok_response(
-        message="keyword_clusters_ready",
-        data=keywords_service.list_clusters(limit=limit),
-    )
+@router.get("/clusters", response_model=ApiResponse)
+async def list_clusters(
+    limit: int = Query(default=50, ge=1, le=200),
+    repo: KeywordRepository = Depends(get_keyword_repo),
+) -> ApiResponse:
+    items = await repo.list_clusters(limit=limit)
+    return ok_response(message="keyword_clusters_ready", data={"items": items, "limit": limit})

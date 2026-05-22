@@ -108,7 +108,7 @@ for lib in ("openai", "httpx", "httpcore", "urllib3"):
 #  LLM 初始化
 # ═══════════════════════════════════════════
 
-_GEO_LLM_MODEL = os.environ.get("GEO_LLM_MODEL") or os.environ.get("OPENAI_MODEL") or "deepseek-chat"
+_GEO_LLM_MODEL = os.environ.get("GEO_LLM_MODEL") or os.environ.get("OPENAI_MODEL") or "deepseek-v4-pro"
 llm = ChatOpenAI(
     model=_GEO_LLM_MODEL,
     base_url=_GEO_LLM_BASE_URL,

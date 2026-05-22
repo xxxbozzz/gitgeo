@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /Users/kev/.claude/hooks/geo_pr_review_hook.py",
+            "timeout": 30,
+            "statusMessage": "GEO PR Review..."
+          }
+        ]
+      }
+    ]
+  }
+}

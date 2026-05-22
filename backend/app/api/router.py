@@ -1,4 +1,4 @@
-"""Central API router."""
+"""Central API router — all routes migrated to PostgreSQL + SQLAlchemy 2.0 async."""
 
 from fastapi import APIRouter
 
@@ -12,7 +12,6 @@ from backend.app.api.routes import (
     runs,
     system,
 )
-
 
 api_router = APIRouter()
 api_router.include_router(articles.router)

@@ -1,11 +1,14 @@
 alembic
+asyncpg
 crewai
 crewai-tools
 fastapi
+httpx
 langchain-openai
-python-dotenv
-mysql-connector-python
+psycopg2-binary
 pydantic-settings
+python-dotenv
+sqlalchemy[asyncio]
 chromadb
 duckduckgo-search
 playwright
@@ -18,3 +21,6 @@ markdown
 requests
 beautifulsoup4
 uvicorn
+pytest
+pytest-asyncio
+pytest-anyio

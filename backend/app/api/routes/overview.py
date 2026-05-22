@@ -1,51 +1,63 @@
-"""Overview endpoints."""
+"""Overview / Dashboard endpoints."""
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 
+from backend.app.core.dependencies import get_keyword_repo, get_overview_repo
+from backend.app.repositories.keyword import KeywordRepository
+from backend.app.repositories.overview import OverviewRepository
 from backend.app.schemas.api import ApiResponse, ok_response
-from backend.app.services.overview_service import overview_service
-
 
 router = APIRouter(prefix="/overview", tags=["overview"])
 
 
+def _article_item(a) -> dict:
+    return {
+        "id": a.id, "title": a.title, "slug": a.slug,
+        "quality_score": a.quality_score or 0, "publish_status": a.publish_status or 0,
+        "dim_subject": a.dim_subject, "dim_action": a.dim_action,
+        "dim_attribute": a.dim_attribute,
+        "created_at": a.created_at.isoformat() if a.created_at else None,
+        "updated_at": a.updated_at.isoformat() if a.updated_at else None,
+    }
+
+
 @router.get("/kpis", response_model=ApiResponse)
-def get_overview_kpis() -> ApiResponse:
-    """Return top-level dashboard KPIs."""
-    return ok_response(
-        message="overview_kpis_ready",
-        data=overview_service.get_kpis(),
-    )
+async def get_kpis(repo: OverviewRepository = Depends(get_overview_repo)) -> ApiResponse:
+    return ok_response(message="overview_kpis_ready", data=await repo.get_kpis())
 
 
 @router.get("/trend", response_model=ApiResponse)
-def get_overview_trend(days: int = Query(default=7, ge=1, le=30)) -> ApiResponse:
-    """Return article production trend for the last N days."""
-    return ok_response(
-        message="overview_trend_ready",
-        data=overview_service.get_trend(days=days),
-    )
+async def get_trend(
+    days: int = Query(default=30, ge=1, le=365),
+    repo: OverviewRepository = Depends(get_overview_repo),
+) -> ApiResponse:
+    items = await repo.get_trend(days=days)
+    return ok_response(message="overview_trend_ready", data={"days": days, "items": items})
 
 
 @router.get("/board", response_model=ApiResponse)
-def get_overview_board(
-    pending_limit: int = Query(default=5, ge=1, le=20),
-    article_limit: int = Query(default=5, ge=1, le=20),
+async def get_board(
+    pending_limit: int = Query(default=20, ge=1, le=100),
+    article_limit: int = Query(default=20, ge=1, le=100),
+    overview_repo: OverviewRepository = Depends(get_overview_repo),
+    kw_repo: KeywordRepository = Depends(get_keyword_repo),
 ) -> ApiResponse:
-    """Return overview board columns."""
-    return ok_response(
-        message="overview_board_ready",
-        data=overview_service.get_board(
-            pending_limit=pending_limit,
-            article_limit=article_limit,
-        ),
-    )
+    pending_kw = await kw_repo.list_pending(limit=pending_limit)
+    drafts = await overview_repo.list_drafts(limit=article_limit)
+    ready = await overview_repo.list_ready(limit=article_limit)
+    return ok_response(message="overview_board_ready", data={
+        "pending_keywords": pending_kw,
+        "draft_articles": [_article_item(a) for a in drafts],
+        "ready_articles": [_article_item(a) for a in ready],
+    })
 
 
 @router.get("/latest-articles", response_model=ApiResponse)
-def get_latest_articles(limit: int = Query(default=8, ge=1, le=30)) -> ApiResponse:
-    """Return latest article cards for the overview page."""
-    return ok_response(
-        message="overview_latest_articles_ready",
-        data=overview_service.get_latest_articles(limit=limit),
-    )
+async def get_latest_articles(
+    limit: int = Query(default=20, ge=1, le=100),
+    repo: OverviewRepository = Depends(get_overview_repo),
+) -> ApiResponse:
+    articles = await repo.list_latest_articles(limit=limit)
+    return ok_response(message="latest_articles_ready", data={
+        "items": [_article_item(a) for a in articles], "limit": limit,
+    })

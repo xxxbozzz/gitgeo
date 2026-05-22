@@ -1,4 +1,24 @@
 services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: geo-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-geo_app}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change-this-password}
+      POSTGRES_DB: ${DB_NAME:-geo_engine}
+      TZ: Asia/Shanghai
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/postgres_data:/var/lib/postgresql/data
+      - ./database/init_postgres.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-geo_app} -d ${DB_NAME:-geo_engine}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   backend:
     image: ${GEO_APP_IMAGE:?set GEO_APP_IMAGE}
     container_name: geo-backend
@@ -8,24 +28,23 @@ services:
       - ./build_info.json:/app/build_info.json:ro
     environment:
       - APP_ENV=production
-      - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
-      - ARTICLE_ACTION_TIMEOUT_SECONDS=120
-      - PUBLISH_REQUEST_TIMEOUT_SECONDS=20
-      - GEO_PUBLISH_REQUEST_TIMEOUT=20
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-geo_app}
+      - DB_PASSWORD=${DB_PASSWORD:-change-this-password}
+      - DB_NAME=${DB_NAME:-geo_engine}
+      - DB_POOL_SIZE=10
+      - DB_MAX_OVERFLOW=5
+      - GEO_LLM_MODEL=${GEO_LLM_MODEL:-deepseek-v4-pro}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL}
-      - OPENAI_MODEL=${OPENAI_MODEL}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - OTEL_SDK_DISABLED=true
-      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
       - TZ=Asia/Shanghai
       - WECHAT_APP_ID=${WECHAT_APP_ID}
       - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
     depends_on:
-      mysql_db:
+      postgres:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8001/api/v1/health >/dev/null || exit 1"]
@@ -46,25 +65,25 @@ services:
       - ./output:/app/output
       - ./build_info.json:/app/build_info.json:ro
     environment:
+      - GEO_LLM_MODEL=${GEO_LLM_MODEL:-deepseek-v4-pro}
       - OPENAI_API_BASE=${OPENAI_BASE_URL}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - CHROMA_DB_HOST=chromadb
       - CHROMA_DB_PORT=8000
       - CREWAI_TRACING_ENABLED=false
       - OTEL_SDK_DISABLED=true
-      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
-      - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-geo_app}
+      - DB_PASSWORD=${DB_PASSWORD:-change-this-password}
+      - DB_NAME=${DB_NAME:-geo_engine}
       - WECHAT_APP_ID=${WECHAT_APP_ID}
       - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
       - TZ=Asia/Shanghai
     depends_on:
-      mysql_db:
+      postgres:
         condition: service_healthy
       chromadb:
         condition: service_started
@@ -80,24 +99,24 @@ services:
       - ./output:/app/output
       - ./build_info.json:/app/build_info.json:ro
     environment:
-      - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-geo_app}
+      - DB_PASSWORD=${DB_PASSWORD:-change-this-password}
+      - DB_NAME=${DB_NAME:-geo_engine}
       - GEO_BACKEND_API_BASE_URL=http://backend:8001/api/v1
       - GEO_BACKEND_API_TIMEOUT=4
       - GEO_BACKEND_ACTION_TIMEOUT=120
+      - GEO_LLM_MODEL=${GEO_LLM_MODEL:-deepseek-v4-pro}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL}
-      - OPENAI_MODEL=${OPENAI_MODEL}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - WECHAT_APP_ID=${WECHAT_APP_ID}
       - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
       - OTEL_SDK_DISABLED=true
-      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
       - TZ=Asia/Shanghai
     depends_on:
-      mysql_db:
+      postgres:
         condition: service_healthy
       backend:
         condition: service_healthy
@@ -114,43 +133,39 @@ services:
       - ./output:/app/output
       - ./build_info.json:/app/build_info.json:ro
     environment:
+      - GEO_LLM_MODEL=${GEO_LLM_MODEL:-deepseek-v4-pro}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - OPENAI_API_BASE=${OPENAI_BASE_URL}
       - OPENAI_BASE_URL=${OPENAI_BASE_URL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL}
       - OTEL_SDK_DISABLED=true
-      - MYSQL_CONNECTOR_PYTHON_TELEMETRY=0
-      - DB_HOST=mysql_db
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=geo_knowledge_engine
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-geo_app}
+      - DB_PASSWORD=${DB_PASSWORD:-change-this-password}
+      - DB_NAME=${DB_NAME:-geo_engine}
       - GEO_PUBLISH_REQUEST_TIMEOUT=20
       - WECHAT_APP_ID=${WECHAT_APP_ID}
       - WECHAT_APP_SECRET=${WECHAT_APP_SECRET}
       - TZ=Asia/Shanghai
     depends_on:
-      mysql_db:
+      postgres:
         condition: service_healthy
     command: >
       bash -c "
         echo '⏰ 定时任务调度器启动';
         while true; do
-          HOUR=$$(date +%H);
-          echo \"[$$(date)] 当前小时: $$HOUR\";
-
+          HOUR=\$$(date +%H);
+          echo \"[\$$(date)] 当前小时: \$$HOUR\";
           python -u fix_and_link.py 2>&1 | tail -5;
-
-          if [ \"$$HOUR\" = '08' ]; then
+          if [ \"\$$HOUR\" = '08' ]; then
             echo '📤 执行自动发文...';
             python -u auto_publish.py --limit 3 2>&1 | tail -10;
           fi;
-
-          if [ \"$$HOUR\" = '20' ]; then
+          if [ \"\$$HOUR\" = '20' ]; then
             echo '🔍 执行 AI 引用检测...';
             python -u -c 'from core.active_prober import ActiveProber; p=ActiveProber(); print(p.probe(\"行业关键词示例\"))' 2>&1 | tail -5;
           fi;
-
           echo '💤 休眠 1 小时...';
           sleep 3600;
         done
@@ -166,22 +181,3 @@ services:
       - ./database/chroma_data:/chroma/chroma
     environment:
       - IS_PERSISTENT=TRUE
-
-  mysql_db:
-    image: mysql:8.0
-    container_name: geo-mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: geo_knowledge_engine
-      TZ: Asia/Shanghai
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./database/mysql_data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
-      interval: 5s
-      timeout: 3s
-      retries: 10

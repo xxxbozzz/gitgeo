@@ -1,7 +1,6 @@
 """Typed backend settings."""
 
 from functools import lru_cache
-from urllib.parse import quote_plus
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -15,34 +14,48 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    # App
     app_name: str = "GEO Backend"
-    app_version: str = "0.1.0"
+    app_version: str = "0.2.0"
     app_env: str = "development"
     app_debug: bool = False
     api_prefix: str = "/api/v1"
 
-    db_host: str = "mysql_db"
-    db_port: int = 3306
+    # PostgreSQL
+    db_host: str = "localhost"
+    db_port: int = 5432
     db_user: str = "geo_app"
     db_password: str = "change-this-password"
     db_name: str = "geo_engine"
-    db_pool_name: str = "geo_backend_pool"
-    db_pool_size: int = 5
+    db_pool_size: int = 10
+    db_max_overflow: int = 5
+
+    # Frontend
+    frontend_dist_dir: str = "/app/frontend_dist"
+
+    # Publishing
     article_action_timeout_seconds: int = 120
     publish_request_timeout_seconds: int = 20
+    enable_live_publish: bool = False
+
+    # LLM
     llm_fix_max_tokens: int = 8000
 
     @property
-    def sqlalchemy_database_url(self) -> str:
-        """Return a SQLAlchemy-compatible MySQL URL."""
-        password = quote_plus(self.db_password)
+    def database_url(self) -> str:
         return (
-            f"mysql+mysqlconnector://{self.db_user}:{password}"
+            f"postgresql+asyncpg://{self.db_user}:{self.db_password}"
+            f"@{self.db_host}:{self.db_port}/{self.db_name}"
+        )
+
+    @property
+    def database_url_sync(self) -> str:
+        return (
+            f"postgresql+psycopg2://{self.db_user}:{self.db_password}"
             f"@{self.db_host}:{self.db_port}/{self.db_name}"
         )
 
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    """Return cached settings instance."""
     return Settings()
